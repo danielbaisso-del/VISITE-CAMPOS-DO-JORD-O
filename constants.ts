@@ -79,4 +79,94 @@ export const TOURS: TourItem[] = [
     imageUrl: 'https://visitecamposdojordao.org.br/wp-content/uploads/2026/01/Untitled-design.png',
     instagram: 'https://www.instagram.com/parquecamposdojordao/'
   }
+  ,
+  {
+    id: 'casa-xilogravura',
+    title: 'Museu Casa da Xilogravura',
+    category: 'Cultura',
+    description: 'Museu particular que divulga a arte da xilogravura, com um acervo amplo e obras de artistas consagrados.',
+    address: 'Av. Eduardo Moreira da Cruz, 295 – Jardim Jaguaribe',
+    phone: '(12) 3662 1832',
+    imageUrl: 'https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/museu_xilogravura.jpg',
+    website: 'https://www.casadaxilogravura.com.br/'
+  },
+  {
+    id: 'palacio-boa-vista',
+    title: 'Palácio Boa Vista',
+    category: 'Cultura',
+    description: 'Residência de inverno convertida em museu com um acervo com mais de 2 mil peças, entre mobiliário, porcelanas, pinturas e esculturas.',
+    address: 'Av. Adhemar de Barros, 3001 – Alto da Boa Vista',
+    phone: '(12) 3668 9739',
+    imageUrl: 'https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/palacio_boa_vista.jpg',
+    website: 'http://www.acervo.sp.gov.br/palBoaVista.html'
+  },
+  {
+    id: 'prana-park',
+    title: 'Prana Park',
+    category: 'Aventura',
+    description: 'Parque de aventuras com tirolesas, bike aérea, megabalanço, arvorismo e mirantes com vistas panorâmicas.',
+    address: 'Estrada do Pico do Itapeva',
+    imageUrl: 'https://visitecamposdojordao.org.br/wp-content/uploads/2025/03/Design-sem-nome.png',
+    website: 'https://pranapark.com.br/'
+  },
+  {
+    id: 'dreams-house-park',
+    title: 'Dreams House Park',
+    category: 'Lazer',
+    description: 'Complexo de entretenimento com museu de cera, Miniland e atrações voltadas a famílias e fotos memoráveis.',
+    imageUrl: 'https://visitecamposdojordao.org.br/wp-content/uploads/2025/10/dreamhouse.png',
+    website: 'https://grupodreams.com.br/loja/campos/'
+  },
+  {
+    id: 'maostiqueiras',
+    title: 'Mãostiqueiras',
+    category: 'Artesanato',
+    description: 'Projeto que processa lã natural localmente em peças de decoração e oferece oficinas e produtos de produtores locais.',
+    address: 'Av. Pedro Paulo, 1455 – Parque da Lagoinha',
+    phone: '(12) 3662 3207',
+    imageUrl: 'https://visitecamposdojordao.org.br/wp-content/uploads/2025/04/maostiqueira.jpg',
+    website: 'http://maostiqueiras.com.br/'
+  },
+  {
+    id: 'parque-da-lagoinha',
+    title: 'Parque da Lagoinha',
+    category: 'Natureza',
+    description: 'Parque revitalizado com trilhas, lagos, projetos socioambientais, educação ambiental e áreas de lazer.',
+    address: 'Av. Pedro Paulo, 1455 – Lot. Veu da Noiva',
+    imageUrl: 'https://visitecamposdojordao.org.br/wp-content/uploads/2025/03/paruqe-da-lagoinha-800x464.jpg',
+    website: 'https://parquedalagoinha.com.br/'
+  },
+  {
+    id: 'casa-araucaria',
+    title: 'Casa Araucária',
+    category: 'Experiência',
+    description: 'Loja e espaço com produtos de pequenos produtores locais, oficinas e experiências imersivas ligadas à araucária e biodiversidade.',
+    imageUrl: 'https://visitecamposdojordao.org.br/wp-content/uploads/2025/04/3-800x450.png',
+    website: 'https://www.casaraucaria.com.br/'
+  },
+  {
+    id: 'iceland-aventura-no-gelo',
+    title: 'Iceland Aventura no Gelo',
+    category: 'Lazer',
+    description: 'Espaço inteiro construído em gelo com esculturas temáticas; visitas curtas com casacos e luvas providenciados.',
+    address: 'R. Eng. Diogo José de Carvalho, 190 – Capivari',
+    imageUrl: 'https://visitecamposdojordao.org.br/wp-content/uploads/2025/04/iceland-800x450.png',
+    website: 'https://www.icelandcampos.com.br/'
+  },
+  {
+    id: 'parque-da-cerveja',
+    title: 'Parque da Cerveja',
+    category: 'Gastronomia',
+    description: 'Espaço com experiências ligadas à produção e degustação de cervejas artesanais em um parque cercado por araucárias.',
+    imageUrl: 'https://visitecamposdojordao.org.br/wp-content/uploads/2025/04/1-800x450.png',
+    website: 'https://cervejacamposdojordao.com.br/'
+  },
+  {
+    id: 'parque-bambui',
+    title: 'Parque Bambuí',
+    category: 'Natureza',
+    description: 'Área verde com trilhas, lagos, arte ao ar livre, Maria-fumaça, esculturas e gastronomia local.',
+    imageUrl: 'https://visitecamposdojordao.org.br/wp-content/uploads/2025/05/parque-bambui.png',
+    website: 'https://parquebambui.com.br/'
+  }
 ];

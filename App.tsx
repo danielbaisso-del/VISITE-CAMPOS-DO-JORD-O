@@ -4,6 +4,7 @@ import { TOURS } from './constants';
 import SITE_CONTENT from './data/siteContent';
 import Gastronomia from './components/Gastronomia';
 import Passeios from './components/Passeios';
+import Roteiros from './components/Roteiros';
 import { TourItem, ChatMessage } from './types';
 import Accommodations from './components/Accommodations';
 import ACCOMMODATIONS from './components/accommodationsData';
@@ -28,6 +29,7 @@ const Navbar: React.FC<{ current: string; onNavigate: (p: string) => void }> = (
       <div className="hidden md:flex items-center gap-8 text-slate-300 font-medium text-sm">
         <button onClick={() => onNavigate('home')} className={`hover:text-blue-400 transition-colors ${current === 'home' ? 'text-white' : ''}`}>A Cidade</button>
         <button onClick={() => onNavigate('passeios')} className={`hover:text-blue-400 transition-colors ${current === 'passeios' ? 'text-white border-b-2 border-blue-500 pb-1' : ''}`}>Passeios</button>
+        <button onClick={() => onNavigate('roteiros')} className={`hover:text-blue-400 transition-colors ${current === 'roteiros' ? 'text-white border-b-2 border-blue-500 pb-1' : ''}`}>Roteiros</button>
         <button onClick={() => onNavigate('ondecomer')} className={`hover:text-blue-400 transition-colors ${current === 'ondecomer' ? 'text-white' : ''}`}>Onde Comer</button>
         <button onClick={() => onNavigate('eventos')} className={`hover:text-blue-400 transition-colors ${current === 'eventos' ? 'text-white' : ''}`}>Eventos</button>
         <button onClick={() => onNavigate('hospedagens')} className={`hover:text-blue-400 transition-colors ${current === 'hospedagens' ? 'text-white' : ''}`}>Onde Ficar</button>
@@ -310,7 +312,7 @@ const VirtualGuide: React.FC = () => {
 export default function App() {
   const [filter, setFilter] = useState<string>('Todos');
   const [searchQuery, setSearchQuery] = useState('');
-  const [page, setPage] = useState<'home'|'passeios'|'ondecomer'|'eventos'|'hospedagens'|'quemsomos'|'associe'>('home');
+  const [page, setPage] = useState<'home'|'passeios'|'roteiros'|'ondecomer'|'eventos'|'hospedagens'|'quemsomos'|'associe'>('home');
 
   useEffect(() => {
     if (page === 'associe') {
@@ -327,6 +329,7 @@ export default function App() {
       const map: Record<string, any> = {
         explore: 'home',
         passeios: 'passeios',
+        roteiros: 'roteiros',
         ondecomer: 'ondecomer',
         hospedagens: 'hospedagens',
         quemsomos: 'quemsomos',
@@ -372,7 +375,7 @@ export default function App() {
     }
 
     if (filter === 'Todos') {
-      const fromAttractions = (SITE_CONTENT.attractions || []).map(a => ({ id: a.id || a.title, title: a.title, category: a.category || 'Attraction', description: a.description || '', imageUrl: a.image || '' }));
+      const fromAttractions = (SITE_CONTENT.attractions || []).map(a => ({ id: a.id || a.title, title: a.title, category: a.category || 'Attraction', description: a.description || '', imageUrl: '' }));
       const fromHotels = (SITE_CONTENT.hotels || []).map(h => {
         const acc = ACCOMMODATIONS.find(a => a.id === h.id);
         const image = acc?.images?.[0] || (h as any).image || `/images/hospedagens/${h.id}.jpg`;
@@ -380,7 +383,7 @@ export default function App() {
         const address = acc?.address || (h as any).address || '';
         const phone = acc?.phone || (h as any).phone || '';
         const website = acc?.website || (h as any).website || '';
-        const status = acc?.status || (h as any).status || '';
+        const status = '';
         const tags = acc?.tags || (h as any).tags || [];
         return {
           id: h.id || h.name,
@@ -453,6 +456,8 @@ export default function App() {
       )}
 
       {page === 'passeios' && <Passeios />}
+
+      {page === 'roteiros' && <Roteiros />}
 
       {page === 'ondecomer' && <Gastronomia />}
 
