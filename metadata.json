@@ -1,0 +1,8 @@
+
+{
+  "name": "Visite Campos do Jordão - Guia Inteligente",
+  "description": "Uma experiência moderna e interativa para explorar os melhores passeios de Campos do Jordão, com um guia virtual alimentado por IA para recomendações personalizadas.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
