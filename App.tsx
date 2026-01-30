@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { TOURS } from './constants';
 import SITE_CONTENT from './data/siteContent';
@@ -19,20 +18,21 @@ const Navbar: React.FC<{ current: string; onNavigate: (p: string) => void }> = (
       <div className="flex items-center gap-2">
         <div className="w-10 h-10 rounded-lg overflow-hidden flex items-center justify-center">
           <img
-            src="https://visitecamposdojordao.org.br/wp-content/uploads/2019/11/logo-branco.png"
+            src="/images/logo-branco.png"
             alt="Logo Campos do Jordão"
+            onError={(e: any) => { e.currentTarget.onerror = null; e.currentTarget.src = 'https://visitecamposdojordao.org.br/wp-content/uploads/2019/11/logo-branco.png'; }}
             className="w-full h-full object-contain p-1"
           />
         </div>
         <span className="text-white font-bold text-lg hidden md:block tracking-tight">VISITE CAMPOS DO JORDÃO</span>
       </div>
       <div className="hidden md:flex items-center gap-8 text-slate-300 font-medium text-sm">
-        <button onClick={() => onNavigate('home')} className={`hover:text-blue-400 transition-colors ${current === 'home' ? 'text-white' : ''}`}>A Cidade</button>
+        <button onClick={() => onNavigate('home')} className={`hover:text-blue-400 transition-colors ${current === 'home' ? 'text-white' : ''}`}>A cidade</button>
         <button onClick={() => onNavigate('passeios')} className={`hover:text-blue-400 transition-colors ${current === 'passeios' ? 'text-white border-b-2 border-blue-500 pb-1' : ''}`}>Passeios</button>
-        <button onClick={() => onNavigate('roteiros')} className={`hover:text-blue-400 transition-colors ${current === 'roteiros' ? 'text-white border-b-2 border-blue-500 pb-1' : ''}`}>Roteiros</button>
-        <button onClick={() => onNavigate('ondecomer')} className={`hover:text-blue-400 transition-colors ${current === 'ondecomer' ? 'text-white' : ''}`}>Onde Comer</button>
+        <button onClick={() => onNavigate('roteiros')} className={`hover:text-blue-400 transition-colors ${current === 'roteiros' ? 'text-white border-b-2 border-blue-500 pb-1' : ''}`}>Mapa e roteiros</button>
+        <button onClick={() => onNavigate('ondecomer')} className={`hover:text-blue-400 transition-colors ${current === 'ondecomer' ? 'text-white' : ''}`}>Onde comer</button>
         <button onClick={() => onNavigate('eventos')} className={`hover:text-blue-400 transition-colors ${current === 'eventos' ? 'text-white' : ''}`}>Eventos</button>
-        <button onClick={() => onNavigate('hospedagens')} className={`hover:text-blue-400 transition-colors ${current === 'hospedagens' ? 'text-white' : ''}`}>Onde Ficar</button>
+        <button onClick={() => onNavigate('hospedagens')} className={`hover:text-blue-400 transition-colors ${current === 'hospedagens' ? 'text-white' : ''}`}>Onde ficar</button>
         <button onClick={() => onNavigate('quemsomos')} className={`hover:text-blue-400 transition-colors ${current === 'quemsomos' ? 'text-white' : ''}`}>Quem somos</button>
       </div>
       <button onClick={() => onNavigate('associe')} className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-full text-xs font-semibold transition-all">
@@ -86,9 +86,10 @@ const Hero: React.FC = () => {
 
       <div className="relative z-20 text-center px-6 w-full">
         <img
-          src="https://visitecamposdojordao.org.br/wp-content/uploads/2019/11/logo-branco.png"
+          src="/images/logo-branco.png"
           alt="Logo Campos do Jordão"
           onClick={() => setCelebrate((s) => !s)}
+          onError={(e: any) => { e.currentTarget.onerror = null; e.currentTarget.src = 'https://visitecamposdojordao.org.br/wp-content/uploads/2019/11/logo-branco.png'; }}
           className={`mx-auto mb-4 w-40 max-w-full transition-transform duration-700 ${celebrate ? 'animate-spin-slow scale-105' : 'floaty hover:scale-105'}`}
           style={{ filter: 'drop-shadow(0 8px 20px rgba(0,0,0,0.6))' }}
         />
@@ -248,7 +249,7 @@ const VirtualGuide: React.FC = () => {
           <div className="relative w-full max-w-4xl h-[70vh] bg-white rounded-3xl shadow-[0_30px_80px_rgba(2,6,23,0.6)] border border-slate-200 overflow-hidden flex flex-col">
           <div className="flex items-center justify-between gap-3 px-4 py-3 bg-gradient-to-r from-indigo-600 to-blue-600 text-white">
             <div className="flex items-center gap-3">
-              <img src="https://visitecamposdojordao.org.br/wp-content/uploads/2019/11/logo-branco.png" alt="logo" className="w-9 h-9 rounded-md object-contain" />
+              <img src="/images/logo-branco.png" alt="logo" className="w-9 h-9 rounded-md object-contain" />
               <div>
                 <div className="font-bold text-sm">Guia Virtual Inteligente</div>
                 <div className="text-[11px] opacity-90">Respostas rápidas sobre Campos do Jordão</div>
@@ -316,7 +317,7 @@ export default function App() {
 
   useEffect(() => {
     if (page === 'associe') {
-      window.open('https://www.visitecamposdojordao.org.br/associados/associe-se/', '_blank');
+      window.open('https://www.visitecamposdojordão.org.br/associados/associe-se/', '_blank');
       setPage('home');
     }
   }, [page]);
@@ -414,7 +415,7 @@ export default function App() {
   }, [filter, searchQuery]);
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col">
+    <div>
       <Navbar current={page} onNavigate={setPage} />
 
       {page === 'home' && (

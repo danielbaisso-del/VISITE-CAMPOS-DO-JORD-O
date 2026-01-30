@@ -1,4 +1,3 @@
-
 import { TOURS } from "../constants";
 import metadata from "../metadata.json";
 import SITE_CONTENT from "../data/siteContent";
@@ -52,48 +51,12 @@ export class GeminiService {
     try {
       const context = this.buildContextSummary();
       const userMessage = `Contexto do site:\n${context}\n\nPergunta do usuário: ${message}`;
-      // Prefer local GenAI proxy if available, then fallback to legacy mock server.
-      const proxyUrl = (typeof (import.meta as any) !== 'undefined' && (import.meta as any).env && (import.meta as any).env.VITE_LOCAL_PROXY_URL) || 'http://127.0.0.1:5051/generate';
-      const localUrl = this.getLocalApiUrl();
-      // try proxy first
-      try {
-        const proxyResp = await this.callLocalApi(proxyUrl, userMessage, opts);
-        if (proxyResp && (proxyResp.text || proxyResp.actions)) {
-          return { text: proxyResp.text || String(proxyResp), actions: proxyResp.actions } as any;
-        }
-      } catch (e) {
-        console.warn('GeminiService: proxy call failed, falling back to local mock', e);
+      // Força sempre o mock local com modelo Claude Opus 4.5
+      const localUrl = 'http://127.0.0.1:5000/generate';
+      const data = await this.callLocalApi(localUrl, userMessage, { ...opts, model: 'claude-3-opus-20240229' });
+      if (data) {
+        return { text: data.text || String(data), actions: data.actions } as any;
       }
-      // fallback to legacy local mock server
-      if (localUrl) {
-        const data = await this.callLocalApi(localUrl, userMessage, opts);
-        if (data) {
-          return { text: data.text || String(data), actions: data.actions } as any;
-        }
-      }
-
-      // If API key present on server (Node) side, try to dynamically load SDK and call it.
-      if (this.apiKey && this.nodeKeyPresent) {
-        try {
-          const { GoogleGenAI } = await import('@google/genai');
-          if (!this.ai) {
-            this.ai = new GoogleGenAI({ apiKey: this.apiKey });
-            this.chat = this.ai.chats.create({ model: 'gemini-3-flash-preview', config: { systemInstruction: SYSTEM_INSTRUCTION } });
-          }
-          const result: any = await this.chat.sendMessage({ message: userMessage });
-          // Try to extract structured JSON from result.text if present
-          const raw = result && (result.text || result.output?.[0]?.content?.[0]?.text) || '';
-          try {
-            const parsed = JSON.parse(raw);
-            return { text: parsed.text || '', actions: parsed.actions } as any;
-          } catch (_e) {
-            return { text: String(raw || 'Desculpe, tive um problema ao processar sua pergunta.') };
-          }
-        } catch (e) {
-          console.warn('Erro ao usar SDK remoto:', e);
-        }
-      }
-
       // fallback local responder
       const fallback = this.buildFallbackResponse(message);
       return { text: fallback.text, actions: fallback.actions } as any;
