@@ -47,16 +47,16 @@ const Roteiros: React.FC = () => {
       if (!L) return console.error('Leaflet not available');
 
       // Bounds expandidos para incluir TODOS os pontos de interesse
-      // - Sul: Parque Amantikir (-22.7835)
-      // - Norte: Horto Florestal (-22.6898)
-      // - Oeste: Museu Felícia Leirner (-45.6337)
-      // - Leste: Horto Florestal (-45.4811)
-      const CAMPOS_BOUNDS = L.latLngBounds([[-22.80, -45.65], [-22.68, -45.47]]);
+      // - Sul: Parque Amantikir (-22.7574)
+      // - Norte: Horto Florestal (-22.6873)
+      // - Oeste: Pedra do Baú (-45.6396)
+      // - Leste: Horto Florestal (-45.5033)
+      const CAMPOS_BOUNDS = L.latLngBounds([[-22.80, -45.70], [-22.68, -45.45]]);
 
       const rawLocations = [
         // ========== HOTÉIS E POUSADAS ==========
         { id: 1, name: "Bendito Cacao Resort & SPA", category: "hotel", lat: -22.6975059, lng: -45.5599906, address: "R. Dr. José Mestres, 2145 - Jardim do Embaixador", phone: "(12) 3669-0777", hours: "Check-in: 15h, Check-out: 12h", image: "https://visitecamposdojordao.org.br/wp-content/uploads/2025/04/Design-sem-nome.png", waze: "https://ul.waze.com/ul?ll=-22.6975059,-45.5599906&navigate=yes", google: "" },
-        { id: 2, name: "Hotel Frontenac", category: "hotel", lat: -22.7212556, lng: -45.5669461, address: "Av. Paulo Ribas, 295 - Capivari", phone: "(12) 3669-1009", hours: "Check-in: 14h, Check-out: 12h", image: "https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/parque_hotel_800.jpg", waze: "https://ul.waze.com/ul?ll=-22.7212556,-45.5669461&navigate=yes", google: "" },
+        { id: 2, name: "Hotel Frontenac", category: "hotel", lat: -22.7200, lng: -45.5685, address: "Av. Paulo Ribas, 295 - Capivari", phone: "(12) 3669-1009", hours: "Check-in: 14h, Check-out: 12h", image: "https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/parque_hotel_800.jpg", waze: "https://ul.waze.com/ul?ll=-22.7200,-45.5685&navigate=yes", google: "" },
         { id: 3, name: "Champet Boutique Hotel", category: "hotel", lat: -22.725427, lng: -45.561286, address: "R. Eng. Diogo José de Carvalho, 801 - Capivari", phone: "(12) 3662-8000", hours: "Check-in: 14h, Check-out: 12h", image: "https://visitecamposdojordao.org.br/wp-content/uploads/2025/05/1.png", waze: "https://ul.waze.com/ul?ll=-22.725427,-45.561286&navigate=yes", google: "" },
         { id: 4, name: "Hotel Serra da Estrela", category: "hotel", lat: -22.7208659, lng: -45.567849, address: "Av. Dr. Mário O. Rezende, 160 - Capivari", phone: "(12) 3669-8000", hours: "Check-in: 15h, Check-out: 12h", image: "https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/chris_park_800.jpg", waze: "https://ul.waze.com/ul?ll=-22.7208659,-45.567849&navigate=yes", google: "" },
         { id: 5, name: "Flat Hotel Home Green Home", category: "hotel", lat: -22.7487335, lng: -45.5566101, address: "Av. Macedo Soares - Vila Capivari", phone: "(12) 3662-5500", hours: "Check-in: 14h, Check-out: 12h", image: "https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/home_green.jpg", waze: "https://ul.waze.com/ul?ll=-22.7487335,-45.5566101&navigate=yes", google: "" },
@@ -65,13 +65,13 @@ const Roteiros: React.FC = () => {
         { id: 8, name: "Hotel Boutique Quebra-Noz", category: "hotel", lat: -22.7148951, lng: -45.5629256, address: "R. Eng. Diogo José de Carvalho - Capivari", phone: "(12) 3663-1234", hours: "Check-in: 14h, Check-out: 12h", image: "https://visitecamposdojordao.org.br/wp-content/uploads/2024/02/Externa-Quebra-Noz-6-scaled.jpg", waze: "https://ul.waze.com/ul?ll=-22.7148951,-45.5629256&navigate=yes", google: "" },
         { id: 9, name: "Hotel Dan Inn Premium", category: "hotel", lat: -22.7281063, lng: -45.5804054, address: "Av. Sen. Roberto Simonsen - Vila Inglesa", phone: "(12) 3662-8899", hours: "Check-in: 14h, Check-out: 12h", image: "https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/dan_inn.jpg", waze: "https://ul.waze.com/ul?ll=-22.7281063,-45.5804054&navigate=yes", google: "" },
         { id: 10, name: "Hotel Estoril", category: "hotel", lat: -22.7198091, lng: -45.5671705, address: "Av. Macedo Soares, 400 - Capivari", phone: "(12) 3662-1100", hours: "Check-in: 14h, Check-out: 12h", image: "https://visitecamposdojordao.org.br/wp-content/uploads/2025/04/hotel-estoril-800x450.png", waze: "https://ul.waze.com/ul?ll=-22.7198091,-45.5671705&navigate=yes", google: "" },
-        { id: 11, name: "Hotel Le Renard", category: "hotel", lat: -22.7194257, lng: -45.5611975, address: "R. Eng. Souza Campos Junior, 50 - Capivari", phone: "(12) 3669-2220", hours: "Check-in: 15h, Check-out: 12h", image: "https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/le_renard.jpg", waze: "https://ul.waze.com/ul?ll=-22.7194257,-45.5611975&navigate=yes", google: "" },
+        { id: 11, name: "Hotel Le Renard", category: "hotel", lat: -22.7183, lng: -45.5645, address: "R. Eng. Souza Campos Junior, 50 - Capivari", phone: "(12) 3669-2220", hours: "Check-in: 15h, Check-out: 12h", image: "https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/le_renard.jpg", waze: "https://ul.waze.com/ul?ll=-22.7183,-45.5645&navigate=yes", google: "" },
         { id: 12, name: "Hotel Leão da Montanha", category: "hotel", lat: -22.7241963, lng: -45.5655824, address: "Av. Pedro Paulo - Descansópolis", phone: "(12) 3662-3456", hours: "Check-in: 14h, Check-out: 12h", image: "https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/leao_montanha.jpg", waze: "https://ul.waze.com/ul?ll=-22.7241963,-45.5655824&navigate=yes", google: "" },
         { id: 13, name: "Hotel Plátanus", category: "hotel", lat: -22.7432498, lng: -45.6035308, address: "R. Eng. Diogo José de Carvalho - Capivari", phone: "(12) 3663-4567", hours: "Check-in: 14h, Check-out: 12h", image: "https://visitecamposdojordao.org.br/wp-content/uploads/2025/05/2.png", waze: "https://ul.waze.com/ul?ll=-22.7432498,-45.6035308&navigate=yes", google: "" },
         { id: 14, name: "Hotel Recanto São Cristovão", category: "hotel", lat: -22.7650143, lng: -45.6120818, address: "Alto da Boa Vista", phone: "(12) 3662-5678", hours: "Check-in: 14h, Check-out: 12h", image: "https://visitecamposdojordão.org.br/wp-content/uploads/2020/11/sao_cristovao.jpg", waze: "https://ul.waze.com/ul?ll=-22.7650143,-45.6120818&navigate=yes", google: "" },
         { id: 15, name: "Hotel Solar D'Izabel", category: "hotel", lat: -22.7200426, lng: -45.5636769, address: "Av. Macedo Soares - Capivari", phone: "(12) 3662-6789", hours: "Check-in: 14h, Check-out: 12h", image: "https://visitecamposdojordão.org.br/wp-content/uploads/2025/04/SOLAR-IZABEL-800x450.png", waze: "https://ul.waze.com/ul?ll=-22.7200426,-45.5636769&navigate=yes", google: "" },
-        { id: 16, name: "Hotel Toriba", category: "hotel", lat: -22.7304785, lng: -45.5553019, address: "Av. Ernesto Diederichsen, 2962 - Vila Matilde", phone: "(12) 3668-5000", hours: "Check-in: 17h, Check-out: 14h", image: "https://visitecamposdojordão.org.br/wp-content/uploads/2025/10/hotel-toriba.png", waze: "https://ul.waze.com/ul?ll=-22.7304785,-45.5553019&navigate=yes", google: "" },
-        { id: 17, name: "Hotel Vila Inglesa", category: "hotel", lat: -22.7388542, lng: -45.5821875, address: "Av. Mariane Baungart, 3400 - Vila Inglesa", phone: "(12) 3669-5000", hours: "Check-in: 16h, Check-out: 14h", image: "https://visitecamposdojordão.org.br/wp-content/uploads/2020/11/vila_inglesa.jpg", waze: "https://ul.waze.com/ul?ll=-22.7388542,-45.5821875&navigate=yes", google: "" },
+        { id: 16, name: "Hotel Toriba", category: "hotel", lat: -22.7356, lng: -45.5839, address: "Av. Ernesto Diederichsen, 2962 - Alto da Boa Vista", phone: "(12) 3668-5000", hours: "Check-in: 17h, Check-out: 14h", image: "https://visitecamposdojordao.org.br/wp-content/uploads/2025/10/hotel-toriba.png", waze: "https://ul.waze.com/ul?ll=-22.7356,-45.5839&navigate=yes", google: "" },
+        { id: 17, name: "Hotel Vila Inglesa", category: "hotel", lat: -22.7273, lng: -45.5744, address: "Av. Mariane Baungart, 3400 - Vila Inglesa", phone: "(12) 3669-5000", hours: "Check-in: 16h, Check-out: 14h", image: "https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/vila_inglesa.jpg", waze: "https://ul.waze.com/ul?ll=-22.7273,-45.5744&navigate=yes", google: "" },
         { id: 18, name: "Le Suisse Elegance Hotel", category: "hotel", lat: -22.7217267, lng: -45.5663686, address: "R. Eng. Diogo José de Carvalho - Capivari", phone: "(12) 3663-7890", hours: "Check-in: 14h, Check-out: 12h", image: "https://visitecamposdojordão.org.br/wp-content/uploads/2025/08/le-suisse.png", waze: "https://ul.waze.com/ul?ll=-22.7217267,-45.5663686&navigate=yes", google: "" },
         { id: 19, name: "Parador Campos do Jordão", category: "hotel", lat: -22.7221371, lng: -45.5740993, address: "Alto da Boa Vista", phone: "(12) 3668-8901", hours: "Check-in: 14h, Check-out: 12h", image: "https://visitecamposdojordão.org.br/wp-content/uploads/2025/10/parador-760x428.png", waze: "https://ul.waze.com/ul?ll=-22.7221371,-45.5740993&navigate=yes", google: "" },
         { id: 20, name: "Pousada Alto da Boa Vista", category: "hotel", lat: -22.7306344, lng: -45.6243382, address: "Av. Adhemar de Barros - Alto da Boa Vista", phone: "(12) 3668-9012", hours: "Check-in: 14h, Check-out: 12h", image: "https://visitecamposdojordão.org.br/wp-content/uploads/2025/05/alto-da-boa-vista-760x428.png", waze: "https://ul.waze.com/ul?ll=-22.7306344,-45.6243382&navigate=yes", google: "" },
@@ -129,26 +129,26 @@ const Roteiros: React.FC = () => {
         { id: 127, name: "Villa Montese Bar & Ristorante", category: "restaurant", lat: -22.720914, lng: -45.5697519, address: "Av. Macedo Soares, 508 - Vila Capivari", phone: "(12) 3662-1111", hours: "Seg-Dom: 12h-23h", image: "", waze: "https://ul.waze.com/ul?ll=-22.720914,-45.5697519&navigate=yes", google: "" },
 
         // ========== ATRAÇÕES ==========
-        { id: 201, name: "Auditório Claudio Santoro", category: "attraction", lat: -22.7427005, lng: -45.6336612, address: "Av. Dr. Luis Arrobas Martins, 1800 - Alto Boa Vista", phone: "(12) 3662-6000", hours: "Varia conforme programação", image: "https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/auditorio_claudio_santoro.jpg", waze: "https://ul.waze.com/ul?ll=-22.7427005,-45.6336612&navigate=yes", google: "" },
-        { id: 202, name: "Parque Tarundu", category: "attraction", lat: -22.7656875, lng: -45.6003542, address: "Av. José A. Manso, 1515 - Toriba", phone: "(12) 3668-9595", hours: "Sáb-Dom: 9h-18h", image: "https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/tarundu.jpg", waze: "https://ul.waze.com/ul?ll=-22.7656875,-45.6003542&navigate=yes", google: "" },
-        { id: 203, name: "Dreams House Park", category: "attraction", lat: -22.7206525, lng: -45.5729856, address: "R. Roberto Jeffery, 30 - Capivari", phone: "(12) 99600-5577", hours: "Dom-Sex: 10h-18h, Sáb: 10h-20h", image: "https://visitecamposdojordao.org.br/wp-content/uploads/2025/10/dreamhouse.png", waze: "https://ul.waze.com/ul?ll=-22.7206525,-45.5729856&navigate=yes", google: "" },
-        { id: 204, name: "Estrada de Ferro Campos do Jordão", category: "attraction", lat: -22.7180701, lng: -45.5674556, address: "Av. Emílio Ribas, s/n - Capivari", phone: "(12) 3663-1531", hours: "Sáb-Dom: 9h-17h", image: "https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/efcj.jpg", waze: "https://ul.waze.com/ul?ll=-22.7180701,-45.5674556&navigate=yes", google: "" },
+        { id: 201, name: "Auditório Claudio Santoro", category: "attraction", lat: -22.7248, lng: -45.5922, address: "Av. Dr. Luis Arrobas Martins, 1800 - Alto Boa Vista", phone: "(12) 3662-6000", hours: "Varia conforme programação", image: "https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/auditorio_claudio_santoro.jpg", waze: "https://ul.waze.com/ul?ll=-22.7248,-45.5922&navigate=yes", google: "" },
+        { id: 202, name: "Parque Tarundu", category: "attraction", lat: -22.7543, lng: -45.5927, address: "Av. José A. Manso, 1515 - Toriba", phone: "(12) 3668-9595", hours: "Sáb-Dom: 9h-18h", image: "https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/tarundu.jpg", waze: "https://ul.waze.com/ul?ll=-22.7543,-45.5927&navigate=yes", google: "" },
+        { id: 203, name: "Dreams House Park", category: "attraction", lat: -22.7207, lng: -45.5706, address: "R. Roberto Jeffery, 30 - Capivari", phone: "(12) 99600-5577", hours: "Dom-Sex: 10h-18h, Sáb: 10h-20h", image: "https://visitecamposdojordao.org.br/wp-content/uploads/2025/10/dreamhouse.png", waze: "https://ul.waze.com/ul?ll=-22.7207,-45.5706&navigate=yes", google: "" },
+        { id: 204, name: "Estrada de Ferro Campos do Jordão", category: "attraction", lat: -22.7178, lng: -45.5674, address: "Av. Emílio Ribas, s/n - Capivari", phone: "(12) 3663-1531", hours: "Sáb-Dom: 9h-17h", image: "https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/efcj.jpg", waze: "https://ul.waze.com/ul?ll=-22.7178,-45.5674&navigate=yes", google: "" },
         { id: 205, name: "Cervejaria Baden Baden", category: "attraction", lat: -22.7479278, lng: -45.6202276, address: "Av. Matheus da Costa Pinto, 1653", phone: "(12) 3664-2004", hours: "Sáb-Dom: 10h-18h", image: "https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/fabrica_baden.jpg", waze: "https://ul.waze.com/ul?ll=-22.7479278,-45.6202276&navigate=yes", google: "" },
-        { id: 206, name: "Iceland - Bar de Gelo", category: "attraction", lat: -22.7181058, lng: -45.5667373, address: "Av. Macedo Soares, 123 - Capivari", phone: "(12) 99782-5874", hours: "Seg-Dom: 10h-21h", image: "https://visitecamposdojordao.org.br/wp-content/uploads/2025/04/iceland-800x450.png", waze: "https://ul.waze.com/ul?ll=-22.7181058,-45.5667373&navigate=yes", google: "" },
-        { id: 207, name: "Ducha de Prata", category: "attraction", lat: -22.7381029, lng: -45.569105, address: "Av. Mariane Baungart, 2485 - Vila Izabel", phone: "", hours: "Sáb-Dom: 8h30-17h30", image: "https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/ducha_prata.jpg", waze: "https://ul.waze.com/ul?ll=-22.7381029,-45.569105&navigate=yes", google: "" },
+        { id: 206, name: "Iceland - Bar de Gelo", category: "attraction", lat: -22.7189, lng: -45.5666, address: "Av. Macedo Soares, 123 - Capivari", phone: "(12) 99782-5874", hours: "Seg-Dom: 10h-21h", image: "https://visitecamposdojordao.org.br/wp-content/uploads/2025/04/iceland-800x450.png", waze: "https://ul.waze.com/ul?ll=-22.7189,-45.5666&navigate=yes", google: "" },
+        { id: 207, name: "Ducha de Prata", category: "attraction", lat: -22.7285, lng: -45.5719, address: "Av. Mariane Baungart, 2485 - Vila Izabel", phone: "", hours: "Sáb-Dom: 8h30-17h30", image: "https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/ducha_prata.jpg", waze: "https://ul.waze.com/ul?ll=-22.7285,-45.5719&navigate=yes", google: "" },
         { id: 208, name: "Museu Casa da Xilogravura", category: "attraction", lat: -22.7278268, lng: -45.585423, address: "Av. Eduardo Moreira da Cruz, 295 - Jardim Jaguaribe", phone: "(12) 3662-1832", hours: "Ter-Dom: 9h-17h", image: "https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/museu_xilogravura.jpg", waze: "https://ul.waze.com/ul?ll=-22.7278268,-45.585423&navigate=yes", google: "" },
-        { id: 209, name: "Museu Felícia Leirner", category: "attraction", lat: -22.7348917, lng: -45.6121861, address: "Av. Dr. Luis Arrobas Martins, 1880 - Alto Boa Vista", phone: "(12) 3512-2508", hours: "Ter-Dom: 9h-18h", image: "https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/museu_felicia_leirner.jpg", waze: "https://ul.waze.com/ul?ll=-22.7348917,-45.6121861&navigate=yes", google: "" },
-        { id: 210, name: "Palácio da Boa Vista", category: "attraction", lat: -22.7359333, lng: -45.6127636, address: "Av. Adhemar Pereira de Barros, 3001 - Jardim Dirce", phone: "(12) 3668-9700", hours: "Sáb-Dom: 10h-17h", image: "https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/palacio_boa_vista.jpg", waze: "https://ul.waze.com/ul?ll=-22.7359333,-45.6127636&navigate=yes", google: "" },
-        { id: 211, name: "Parque Amantikir", category: "attraction", lat: -22.7835819, lng: -45.6028104, address: "R. Simplício Ribeiro de Toledo Neto, 2200 - Gavião Gonzaga", phone: "(12) 99634-6784", hours: "Sáb-Dom: 9h-16h", image: "https://visitecamposdojordao.org.br/wp-content/uploads/2025/04/2-800x450.png", waze: "https://ul.waze.com/ul?ll=-22.7835819,-45.6028104&navigate=yes", google: "" },
+        { id: 209, name: "Museu Felícia Leirner", category: "attraction", lat: -22.7256, lng: -45.5918, address: "Av. Dr. Luis Arrobas Martins, 1880 - Alto Boa Vista", phone: "(12) 3512-2508", hours: "Ter-Dom: 9h-18h", image: "https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/museu_felicia_leirner.jpg", waze: "https://ul.waze.com/ul?ll=-22.7256,-45.5918&navigate=yes", google: "" },
+        { id: 210, name: "Palácio da Boa Vista", category: "attraction", lat: -22.7261, lng: -45.5863, address: "Av. Adhemar Pereira de Barros, 3001 - Jardim Dirce", phone: "(12) 3668-9700", hours: "Sáb-Dom: 10h-17h", image: "https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/palacio_boa_vista.jpg", waze: "https://ul.waze.com/ul?ll=-22.7261,-45.5863&navigate=yes", google: "" },
+        { id: 211, name: "Parque Amantikir", category: "attraction", lat: -22.7574, lng: -45.6163, address: "R. Simplício Ribeiro de Toledo Neto, 2200 - Gavião Gonzaga", phone: "(12) 99634-6784", hours: "Sáb-Dom: 9h-16h", image: "https://visitecamposdojordao.org.br/wp-content/uploads/2025/04/2-800x450.png", waze: "https://ul.waze.com/ul?ll=-22.7574,-45.6163&navigate=yes", google: "" },
         { id: 212, name: "Bosque do Silêncio", category: "attraction", lat: -22.7335427, lng: -45.5714982, address: "Av. Sen. Roberto Simonsen, 1724 - Jardim Alpestre", phone: "(12) 99260-7027", hours: "Sáb-Dom: 9h-17h", image: "https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/bosque_silencio.jpg", waze: "https://ul.waze.com/ul?ll=-22.7335427,-45.5714982&navigate=yes", google: "" },
-        { id: 213, name: "Parque Capivari", category: "attraction", lat: -22.7177723, lng: -45.5661137, address: "R. Eng. Diogo José de Carvalho, 1291 - Capivari", phone: "(12) 3663-6463", hours: "Seg-Dom: 9h-22h", image: "https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/parque_capivari.jpg", waze: "https://ul.waze.com/ul?ll=-22.7177723,-45.5661137&navigate=yes", google: "" },
+        { id: 213, name: "Parque Capivari", category: "attraction", lat: -22.7189, lng: -45.5672, address: "R. Eng. Diogo José de Carvalho, 1291 - Capivari", phone: "(12) 3663-6463", hours: "Seg-Dom: 9h-22h", image: "https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/parque_capivari.jpg", waze: "https://ul.waze.com/ul?ll=-22.7189,-45.5672&navigate=yes", google: "" },
         { id: 214, name: "Parque da Cerveja", category: "attraction", lat: -22.781498, lng: -45.6040617, address: "Estr. Mun. Paulo Costa Lenz Cesar, 2150 - Alto Lajeado", phone: "(12) 99790-6955", hours: "Sáb-Dom: 10h-18h", image: "https://visitecamposdojordao.org.br/wp-content/uploads/2025/04/1-800x450.png", waze: "https://ul.waze.com/ul?ll=-22.781498,-45.6040617&navigate=yes", google: "" },
         { id: 215, name: "Parque da Lagoinha", category: "attraction", lat: -22.7094417, lng: -45.5479686, address: "Av. Pedro Paulo, 1455 - Lot. Veu da Noiva", phone: "(12) 3662-6677", hours: "Sáb-Dom: 9h-18h", image: "https://visitecamposdojordao.org.br/wp-content/uploads/2025/03/paruqe-da-lagoinha-800x464.jpg", waze: "https://ul.waze.com/ul?ll=-22.7094417,-45.5479686&navigate=yes", google: "" },
-        { id: 216, name: "Parque Estadual Campos do Jordão", category: "attraction", lat: -22.6924167, lng: -45.4554167, address: "Av. Pedro Paulo, s/n - Horto Florestal", phone: "(12) 99607-0501", hours: "Seg-Dom: 9h-18h", image: "https://visitecamposdojordao.org.br/wp-content/uploads/2026/01/Untitled-design.png", waze: "https://ul.waze.com/ul?ll=-22.6924167,-45.4554167&navigate=yes", google: "" },
+        { id: 216, name: "Parque Estadual Campos do Jordão", category: "attraction", lat: -22.6958, lng: -45.5033, address: "Av. Pedro Paulo, s/n - Horto Florestal", phone: "(12) 99607-0501", hours: "Seg-Dom: 9h-18h", image: "https://visitecamposdojordao.org.br/wp-content/uploads/2026/01/Untitled-design.png", waze: "https://ul.waze.com/ul?ll=-22.6958,-45.5033&navigate=yes", google: "" },
         { id: 217, name: "Pico do Itapeva", category: "attraction", lat: -22.7648196, lng: -45.5292868, address: "Estrada do Pico do Itapeva", phone: "", hours: "Aberto 24h", image: "https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/pico_itapeva.jpg", waze: "https://ul.waze.com/ul?ll=-22.7648196,-45.5292868&navigate=yes", google: "" },
-        { id: 218, name: "Morro do Elefante", category: "attraction", lat: -22.7135276, lng: -45.5665424, address: "Av. da Vila Médica - Jardim Belvedere", phone: "", hours: "Seg-Dom: 9h-22h", image: "https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/morro_elefante.jpg", waze: "https://ul.waze.com/ul?ll=-22.7135276,-45.5665424&navigate=yes", google: "" },
-        { id: 219, name: "Pedra do Baú", category: "attraction", lat: -22.688889, lng: -45.661389, address: "Parque Pedra do Baú - São Bento do Sapucaí", phone: "", hours: "Aberto 24h", image: "https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/pedra_do_bau.jpg", waze: "https://ul.waze.com/ul?ll=-22.688889,-45.661389&navigate=yes", google: "" },
-        { id: 220, name: "Teleférico de Campos do Jordão", category: "attraction", lat: -22.7134274, lng: -45.5659753, address: "R. Eng. Diogo José de Carvalho - Capivari", phone: "(12) 3664-1418", hours: "Seg-Dom: 9h-17h", image: "https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/morro_elefante.jpg", waze: "https://ul.waze.com/ul?ll=-22.7134274,-45.5659753&navigate=yes", google: "" },
+        { id: 218, name: "Morro do Elefante", category: "attraction", lat: -22.7208, lng: -45.5678, address: "Av. da Vila Médica - Jardim Belvedere", phone: "", hours: "Seg-Dom: 9h-22h", image: "https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/morro_elefante.jpg", waze: "https://ul.waze.com/ul?ll=-22.7208,-45.5678&navigate=yes", google: "" },
+        { id: 219, name: "Pedra do Baú", category: "attraction", lat: -22.6873, lng: -45.6396, address: "Parque Pedra do Baú - São Bento do Sapucaí", phone: "", hours: "Aberto 24h", image: "https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/pedra_do_bau.jpg", waze: "https://ul.waze.com/ul?ll=-22.6873,-45.6396&navigate=yes", google: "" },
+        { id: 220, name: "Teleférico de Campos do Jordão", category: "attraction", lat: -22.7208, lng: -45.5678, address: "R. Eng. Diogo José de Carvalho - Capivari", phone: "(12) 3664-1418", hours: "Seg-Dom: 9h-17h", image: "https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/morro_elefante.jpg", waze: "https://ul.waze.com/ul?ll=-22.7208,-45.5678&navigate=yes", google: "" },
 
         // ========== PRESTADORES DE SERVIÇOS ==========
         { id: 301, name: "Amarelinha Tintas", category: "service", lat: -22.7334, lng: -45.5789, address: "Capivari", phone: "(12) 3662-1111", hours: "Seg-Sex: 8h-18h", image: "https://visitecamposdojordao.org.br/wp-content/uploads/2023/07/parque_capivari.jpg", waze: "https://ul.waze.com/ul?ll=-22.7334,-45.5789&navigate=yes", google: "" },
@@ -353,7 +353,7 @@ const Roteiros: React.FC = () => {
 
       function initMap() {
           // Centro no Parque Capivari - coração turístico de Campos do Jordão
-          map = L.map('main-map', { minZoom: 12, maxZoom: 19, maxBounds: CAMPOS_BOUNDS, maxBoundsViscosity: 0.9 }).setView([-22.7177, -45.5661], 14);
+          map = L.map('main-map', { zoomControl: false, minZoom: 12, maxZoom: 19, maxBounds: CAMPOS_BOUNDS, maxBoundsViscosity: 0.9 }).setView([-22.7177, -45.5661], 14);
         
         // Tile layer estilo Google Maps (CartoDB Voyager - visual limpo e moderno)
         L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
@@ -441,7 +441,7 @@ const Roteiros: React.FC = () => {
         });
       }
 
-      function selectLocation(location: any) { selectedLocation = location; updateInfoPanel(); map.setView([location.lat, location.lng], 16); markers.forEach(marker => { if (marker.location.id === location.id) { marker.openPopup(); const el = marker.getElement(); if (el) { el.classList.add('pulse-marker'); (el as any).style.zIndex = '1000'; setTimeout(() => { el.classList.remove('pulse-marker'); (el as any).style.zIndex = '100'; }, 3000); } } }); loadLocationsList(); }
+      function selectLocation(location: any) { selectedLocation = location; updateInfoPanel(); markers.forEach(marker => { if (marker.location.id === location.id) { marker.openPopup(); const el = marker.getElement(); if (el) { el.classList.add('pulse-marker'); (el as any).style.zIndex = '1000'; setTimeout(() => { el.classList.remove('pulse-marker'); (el as any).style.zIndex = '100'; }, 3000); } } }); loadLocationsList(); }
 
       (window as any).selectLocationById = function(id: number) { const location = locations.find((loc: any) => loc.id === id); if (location) selectLocation(location); };
       (window as any).navigateToLocation = function(id: number) { const location = locations.find((loc: any) => loc.id === id); if (!location) return; window.open(location.waze, '_blank'); };
@@ -545,7 +545,7 @@ const Roteiros: React.FC = () => {
         
         .main-container { 
           display: flex; 
-          height: 100vh; 
+          height: calc(100vh - 80px); /* desconta a altura da navbar */
           overflow: hidden;
           padding-top: 0;
           position: relative;
@@ -561,7 +561,7 @@ const Roteiros: React.FC = () => {
           flex-direction: column; 
           overflow: hidden;
           box-shadow: var(--shadow-xl);
-          padding-top: 12px; /* reduzido para puxar busca e abas para cima */
+          padding-top: 20px; /* espaço suficiente para o campo de busca */
         }
 
         /* Mobile Responsiveness */
@@ -572,7 +572,7 @@ const Roteiros: React.FC = () => {
 
           .sidebar {
             width: 100%;
-            height: 100vh;
+            height: calc(100vh - 80px); /* desconta a altura da navbar */
             border-right: none;
             border-bottom: none;
             position: absolute;
@@ -589,7 +589,7 @@ const Roteiros: React.FC = () => {
 
           .map-container {
             width: 100%;
-            height: 100vh;
+            height: calc(100vh - 80px); /* desconta a altura da navbar */
           }
 
           /* Hide floating buttons on mobile */
@@ -677,7 +677,7 @@ const Roteiros: React.FC = () => {
         }
         
         .search-container {
-          padding: 8px 12px; /* mais compacta */
+          padding: 12px 16px; /* espaço adequado para o ícone de busca */
           border-bottom: 1px solid var(--border-color);
           background: none;
         }
@@ -1181,12 +1181,6 @@ const Roteiros: React.FC = () => {
         }
       `}</style>
 
-      {/* Remove the header bar, keep only floating buttons */}
-      <div style={{ position: 'absolute', top: 12, right: 80, zIndex: 120, display: 'flex', gap: 8 }}>
-        <button id="show-route" className="btn btn-primary" style={{ padding: '6px 12px', fontSize: '0.8rem' }}><i className="fas fa-route" /> Roteiros</button>
-        <button id="reset-map" className="btn btn-primary" style={{ padding: '6px 12px', fontSize: '0.8rem' }}><i className="fas fa-compass" /> Centralizar</button>
-      </div>
-
       {/* Mobile Toggle Button */}
       <button id="mobile-toggle-list" className="mobile-toggle-btn">
         <i className="fas fa-list" />
@@ -1228,6 +1222,12 @@ const Roteiros: React.FC = () => {
             <button id="zoom-in" className="map-control-btn" title="Aumentar Zoom"><i className="fas fa-plus" /></button>
             <button id="zoom-out" className="map-control-btn" title="Diminuir Zoom"><i className="fas fa-minus" /></button>
             <button id="locate-me" className="map-control-btn" title="Minha Localização"><i className="fas fa-location-crosshairs" /></button>
+          </div>
+
+          {/* Floating buttons aligned with map-controls */}
+          <div style={{ position: 'absolute', top: 20, right: 80, zIndex: 1000, display: 'flex', gap: 8 }}>
+            <button id="show-route" className="btn btn-primary" style={{ padding: '6px 12px', fontSize: '0.8rem', height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><i className="fas fa-route" style={{ marginRight: 6 }} />Roteiros</button>
+            <button id="reset-map" className="btn btn-primary" style={{ padding: '6px 12px', fontSize: '0.8rem', height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><i className="fas fa-compass" style={{ marginRight: 6 }} />Centralizar</button>
           </div>
 
           <div id="info-panel" className="info-panel">
