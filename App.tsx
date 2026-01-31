@@ -375,6 +375,8 @@ export default function App() {
       return [...base, ...restos.filter(r => !existingIds.has(r.id))];
     }
 
+
+    
     if (filter === 'Todos') {
       const fromAttractions = (SITE_CONTENT.attractions || []).map(a => ({ id: a.id || a.title, title: a.title, category: a.category || 'Attraction', description: a.description || '', imageUrl: '' }));
       const fromHotels = (SITE_CONTENT.hotels || []).map(h => {
