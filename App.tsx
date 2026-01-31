@@ -12,35 +12,110 @@ import QuemSomos from './components/QuemSomos';
 import TourCard from './components/TourCard';
 import { geminiService } from './services/gemini';
 
-const Navbar: React.FC<{ current: string; onNavigate: (p: string) => void }> = ({ current, onNavigate }) => (
-  <nav className="sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 px-6 py-4">
-    <div className="max-w-7xl mx-auto flex justify-between items-center">
-      <div className="flex items-center gap-2">
-        <div className="w-10 h-10 rounded-lg overflow-hidden flex items-center justify-center">
-          <img
-            src="/images/logo-branco.png"
-            alt="Logo Campos do Jordão"
-            onError={(e: any) => { e.currentTarget.onerror = null; e.currentTarget.src = 'https://visitecamposdojordao.org.br/wp-content/uploads/2019/11/logo-branco.png'; }}
-            className="w-full h-full object-contain p-1"
-          />
+const Navbar: React.FC<{ current: string; onNavigate: (p: string) => void }> = ({ current, onNavigate }) => {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  return (
+    <nav className="sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 px-6 py-4">
+      <div className="max-w-7xl mx-auto flex justify-between items-center">
+        <div className="flex items-center gap-2">
+          <div className="w-10 h-10 rounded-lg overflow-hidden flex items-center justify-center">
+            <img
+              src="/images/logo-branco.png"
+              alt="Logo Campos do Jordão"
+              onError={(e: any) => { e.currentTarget.onerror = null; e.currentTarget.src = 'https://visitecamposdojordao.org.br/wp-content/uploads/2019/11/logo-branco.png'; }}
+              className="w-full h-full object-contain p-1"
+            />
+          </div>
+          <span className="text-white font-bold text-lg hidden md:block tracking-tight">VISITE CAMPOS DO JORDÃO</span>
         </div>
-        <span className="text-white font-bold text-lg hidden md:block tracking-tight">VISITE CAMPOS DO JORDÃO</span>
+
+        {/* Desktop Menu */}
+        <div className="hidden md:flex items-center gap-8 text-slate-300 font-medium text-sm">
+          <button onClick={() => onNavigate('home')} className={`hover:text-blue-400 transition-colors ${current === 'home' ? 'text-white' : ''}`}>A cidade</button>
+          <button onClick={() => onNavigate('passeios')} className={`hover:text-blue-400 transition-colors ${current === 'passeios' ? 'text-white border-b-2 border-blue-500 pb-1' : ''}`}>Passeios</button>
+          <button onClick={() => onNavigate('roteiros')} className={`hover:text-blue-400 transition-colors ${current === 'roteiros' ? 'text-white border-b-2 border-blue-500 pb-1' : ''}`}>Mapa e roteiros</button>
+          <button onClick={() => onNavigate('ondecomer')} className={`hover:text-blue-400 transition-colors ${current === 'ondecomer' ? 'text-white' : ''}`}>Onde comer</button>
+          <button onClick={() => onNavigate('eventos')} className={`hover:text-blue-400 transition-colors ${current === 'eventos' ? 'text-white' : ''}`}>Eventos</button>
+          <button onClick={() => onNavigate('hospedagens')} className={`hover:text-blue-400 transition-colors ${current === 'hospedagens' ? 'text-white' : ''}`}>Onde ficar</button>
+          <button onClick={() => onNavigate('quemsomos')} className={`hover:text-blue-400 transition-colors ${current === 'quemsomos' ? 'text-white' : ''}`}>Quem somos</button>
+        </div>
+
+        {/* Hamburguer Button - Mobile */}
+        <button
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className="md:hidden flex flex-col gap-1.5 p-2 hover:bg-slate-800 rounded transition-colors"
+          aria-label="Menu"
+        >
+          <span className={`w-6 h-0.5 bg-white transition-all ${mobileMenuOpen ? 'rotate-45 translate-y-2' : ''}`}></span>
+          <span className={`w-6 h-0.5 bg-white transition-all ${mobileMenuOpen ? 'opacity-0' : ''}`}></span>
+          <span className={`w-6 h-0.5 bg-white transition-all ${mobileMenuOpen ? '-rotate-45 -translate-y-2' : ''}`}></span>
+        </button>
+
+        {/* Associe-se Button - Desktop */}
+        <button onClick={() => onNavigate('associe')} className="hidden md:block bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-full text-xs font-semibold transition-all">
+          Associe-se
+        </button>
       </div>
-      <div className="hidden md:flex items-center gap-8 text-slate-300 font-medium text-sm">
-        <button onClick={() => onNavigate('home')} className={`hover:text-blue-400 transition-colors ${current === 'home' ? 'text-white' : ''}`}>A cidade</button>
-        <button onClick={() => onNavigate('passeios')} className={`hover:text-blue-400 transition-colors ${current === 'passeios' ? 'text-white border-b-2 border-blue-500 pb-1' : ''}`}>Passeios</button>
-        <button onClick={() => onNavigate('roteiros')} className={`hover:text-blue-400 transition-colors ${current === 'roteiros' ? 'text-white border-b-2 border-blue-500 pb-1' : ''}`}>Mapa e roteiros</button>
-        <button onClick={() => onNavigate('ondecomer')} className={`hover:text-blue-400 transition-colors ${current === 'ondecomer' ? 'text-white' : ''}`}>Onde comer</button>
-        <button onClick={() => onNavigate('eventos')} className={`hover:text-blue-400 transition-colors ${current === 'eventos' ? 'text-white' : ''}`}>Eventos</button>
-        <button onClick={() => onNavigate('hospedagens')} className={`hover:text-blue-400 transition-colors ${current === 'hospedagens' ? 'text-white' : ''}`}>Onde ficar</button>
-        <button onClick={() => onNavigate('quemsomos')} className={`hover:text-blue-400 transition-colors ${current === 'quemsomos' ? 'text-white' : ''}`}>Quem somos</button>
-      </div>
-      <button onClick={() => onNavigate('associe')} className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-full text-xs font-semibold transition-all">
-        Associe-se
-      </button>
-    </div>
-  </nav>
-);
+
+      {/* Mobile Menu Dropdown */}
+      {mobileMenuOpen && (
+        <div className="md:hidden mt-4 pb-4 border-t border-slate-800 pt-4 animate-fade-in">
+          <div className="flex flex-col gap-3 text-slate-300 font-medium">
+            <button
+              onClick={() => { onNavigate('home'); setMobileMenuOpen(false); }}
+              className={`text-left px-4 py-3 hover:bg-slate-800 rounded transition-colors ${current === 'home' ? 'text-white bg-slate-800' : ''}`}
+            >
+              A cidade
+            </button>
+            <button
+              onClick={() => { onNavigate('passeios'); setMobileMenuOpen(false); }}
+              className={`text-left px-4 py-3 hover:bg-slate-800 rounded transition-colors ${current === 'passeios' ? 'text-white bg-slate-800' : ''}`}
+            >
+              Passeios
+            </button>
+            <button
+              onClick={() => { onNavigate('roteiros'); setMobileMenuOpen(false); }}
+              className={`text-left px-4 py-3 hover:bg-slate-800 rounded transition-colors ${current === 'roteiros' ? 'text-white bg-slate-800' : ''}`}
+            >
+              Mapa e roteiros
+            </button>
+            <button
+              onClick={() => { onNavigate('ondecomer'); setMobileMenuOpen(false); }}
+              className={`text-left px-4 py-3 hover:bg-slate-800 rounded transition-colors ${current === 'ondecomer' ? 'text-white bg-slate-800' : ''}`}
+            >
+              Onde comer
+            </button>
+            <button
+              onClick={() => { onNavigate('eventos'); setMobileMenuOpen(false); }}
+              className={`text-left px-4 py-3 hover:bg-slate-800 rounded transition-colors ${current === 'eventos' ? 'text-white bg-slate-800' : ''}`}
+            >
+              Eventos
+            </button>
+            <button
+              onClick={() => { onNavigate('hospedagens'); setMobileMenuOpen(false); }}
+              className={`text-left px-4 py-3 hover:bg-slate-800 rounded transition-colors ${current === 'hospedagens' ? 'text-white bg-slate-800' : ''}`}
+            >
+              Onde ficar
+            </button>
+            <button
+              onClick={() => { onNavigate('quemsomos'); setMobileMenuOpen(false); }}
+              className={`text-left px-4 py-3 hover:bg-slate-800 rounded transition-colors ${current === 'quemsomos' ? 'text-white bg-slate-800' : ''}`}
+            >
+              Quem somos
+            </button>
+            <button
+              onClick={() => { onNavigate('associe'); setMobileMenuOpen(false); }}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg font-semibold transition-all mt-2"
+            >
+              Associe-se
+            </button>
+          </div>
+        </div>
+      )}
+    </nav>
+  );
+};
 
 const Hero: React.FC = () => {
   // use a known public hero image so the Hero appears immediately

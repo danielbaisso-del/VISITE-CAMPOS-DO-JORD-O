@@ -405,7 +405,7 @@ const Roteiros: React.FC = () => {
           
           const icon = L.divIcon({ html: iconHtml, className: 'custom-marker', iconSize: [42,42], iconAnchor: [21,21] });
           const marker = L.marker([location.lat, location.lng], { icon: icon, title: location.name }).addTo(map);
-          marker.bindPopup(`<div style="min-width:200px;"><div class="popup-title">${location.name}</div><div class="popup-category" style="background-color:${config.color}">${config.name}</div><div style="font-size:12px;color:#666;margin-bottom:10px;">${location.address}</div><div class="popup-actions"><button onclick=\"event.stopPropagation(); window.selectLocationById(${location.id})\" class=\"popup-btn\"><i class=\"fas fa-info-circle\"></i> Detalhes</button><button onclick=\"event.stopPropagation(); window.navigateToLocation(${location.id})\" class=\"popup-btn\"><i class=\"fas fa-directions\"></i> Navegar</button></div></div>`);
+          // Removido popup para usar apenas o info-panel
           (marker as any).location = location; markers.push(marker); marker.on('click', () => selectLocation(location));
         });
       }
@@ -461,6 +461,23 @@ const Roteiros: React.FC = () => {
         const resetBtn = document.getElementById('reset-map'); if (resetBtn) resetBtn.addEventListener('click', () => map.setView([-22.735, -45.58], 14)); const closeInfo = document.getElementById('close-info'); if (closeInfo) closeInfo.addEventListener('click', () => document.getElementById('info-panel')?.classList.remove('active')); const closeRoute = document.getElementById('close-route'); if (closeRoute) closeRoute.addEventListener('click', () => document.getElementById('route-panel')?.classList.remove('active')); const showRoute = document.getElementById('show-route'); if (showRoute) showRoute.addEventListener('click', () => document.getElementById('route-panel')?.classList.toggle('active'));
         document.querySelectorAll('.route-option').forEach(option => { option.addEventListener('click', () => { document.querySelectorAll('.route-option').forEach(opt => opt.classList.remove('active')); option.classList.add('active'); setupRouteNavigation((option as HTMLElement).dataset.route || 'cultural'); }); });
         const openWaze = document.getElementById('open-waze-route'); if (openWaze) openWaze.addEventListener('click', () => { const routeUrl = (openWaze as HTMLElement).dataset.route; if (routeUrl) window.open(routeUrl, '_blank'); }); const openGoogle = document.getElementById('open-google-route'); if (openGoogle) openGoogle.addEventListener('click', () => { const routeUrl = (openGoogle as HTMLElement).dataset.route; if (routeUrl) window.open(routeUrl, '_blank'); });
+        
+        // Mobile toggle functionality
+        const mobileToggleList = document.getElementById('mobile-toggle-list');
+        const mobileCloseSidebar = document.getElementById('mobile-close-sidebar');
+        const sidebar = document.querySelector('.sidebar');
+        
+        if (mobileToggleList) {
+          mobileToggleList.addEventListener('click', () => {
+            sidebar?.classList.toggle('mobile-visible');
+          });
+        }
+        
+        if (mobileCloseSidebar) {
+          mobileCloseSidebar.addEventListener('click', () => {
+            sidebar?.classList.remove('mobile-visible');
+          });
+        }
       }
 
       function setupRouteNavigation(routeType: string) { const wazeRoutes: any = { cultural: 'https://ul.waze.com/ul?ll=-22.73688900%2C-45.58794000&navigate=yes&to=1.%20Pal%C3%A1cio%20Boa%20Vista%20%3E%202.%20Audit%C3%B3rio%20Santoro%20%3E%203.%20Museu%20Felícia%20Leirner', gastronomic: 'https://ul.waze.com/ul?ll=-22.72842000%2C-45.57215000&navigate=yes&to=1.%20Baden%20Baden%20%3E%202.%20Caras%20de%20Malte%20%3E%203.%20Ludwig%20Restaurant', nature: 'https://ul.waze.com/ul?ll=-22.72652000%2C-45.58432000&navigate=yes&to=1.%20Horto%20Florestal%20%3E%202.%20Parque%20Capivari%20%3E%203.%20Morro%20do%20Elefante', adventure: 'https://ul.waze.com/ul?ll=-22.71532000%2C-45.55623000&navigate=yes&to=1.%20Tarundu%20%3E%202.%20Prana%20Park%20%3E%203.%20Iceland' }; const googleRoutes: any = { cultural: 'https://www.google.com/maps/dir/Pal%C3%A1cio+Boa+Vista,+Av.+Adhemar+de+Barros,+3001+-+Alto+da+Boa+Vista,+Campos+do+Jord%C3%AÃ£o+-+SP/Audit%C3%Bório+Claudio+Santoro,+Av.+Dr.+Luis+Arrobas+Martins,+1880+-+Alto+Boa+Vista,+Campos+do+Jord%C3%AÃ£o+-+SP/Museu+Felícia+Leirner,+Av.+Dr.+Luis+Arrobas+Martins,+1880+-+Alto+Boa+Vista,+Campos+do+Jord%C3%AÃ£o+-+SP', gastronomic: 'https://www.google.com/maps/dir/Cervejaria+Baden+Baden,+Av.+Matheus+Costa+Pinto,+1653+-+Vila+Santa+Cruz,+Campos+do+Jord%C3%AÃ£o+-+SP/Caras+de+Malte,+Av.+Pedro+Paulo,+1455+-+Jardim+Embaixador,+Campos+do+Jord%C3%AÃ£o+-+SP/Ludwig+Restaurant,+Av.+Dr.+Jan+Antonin+Bata,+1400+-+Capivari,+Campos+do+Jord%C3%AÃ£o+-+SP', nature: 'https://www.google.com/maps/dir/Horto+Florestal,+Av.+Pedro+Paulo+-+Horto+Florestal,+Campos+do+Jord%C3%AÃ£o+-+SP/Parque+Capivari,+R.+Eng.+Diogo+Jos%C3%A9+de+Carvalho,+1291+-+Capivari,+Campos+do+Jord%C3%AÃ£o+-+SP/Morro+do+Elefante,+Av.+Em%C3%IMe+Lang+J%C3%BAnior+-+Campos+do+Jord%C3%AÃ£o+-+SP', adventure: 'https://www.google.com/maps/dir/Centro+de+Lazer+Tarundu,+Av.+Jos%C3%AÉ+Antonio+Manso,+1515+-+Campos+do+Jord%C3%AÃ£o+-+SP/Prana+Park,+Estrada+do+Pico+do+Itapeva+-+Campos+do+Jord%C3%AÃ£o+-+SP/Iceland+Aventura+no+Gelo,+R.+Eng.+Diogo+Jos%C3%AÉ+de+Carvalho,+190+-+Capivari,+Campos+do+Jord%C3%AÃ£o+-+SP' }; const openWaze = document.getElementById('open-waze-route'); if (openWaze) (openWaze as HTMLElement).dataset.route = wazeRoutes[routeType]; const openGoogle = document.getElementById('open-google-route'); if (openGoogle) (openGoogle as HTMLElement).dataset.route = googleRoutes[routeType]; }
@@ -531,6 +548,7 @@ const Roteiros: React.FC = () => {
           height: 100vh; 
           overflow: hidden;
           padding-top: 0;
+          position: relative;
         }
         
         .sidebar { 
@@ -544,6 +562,114 @@ const Roteiros: React.FC = () => {
           overflow: hidden;
           box-shadow: var(--shadow-xl);
           padding-top: 12px; /* reduzido para puxar busca e abas para cima */
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+          .main-container {
+            flex-direction: column;
+          }
+
+          .sidebar {
+            width: 100%;
+            height: 100vh;
+            border-right: none;
+            border-bottom: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+          }
+
+          .sidebar.mobile-visible {
+            transform: translateX(0);
+          }
+
+          .map-container {
+            width: 100%;
+            height: 100vh;
+          }
+
+          /* Hide floating buttons on mobile */
+          #show-route, #reset-map {
+            display: none !important;
+          }
+
+          /* Mobile toggle buttons */
+          .mobile-toggle-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 200;
+            background: linear-gradient(135deg, #4f46e5, #6366f1);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 1.5rem;
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+          }
+
+          .mobile-toggle-btn:active {
+            transform: scale(0.95);
+          }
+
+          .mobile-close-sidebar {
+            position: fixed;
+            top: 20px;
+            left: 80px;
+            z-index: 101;
+            background: rgba(30, 41, 59, 0.9);
+            color: white;
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+          }
+
+          .sidebar.mobile-visible ~ .mobile-close-sidebar {
+            display: flex;
+          }
+
+          /* Info panel adjustments for mobile */
+          .info-panel {
+            width: 90% !important;
+            max-width: 400px;
+            bottom: 20px !important;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+            max-height: 70vh;
+            overflow-y: auto;
+          }
+
+          .route-panel {
+            width: 90% !important;
+            max-width: 400px;
+            bottom: 20px !important;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+            max-height: 70vh;
+            overflow-y: auto;
+          }
+
+          /* Map controls adjustment */
+          .map-controls {
+            top: 20px !important;
+            right: 20px !important;
+          }
         }
         
         .sidebar-header {
@@ -672,28 +798,37 @@ const Roteiros: React.FC = () => {
         }
         
         .info-panel { 
-          position: absolute; 
-          bottom: 20px; 
-          left: 20px; 
-          right: 20px; 
+          position: fixed !important; 
+          top: 50% !important; 
+          left: 50% !important; 
+          transform: translate(-50%, -50%) !important; 
           max-width: 480px; 
+          width: 90%;
           background: rgba(15, 23, 42, 0.95); 
           backdrop-filter: blur(20px);
           -webkit-backdrop-filter: blur(20px);
           border-radius: 24px; 
           padding: 24px; 
           box-shadow: var(--shadow-xl);
-          z-index: 10; 
+          z-index: 150; 
           display: none;
           border: 1px solid var(--border-color);
           color: var(--text-primary);
+          max-height: 85vh;
+          overflow-y: auto;
+          margin: 0 !important;
+          bottom: auto !important;
+          right: auto !important;
         }
         
-        .info-panel.active { display: block; animation: slideUp 0.3s ease; }
+        .info-panel.active { 
+          display: block !important; 
+          animation: fadeIn 0.3s ease; 
+        }
         
-        @keyframes slideUp {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translate(-50%, -50%) scale(0.95); }
+          to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
         }
         
         .route-panel { 
@@ -1051,6 +1186,16 @@ const Roteiros: React.FC = () => {
         <button id="show-route" className="btn btn-primary" style={{ padding: '6px 12px', fontSize: '0.8rem' }}><i className="fas fa-route" /> Roteiros</button>
         <button id="reset-map" className="btn btn-primary" style={{ padding: '6px 12px', fontSize: '0.8rem' }}><i className="fas fa-compass" /> Centralizar</button>
       </div>
+
+      {/* Mobile Toggle Button */}
+      <button id="mobile-toggle-list" className="mobile-toggle-btn">
+        <i className="fas fa-list" />
+      </button>
+
+      {/* Mobile Close Button - moved outside sidebar */}
+      <button id="mobile-close-sidebar" className="mobile-close-sidebar">
+        <i className="fas fa-times" />
+      </button>
 
       <div className="main-container">
         <aside className="sidebar">
