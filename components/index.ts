@@ -5,6 +5,7 @@ export * from './layout';
 export * from './pages';
 
 // Feature Components
+export { default as ImageCarousel } from './ImageCarousel';
 export { default as Gastronomia } from './Gastronomia';
 export { default as Passeios } from './Passeios';
 export { default as Roteiros } from './Roteiros';

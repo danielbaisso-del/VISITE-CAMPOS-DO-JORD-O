@@ -5,9 +5,9 @@ export const Footer: React.FC = () => {
   const { language } = useLanguage();
   
   const texts = {
-    pt: 'Desenvolvido por Concept ONE Tecnologia',
-    en: 'Developed by Concept ONE Tecnologia',
-    es: 'Desarrollado por Concept ONE Tecnologia',
+    pt: 'Desenvolvido por Codedev',
+    en: 'Developed by Codedev',
+    es: 'Desarrollado por Codedev',
   };
 
   return (

@@ -2,6 +2,15 @@ import { Accommodation } from '../types';
 
 export const ACCOMMODATIONS: Accommodation[] = [
   {
+    id: 'hortensias',
+    name: 'Pousada das Hortênsias',
+    description: 'No Capivari; apartamentos com TV LCD SKY, DVD, cofre digital, secador, frigobar e aquecedor elétrico; minibiblioteca, bicicletas e sala de jogos.',
+    phone: '(12) 3663-6010',
+    website: 'https://dashortensias.com.br/',
+    images: ['https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/pousada_hortensias.jpg'],
+    tags: ['Centro', 'Família']
+  },
+  {
     id: 'parque-hotel',
     name: 'Campos do Jordão Parque Hotel',
     description: 'Localizado a 400m do centro turístico do Capivari; apartamentos com vista panorâmica, sala de jogos, restaurante e café da manhã incluso.',
@@ -245,15 +254,6 @@ export const ACCOMMODATIONS: Accommodation[] = [
     website: 'https://www.pousadadapedra.com.br/',
     images: ['https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/pousada_pedra.jpg'],
     tags: ['Piscina', 'Charme']
-  },
-  {
-    id: 'hortensias',
-    name: 'Pousada das Hortênsias',
-    description: 'No Capivari; apartamentos com TV LCD SKY, DVD, cofre digital, secador, frigobar e aquecedor elétrico; minibiblioteca, bicicletas e sala de jogos.',
-    phone: '(12) 3663-6010',
-    website: 'https://dashortensias.com.br/',
-    images: ['https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/pousada_hortensias.jpg'],
-    tags: ['Centro', 'Família']
   },
   {
     id: 'lavandas',

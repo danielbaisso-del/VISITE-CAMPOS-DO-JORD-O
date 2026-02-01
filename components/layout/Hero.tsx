@@ -70,15 +70,24 @@ export const Hero: React.FC = () => {
   const displayActions = resultCard?.actions?.length ? resultCard.actions : DEFAULT_ACTIONS;
 
   return (
-    <div className="relative h-[68vh] min-h-[520px] flex items-center justify-center overflow-hidden">
+    <div className="relative h-[68vh] min-h-[520px] flex items-center justify-center">
       {/* Background */}
-      <div className="absolute inset-0 transform-gpu will-change-transform">
+      <div className="absolute inset-0 transform-gpu will-change-transform overflow-hidden rounded-b-[3rem]">
         <div
           className="absolute inset-0 bg-center bg-cover animate-kenburns"
           style={{ backgroundImage: `url('${APP_CONFIG.hero.image}')` }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-950/70 to-slate-950/60" />
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-950/70 to-slate-900/60" />
       </div>
+
+      {/* Sombra suave inferior */}
+      <div 
+        className="absolute -bottom-4 left-4 right-4 h-16 z-0 pointer-events-none rounded-[2rem]"
+        style={{ 
+          background: 'radial-gradient(ellipse at center, rgba(0,0,0,0.15) 0%, transparent 70%)',
+          filter: 'blur(12px)'
+        }}
+      />
 
       {/* Content */}
       <div className="relative z-20 text-center px-6 w-full">
@@ -131,32 +140,81 @@ export const Hero: React.FC = () => {
           </div>
         </div>
 
-        {/* Result Card */}
-        <div className="mt-6 flex justify-center">
-          <div className={`w-full max-w-3xl transition-all duration-400 ${
-            cardVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-          }`}>
-            <div className="bg-slate-900/60 rounded-[2rem] p-6 backdrop-blur-xl border border-white/10 shadow-2xl text-slate-50">
-              <div className="flex items-start justify-between gap-4">
-                <div className="prose prose-invert max-w-none text-sm whitespace-pre-wrap">
-                  {loadingResult ? texts.loading : (resultCard ? resultCard.text : texts.defaultText)}
-                </div>
+      </div>
+
+      {/* Result Card - Sobrepondo a capa */}
+      {cardVisible && (
+        <div className="absolute left-1/2 -translate-x-1/2 bottom-0 translate-y-[85%] z-50 w-full max-w-4xl px-4">
+          <div className="bg-gradient-to-br from-slate-900/95 via-slate-800/95 to-slate-900/95 rounded-[2rem] p-6 backdrop-blur-xl border border-white/20 shadow-[0_20px_60px_rgba(0,0,0,0.5)] text-slate-50">
+            {/* Header do Card */}
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <span className="text-2xl">🤖</span>
+                <span className="text-sm font-semibold text-white/90">Guia Virtual</span>
               </div>
-              <div className="mt-4 flex flex-wrap gap-2">
+              <button 
+                onClick={() => setCardVisible(false)}
+                className="text-white/60 hover:text-white/90 transition-colors text-lg"
+              >
+                ✕
+              </button>
+            </div>
+            
+            {/* Conteúdo da Resposta */}
+            <div className="max-h-[280px] overflow-y-auto custom-scrollbar">
+              <div className="prose prose-invert max-w-none text-sm leading-relaxed">
+                {loadingResult ? (
+                  <div className="flex items-center gap-2 text-slate-300">
+                    <div className="animate-spin w-4 h-4 border-2 border-white/30 border-t-white rounded-full"></div>
+                    {texts.loading}
+                  </div>
+                ) : (
+                  <div className="whitespace-pre-wrap text-slate-100">
+                    {resultCard ? resultCard.text : texts.defaultText}
+                  </div>
+                )}
+              </div>
+            </div>
+            
+            {/* Botões de Ação */}
+            <div className="mt-5 pt-4 border-t border-white/10">
+              <div className="flex flex-wrap gap-2">
                 {displayActions.map((a, i) => (
                   <a
                     key={i}
                     href={a.url || '#'}
-                    className="inline-flex items-center px-3 py-1 rounded-full bg-white/10 text-white text-xs hover:bg-white/20 transition"
+                    onClick={(e) => {
+                      const url = a.url || '';
+                      // Links externos - deixa o comportamento padrão
+                      if (url.startsWith('http')) {
+                        return;
+                      }
+                      e.preventDefault();
+                      setCardVisible(false);
+                      
+                      // Extrai o target da URL (ex: /#ondecomer -> ondecomer)
+                      const target = url.replace('/#', '').replace('#', '').replace('/', '');
+                      
+                      if (target) {
+                        // Dispara evento de navegação para mudar de página
+                        setTimeout(() => {
+                          window.dispatchEvent(new CustomEvent('site:navigate', { detail: { target } }));
+                        }, 100);
+                      }
+                    }}
+                    target={a.url?.startsWith('http') ? '_blank' : undefined}
+                    rel={a.url?.startsWith('http') ? 'noopener noreferrer' : undefined}
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-gradient-to-r from-indigo-600 to-blue-600 text-white text-xs font-medium hover:from-indigo-500 hover:to-blue-500 transition-all shadow-lg hover:shadow-xl hover:scale-105 cursor-pointer"
                   >
-                    {a.label}
+                    <span>{a.label}</span>
+                    {a.url?.startsWith('http') && <span className="opacity-70">↗</span>}
                   </a>
                 ))}
               </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Animations CSS */}
       <style>{`
@@ -167,6 +225,10 @@ export const Hero: React.FC = () => {
         .floaty { animation: floaty 4s ease-in-out infinite; }
         @keyframes spinSlow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         .animate-spin-slow { animation: spinSlow 1.2s linear; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 3px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.3); }
       `}</style>
     </div>
   );

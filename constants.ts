@@ -2,6 +2,108 @@
 import { TourItem } from './types';
 
 export const TOURS: TourItem[] = [
+  // ========== HOTÉIS E POUSADAS (primeiro) ==========
+  {
+    id: 'hortensias',
+    title: 'Pousada das Hortênsias',
+    category: 'Hospedagem',
+    description: 'No Capivari; apartamentos com TV LCD SKY, DVD, cofre digital, secador, frigobar e aquecedor elétrico; minibiblioteca, bicicletas e sala de jogos.',
+    address: 'Capivari, Campos do Jordão',
+    phone: '(12) 3663-6010',
+    imageUrl: 'https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/pousada_hortensias.jpg',
+    website: 'https://dashortensias.com.br/'
+  },
+  {
+    id: 'parque-hotel',
+    title: 'Campos do Jordão Parque Hotel',
+    category: 'Hospedagem',
+    description: 'Localizado a 400m do centro turístico do Capivari; apartamentos com vista panorâmica, sala de jogos, restaurante e café da manhã incluso.',
+    address: 'Capivari, Campos do Jordão',
+    phone: '(12) 3669-3333',
+    imageUrl: 'https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/parque_hotel_800.jpg',
+    website: 'http://www.parquehotel.com.br'
+  },
+  {
+    id: 'hotel-toriba',
+    title: 'Hotel Toriba',
+    category: 'Hospedagem',
+    description: 'Hotel com forte infraestrutura: spa, quadras, trilhas, restaurantes e diversas opções de lazer; café da manhã incluso.',
+    address: 'Alto da Boa Vista, Campos do Jordão',
+    phone: '(12) 3668-5008',
+    imageUrl: 'https://visitecamposdojordao.org.br/wp-content/uploads/2025/10/hotel-toriba.png',
+    website: 'https://www.toriba.com.br/'
+  },
+  {
+    id: 'bendito-cacau',
+    title: 'Hotel Bendito Cacau Resort',
+    category: 'Hospedagem',
+    description: 'Quartos equipados com frigobar e ar-condicionado; instalações de fitness e quadras; Wi‑Fi e estacionamento.',
+    address: 'Campos do Jordão',
+    phone: '(12) 3669-0777',
+    imageUrl: 'https://visitecamposdojordao.org.br/wp-content/uploads/2025/04/Design-sem-nome.png',
+    website: 'https://www.benditocacauresort.com.br/campos'
+  },
+  {
+    id: 'hotel-quebra-noz',
+    title: 'Hotel Boutique Quebra-Noz',
+    category: 'Hospedagem',
+    description: 'Suítes com banheira, piscina aquecida, spa, áreas de lazer e restaurante; café da manhã incluso.',
+    address: 'Capivari, Campos do Jordão',
+    phone: '(12) 3663-4889',
+    imageUrl: 'https://visitecamposdojordao.org.br/wp-content/uploads/2024/02/Externa-Quebra-Noz-6-scaled.jpg',
+    website: 'https://quebranoz.com.br'
+  },
+  {
+    id: 'vila-inglesa',
+    title: 'Hotel Vila Inglesa',
+    category: 'Hospedagem',
+    description: 'Localizado na Vila Inglesa; oferece diversas atividades como arvorismo, tirolesa, quadras e piscinas; café da manhã incluso.',
+    address: 'Vila Inglesa, Campos do Jordão',
+    phone: '(12) 3669-5000',
+    imageUrl: 'https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/vila_inglesa.jpg',
+    website: 'http://www.hotelvilainglesa.com.br'
+  },
+  {
+    id: 'le-renard',
+    title: 'Hotel Le Renard',
+    category: 'Hospedagem',
+    description: 'Suítes com piso aquecido e amenities de qualidade; piscina descoberta aquecida e café da manhã incluso.',
+    address: 'Capivari, Campos do Jordão',
+    phone: '(12) 3669-2220',
+    imageUrl: 'https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/le_renard.jpg',
+    website: 'https://lerenard.com.br/'
+  },
+  {
+    id: 'chateau-villette',
+    title: 'Pousada Chateau La Villette',
+    category: 'Hospedagem',
+    description: 'Na Vila Everest; suítes com cama king, roupa de cama 600 fios, calefação, TV SKY HD, DVDs, Wi-Fi e cofre; restaurante Le Foyer.',
+    address: 'Vila Everest, Campos do Jordão',
+    phone: '(12) 3663-1444',
+    imageUrl: 'https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/la_villette.jpg',
+    website: 'https://chateaulavillette.com.br/'
+  },
+  {
+    id: 'annecy',
+    title: 'Pousada Annecy',
+    category: 'Hospedagem',
+    description: 'A 400m do centro do Capivari; suítes com cama box queen size, TV LCD 42″, DVD e Sky, frigobar, aquecedor elétrico e enxoval Trussardi.',
+    address: 'Capivari, Campos do Jordão',
+    phone: '(12) 3663-3617',
+    imageUrl: 'https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/annecy.jpg',
+    website: 'https://www.annecypousada.com.br/'
+  },
+  {
+    id: 'alto-boa-vista',
+    title: 'Pousada Alto da Boa Vista',
+    category: 'Hospedagem',
+    description: 'Chalés em estilo europeu com vista panorâmica das montanhas; sala de leitura, lounge com lareira e jardins; café da manhã incluso.',
+    address: 'Alto da Boa Vista, Campos do Jordão',
+    phone: '(12) 99660-3386',
+    imageUrl: 'https://visitecamposdojordao.org.br/wp-content/uploads/2025/05/alto-da-boa-vista-760x428.png',
+    website: 'https://pousadaaltodaboavista.com.br/'
+  },
+  // ========== PASSEIOS E ATRAÇÕES ==========
   {
     id: 'claudio-santoro',
     title: 'Auditório Claudio Santoro',

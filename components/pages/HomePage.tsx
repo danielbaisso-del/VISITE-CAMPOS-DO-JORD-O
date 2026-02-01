@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Hero } from '../layout';
 import TourCard from '../TourCard';
+import ImageCarousel from '../ImageCarousel';
 import { useFilteredTours } from '../../hooks';
 import { FILTER_CATEGORIES, FilterCategory } from '../../config';
 import { useLanguage } from '../../contexts';
@@ -38,12 +39,19 @@ export const HomePage: React.FC = () => {
   return (
     <>
       <Hero />
-      <main className="flex-grow max-w-7xl mx-auto px-6 py-12" id="explore">
+      {/* Espaço extra para o card de resposta que sobrepõe */}
+      <div className="h-2 md:h-4"></div>
+      <main className="flex-grow max-w-7xl mx-auto px-6 py-6" id="explore">
         {/* Quote Section */}
-        <div className="text-center mb-16 max-w-3xl mx-auto">
+        <div className="text-center mb-8 max-w-3xl mx-auto">
           <h2 className="text-3xl font-serif text-slate-800 mb-6 italic">
             {txt.quote}
           </h2>
+        </div>
+
+        {/* Modern Image Carousel */}
+        <div className="mb-16 -mx-6 md:-mx-0">
+          <ImageCarousel />
         </div>
 
         {/* Filters and Search */}
