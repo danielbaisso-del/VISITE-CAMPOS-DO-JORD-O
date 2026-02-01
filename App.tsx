@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigation } from './hooks';
 import { PageType } from './config';
+import { LanguageProvider } from './contexts';
 
 // Layout Components
 import { Navbar, Footer, VirtualGuide } from './components/layout';
@@ -45,14 +46,16 @@ export default function App() {
   const { page, setPage } = useNavigation('home');
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar current={page} onNavigate={setPage} />
-      
-      <PageRouter page={page} />
-      
-      {page !== 'roteiros' && <Footer />}
-      
-      <VirtualGuide />
-    </div>
+    <LanguageProvider>
+      <div className="min-h-screen flex flex-col">
+        <Navbar current={page} onNavigate={setPage} />
+        
+        <PageRouter page={page} />
+        
+        {page !== 'roteiros' && <Footer />}
+        
+        <VirtualGuide />
+      </div>
+    </LanguageProvider>
   );
 }

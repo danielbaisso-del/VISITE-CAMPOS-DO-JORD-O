@@ -3,12 +3,37 @@ import { Hero } from '../layout';
 import TourCard from '../TourCard';
 import { useFilteredTours } from '../../hooks';
 import { FILTER_CATEGORIES, FilterCategory } from '../../config';
+import { useLanguage } from '../../contexts';
 
 export const HomePage: React.FC = () => {
+  const { language, t } = useLanguage();
   const [filter, setFilter] = useState<FilterCategory>('Todos');
   const [searchQuery, setSearchQuery] = useState('');
   
   const filteredTours = useFilteredTours(filter, searchQuery);
+
+  const texts = {
+    pt: {
+      quote: '"A cidade perfeita para quem quer apenas relaxar, agitar ou se aventurar."',
+      search: 'Buscar passeio...',
+    },
+    en: {
+      quote: '"The perfect city for those who just want to relax, have fun or adventure."',
+      search: 'Search tour...',
+    },
+    es: {
+      quote: '"La ciudad perfecta para quien quiere simplemente relajarse, divertirse o aventurarse."',
+      search: 'Buscar paseo...',
+    },
+  };
+
+  const categoryTranslations: Record<string, Record<FilterCategory, string>> = {
+    pt: { Todos: 'Todos', Cultura: 'Cultura', Natureza: 'Natureza', Lazer: 'Lazer', Gastronomia: 'Gastronomia' },
+    en: { Todos: 'All', Cultura: 'Culture', Natureza: 'Nature', Lazer: 'Leisure', Gastronomia: 'Gastronomy' },
+    es: { Todos: 'Todos', Cultura: 'Cultura', Natureza: 'Naturaleza', Lazer: 'Ocio', Gastronomia: 'Gastronomía' },
+  };
+
+  const txt = texts[language];
 
   return (
     <>
@@ -17,7 +42,7 @@ export const HomePage: React.FC = () => {
         {/* Quote Section */}
         <div className="text-center mb-16 max-w-3xl mx-auto">
           <h2 className="text-3xl font-serif text-slate-800 mb-6 italic">
-            "A cidade perfeita para quem quer apenas relaxar, agitar ou se aventurar."
+            {txt.quote}
           </h2>
         </div>
 
@@ -34,13 +59,13 @@ export const HomePage: React.FC = () => {
                     : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
                 }`}
               >
-                {cat}
+                {categoryTranslations[language][cat]}
               </button>
             ))}
           </div>
           <input
             type="text"
-            placeholder="Buscar passeio..."
+            placeholder={txt.search}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full md:w-64 px-4 py-2 bg-white border border-slate-200 rounded-full text-sm focus:ring-1 focus:ring-blue-500 outline-none"

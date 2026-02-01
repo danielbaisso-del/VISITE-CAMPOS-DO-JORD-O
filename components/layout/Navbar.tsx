@@ -1,14 +1,27 @@
 import React, { useState } from 'react';
 import { NAV_ITEMS, PageType } from '../../config';
 import { APP_CONFIG } from '../../config/app';
+import { useLanguage, LanguageSelector } from '../../contexts';
 
 interface NavbarProps {
   current: PageType;
   onNavigate: (page: PageType) => void;
 }
 
+// Mapeamento de labels para chaves de tradução
+const labelToTranslationKey: Record<string, string> = {
+  'home': 'nav.cidade',
+  'roteiros': 'nav.mapa',
+  'passeios': 'nav.passeios',
+  'ondecomer': 'nav.ondecomer',
+  'eventos': 'nav.eventos',
+  'hospedagens': 'nav.ondeficar',
+  'quemsomos': 'nav.quemsomos',
+};
+
 export const Navbar: React.FC<NavbarProps> = ({ current, onNavigate }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { t } = useLanguage();
 
   const handleNavigate = (page: PageType) => {
     onNavigate(page);
@@ -35,8 +48,8 @@ export const Navbar: React.FC<NavbarProps> = ({ current, onNavigate }) => {
   };
 
   return (
-    <nav className="sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 px-6 py-4">
-      <div className="max-w-7xl mx-auto flex justify-between items-center">
+    <nav className="sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 px-2 py-4">
+      <div className="flex justify-between items-center">
         {/* Logo */}
         <div className="flex items-center gap-2">
           <div className="w-14 h-14 rounded-lg overflow-hidden flex items-center justify-center">
@@ -50,7 +63,7 @@ export const Navbar: React.FC<NavbarProps> = ({ current, onNavigate }) => {
               className="w-full h-full object-contain"
             />
           </div>
-          <span className="text-white font-bold text-lg hidden md:block tracking-tight">
+          <span className="text-white font-bold text-lg hidden md:block tracking-tight whitespace-nowrap">
             VISITE CAMPOS DO JORDÃO
           </span>
         </div>
@@ -63,7 +76,7 @@ export const Navbar: React.FC<NavbarProps> = ({ current, onNavigate }) => {
               onClick={() => handleNavigate(item.id)}
               className={getButtonClass(item)}
             >
-              {item.label}
+              {t(labelToTranslationKey[item.id] || item.label)}
             </button>
           ))}
         </div>
@@ -79,33 +92,41 @@ export const Navbar: React.FC<NavbarProps> = ({ current, onNavigate }) => {
           <span className={`w-6 h-0.5 bg-white transition-all ${mobileMenuOpen ? '-rotate-45 -translate-y-2' : ''}`} />
         </button>
 
-        {/* Associe-se Button - Desktop */}
-        <button
-          onClick={() => handleNavigate('associe')}
-          className="hidden md:block bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-full text-xs font-semibold transition-all"
-        >
-          Associe-se
-        </button>
+        {/* Language Selector & Associe-se Button - Desktop */}
+        <div className="hidden md:flex items-center gap-4">
+          <LanguageSelector />
+          <button
+            onClick={() => handleNavigate('associe')}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-full text-xs font-semibold transition-all"
+          >
+            {t('nav.associe')}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
         <div className="md:hidden mt-4 pb-4 border-t border-slate-800 pt-4 animate-fade-in">
           <div className="flex flex-col gap-3 text-slate-300 font-medium">
+            {/* Language Selector - Mobile */}
+            <div className="flex items-center justify-center gap-2 py-2 border-b border-slate-700 mb-2">
+              <LanguageSelector />
+            </div>
+            
             {NAV_ITEMS.map(item => (
               <button
                 key={item.id}
                 onClick={() => handleNavigate(item.id)}
                 className={getMobileButtonClass(item.id)}
               >
-                {item.label}
+                {t(labelToTranslationKey[item.id] || item.label)}
               </button>
             ))}
             <button
               onClick={() => handleNavigate('associe')}
               className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg font-semibold transition-all mt-2"
             >
-              Associe-se
+              {t('nav.associe')}
             </button>
           </div>
         </div>

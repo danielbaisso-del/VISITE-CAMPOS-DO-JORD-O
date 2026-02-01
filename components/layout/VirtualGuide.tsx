@@ -2,8 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import { ChatMessage } from '../../types';
 import { geminiService } from '../../services/gemini';
 import { APP_CONFIG, TONE_OPTIONS } from '../../config/app';
+import { useLanguage } from '../../contexts';
 
 export const VirtualGuide: React.FC = () => {
+  const { language } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [tone, setTone] = useState<string>('friendly');
@@ -12,6 +14,39 @@ export const VirtualGuide: React.FC = () => {
   
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
+
+  // Textos traduzidos
+  const texts = {
+    pt: {
+      title: 'Guia Virtual Inteligente',
+      subtitle: 'Respostas rápidas sobre Campos do Jordão',
+      placeholder: 'Pergunte sobre Campos do Jordão ou sobre o nosso site',
+      send: 'Enviar',
+      typing: 'Digitando...',
+      welcome: 'Olá! Em que posso ajudar hoje?',
+      error: 'Desculpe, ocorreu um erro ao obter resposta.',
+    },
+    en: {
+      title: 'Smart Virtual Guide',
+      subtitle: 'Quick answers about Campos do Jordão',
+      placeholder: 'Ask about Campos do Jordão or about our website',
+      send: 'Send',
+      typing: 'Typing...',
+      welcome: 'Hello! How can I help you today?',
+      error: 'Sorry, an error occurred while getting the response.',
+    },
+    es: {
+      title: 'Guía Virtual Inteligente',
+      subtitle: 'Respuestas rápidas sobre Campos do Jordão',
+      placeholder: 'Pregunta sobre Campos do Jordão o sobre nuestro sitio',
+      send: 'Enviar',
+      typing: 'Escribiendo...',
+      welcome: '¡Hola! ¿En qué puedo ayudarte hoy?',
+      error: 'Lo sentimos, ocurrió un error al obtener la respuesta.',
+    },
+  };
+
+  const t = texts[language];
 
   // Auto-scroll and focus management
   useEffect(() => {
@@ -44,14 +79,14 @@ export const VirtualGuide: React.FC = () => {
         const response = await geminiService.sendMessage(q, { tone });
         setMessages(prev => [...prev, { role: 'model', text: response.text, actions: response.actions }]);
       } catch (err) {
-        setMessages(prev => [...prev, { role: 'model', text: 'Desculpe, ocorreu um erro ao obter resposta.' }]);
+        setMessages(prev => [...prev, { role: 'model', text: t.error }]);
       }
       setIsLoading(false);
     }
 
     window.addEventListener('virtualguide:open-query', handleOpenQuery as EventListener);
     return () => window.removeEventListener('virtualguide:open-query', handleOpenQuery as EventListener);
-  }, [tone]);
+  }, [tone, t.error]);
 
   const handleSend = async () => {
     if (!inputValue.trim() || isLoading) return;
@@ -65,7 +100,7 @@ export const VirtualGuide: React.FC = () => {
       const response = await geminiService.sendMessage(userMsg, { tone });
       setMessages(prev => [...prev, { role: 'model', text: response.text, actions: response.actions }]);
     } catch (e) {
-      setMessages(prev => [...prev, { role: 'model', text: 'Desculpe, ocorreu um erro ao obter resposta.' }]);
+      setMessages(prev => [...prev, { role: 'model', text: t.error }]);
     }
     setIsLoading(false);
   };
@@ -130,8 +165,8 @@ export const VirtualGuide: React.FC = () => {
                   className="w-9 h-9 rounded-md object-contain"
                 />
                 <div>
-                  <div className="font-bold text-sm">Guia Virtual Inteligente</div>
-                  <div className="text-[11px] opacity-90">Respostas rápidas sobre Campos do Jordão</div>
+                  <div className="font-bold text-sm">{t.title}</div>
+                  <div className="text-[11px] opacity-90">{t.subtitle}</div>
                 </div>
               </div>
               <div className="flex items-center gap-2">
@@ -154,7 +189,7 @@ export const VirtualGuide: React.FC = () => {
             <div className="flex-grow p-6 overflow-y-auto" ref={scrollRef}>
               {messages.length === 0 && (
                 <div className="text-center text-slate-400 py-8 bg-white/4 backdrop-blur-md rounded-lg px-4">
-                  Olá! Em que posso ajudar hoje?
+                  {t.welcome}
                 </div>
               )}
               <div className="space-y-3">
@@ -184,7 +219,7 @@ export const VirtualGuide: React.FC = () => {
                     </div>
                   </div>
                 ))}
-                {isLoading && <div className="text-sm text-slate-500">Digitando...</div>}
+                {isLoading && <div className="text-sm text-slate-500">{t.typing}</div>}
               </div>
             </div>
 
@@ -196,14 +231,14 @@ export const VirtualGuide: React.FC = () => {
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-                  placeholder="Pergunte sobre Campos do Jordão ou sobre o nosso site"
+                  placeholder={t.placeholder}
                   className="flex-grow rounded-full px-4 py-3 text-sm border border-slate-200 bg-slate-50 focus:outline-none"
                 />
                 <button
                   onClick={handleSend}
                   className="bg-slate-900 text-white px-5 py-2 rounded-full"
                 >
-                  Enviar
+                  {t.send}
                 </button>
               </div>
             </div>

@@ -1,14 +1,49 @@
 import React, { useState } from 'react';
 import { APP_CONFIG, DEFAULT_ACTIONS } from '../../config/app';
 import { geminiService } from '../../services/gemini';
+import { useLanguage } from '../../contexts';
 
 export const Hero: React.FC = () => {
+  const { t, language } = useLanguage();
   const [query, setQuery] = useState('');
   const [searching, setSearching] = useState(false);
   const [celebrate, setCelebrate] = useState(false);
   const [resultCard, setResultCard] = useState<{ text: string; actions?: Array<{ label?: string; url?: string }> } | null>(null);
   const [cardVisible, setCardVisible] = useState(false);
   const [loadingResult, setLoadingResult] = useState(false);
+
+  // Placeholders e textos por idioma
+  const heroTexts = {
+    pt: {
+      title: 'Campos do Jordão, destino de experiências',
+      subtitle: 'Turismo, eventos, gastronomia e hospedagem com curadoria local para valorizar o destino o ano todo.',
+      placeholder: 'Pergunte sobre Campos do Jordão ou sobre o nosso site',
+      search: 'Pesquisar',
+      loading: 'Carregando...',
+      defaultText: 'Faça uma pergunta para ver a resposta aqui.',
+      error: 'Desculpe, não foi possível obter resposta no momento.',
+    },
+    en: {
+      title: 'Campos do Jordão, a destination of experiences',
+      subtitle: 'Tourism, events, gastronomy and accommodation with local curation to enhance the destination all year round.',
+      placeholder: 'Ask about Campos do Jordão or about our website',
+      search: 'Search',
+      loading: 'Loading...',
+      defaultText: 'Ask a question to see the answer here.',
+      error: 'Sorry, we could not get a response at this time.',
+    },
+    es: {
+      title: 'Campos do Jordão, destino de experiencias',
+      subtitle: 'Turismo, eventos, gastronomía y alojamiento con curaduría local para valorizar el destino todo el año.',
+      placeholder: 'Pregunta sobre Campos do Jordão o sobre nuestro sitio',
+      search: 'Buscar',
+      loading: 'Cargando...',
+      defaultText: 'Haz una pregunta para ver la respuesta aquí.',
+      error: 'Lo sentimos, no fue posible obtener una respuesta en este momento.',
+    },
+  };
+
+  const texts = heroTexts[language];
 
   const handleSearch = async (q?: string) => {
     const text = (q ?? query).trim();
@@ -24,7 +59,7 @@ export const Hero: React.FC = () => {
       setResultCard({ text: parsedText, actions: resp.actions });
       setTimeout(() => setCardVisible(true), 80);
     } catch (e) {
-      setResultCard({ text: 'Desculpe, não foi possível obter resposta no momento.' });
+      setResultCard({ text: texts.error });
       setCardVisible(true);
     }
 
@@ -64,10 +99,10 @@ export const Hero: React.FC = () => {
 
         {/* Title & Subtitle */}
         <h1 className="text-3xl md:text-5xl lg:text-6xl font-serif text-white font-bold tracking-tight leading-tight mb-4">
-          Campos do Jordão, destino de experiências
+          {texts.title}
         </h1>
         <p className="text-lg md:text-xl text-slate-200 max-w-2xl mx-auto mb-8">
-          Turismo, eventos, gastronomia e hospedagem com curadoria local para valorizar o destino o ano todo.
+          {texts.subtitle}
         </p>
 
         {/* Search Input */}
@@ -79,18 +114,18 @@ export const Hero: React.FC = () => {
             />
             <div className="relative flex items-center gap-3 bg-white/6 backdrop-blur-md border border-white/10 rounded-3xl px-4 py-3 shadow-lg">
               <input
-                aria-label="Pesquisar sobre Campos do Jordão"
+                aria-label={texts.placeholder}
                 value={query}
                 onChange={e => setQuery(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && handleSearch()}
                 className="flex-grow bg-transparent placeholder-slate-200 text-white outline-none text-sm md:text-base"
-                placeholder="Pergunte sobre Campos do Jordão ou sobre o nosso site"
+                placeholder={texts.placeholder}
               />
               <button
                 onClick={() => handleSearch()}
                 className="bg-white/10 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-white/20 transition"
               >
-                {searching ? '...' : 'Pesquisar'}
+                {searching ? '...' : texts.search}
               </button>
             </div>
           </div>
@@ -104,7 +139,7 @@ export const Hero: React.FC = () => {
             <div className="bg-slate-900/60 rounded-[2rem] p-6 backdrop-blur-xl border border-white/10 shadow-2xl text-slate-50">
               <div className="flex items-start justify-between gap-4">
                 <div className="prose prose-invert max-w-none text-sm whitespace-pre-wrap">
-                  {loadingResult ? 'Carregando...' : (resultCard ? resultCard.text : 'Faça uma pergunta para ver a resposta aqui.')}
+                  {loadingResult ? texts.loading : (resultCard ? resultCard.text : texts.defaultText)}
                 </div>
               </div>
               <div className="mt-4 flex flex-wrap gap-2">

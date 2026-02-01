@@ -1,10 +1,132 @@
 import React, { useEffect } from 'react';
 import SITE_CONTENT from '../data/siteContent';
 import { TOURS } from '../constants';
+import { useLanguage, Language } from '../contexts';
+import { getTranslatedMapLocation, mapCategoryTranslations } from '../data/translations';
 
-declare global { interface Window { selectLocationById?: any; navigateToLocation?: any; map?: any; __roteiros_cleanup?: any } }
+declare global { interface Window { selectLocationById?: any; navigateToLocation?: any; map?: any; __roteiros_cleanup?: any; __roteirosLang?: any; __roteirosGetTranslation?: any } }
 
 const Roteiros: React.FC = () => {
+  const { language } = useLanguage();
+
+  // Traduções para o componente Roteiros
+  const translations = {
+    pt: {
+      search: 'Buscar hotéis, restaurantes, atrações...',
+      all: 'Todos',
+      hotels: 'Hotéis',
+      restaurants: 'Restaurantes',
+      attractions: 'Atrações',
+      services: 'Serviços',
+      routes: 'Roteiros',
+      center: 'Centralizar',
+      zoomIn: 'Aumentar Zoom',
+      zoomOut: 'Diminuir Zoom',
+      myLocation: 'Minha Localização',
+      directions: 'Como chegar',
+      moreInfo: 'Mais informações',
+      close: 'Fechar',
+      locationName: 'Nome do Local',
+      selectRoute: 'Selecione um roteiro',
+      startRoute: 'Iniciar Roteiro',
+      closeRoute: 'Fechar',
+      routeTitle: 'Roteiros Turísticos',
+      routeHistoric: 'Roteiro Histórico',
+      routeHistoricDesc: 'Conheça a história de Campos do Jordão',
+      routeNature: 'Roteiro da Natureza',
+      routeNatureDesc: 'Explore as belezas naturais da região',
+      routeGastronomy: 'Roteiro Gastronômico',
+      routeGastronomyDesc: 'Saboreie o melhor da gastronomia local',
+      notProvided: 'Não informado',
+      noResults: 'Nenhum local encontrado',
+      view: 'Ver',
+      navigate: 'Navegar',
+    },
+    en: {
+      search: 'Search hotels, restaurants, attractions...',
+      all: 'All',
+      hotels: 'Hotels',
+      restaurants: 'Restaurants',
+      attractions: 'Attractions',
+      services: 'Services',
+      routes: 'Routes',
+      center: 'Center',
+      zoomIn: 'Zoom In',
+      zoomOut: 'Zoom Out',
+      myLocation: 'My Location',
+      directions: 'Get directions',
+      moreInfo: 'More information',
+      close: 'Close',
+      locationName: 'Location Name',
+      selectRoute: 'Select a route',
+      startRoute: 'Start Route',
+      closeRoute: 'Close',
+      routeTitle: 'Tourist Routes',
+      routeHistoric: 'Historic Route',
+      routeHistoricDesc: 'Discover the history of Campos do Jordão',
+      routeNature: 'Nature Route',
+      routeNatureDesc: 'Explore the natural beauties of the region',
+      routeGastronomy: 'Gastronomy Route',
+      routeGastronomyDesc: 'Taste the best of local cuisine',
+      notProvided: 'Not provided',
+      noResults: 'No locations found',
+      view: 'View',
+      navigate: 'Navigate',
+    },
+    es: {
+      search: 'Buscar hoteles, restaurantes, atracciones...',
+      all: 'Todos',
+      hotels: 'Hoteles',
+      restaurants: 'Restaurantes',
+      attractions: 'Atracciones',
+      services: 'Servicios',
+      routes: 'Rutas',
+      center: 'Centrar',
+      zoomIn: 'Acercar',
+      zoomOut: 'Alejar',
+      myLocation: 'Mi Ubicación',
+      directions: 'Cómo llegar',
+      moreInfo: 'Más información',
+      close: 'Cerrar',
+      locationName: 'Nombre del Lugar',
+      selectRoute: 'Selecciona una ruta',
+      startRoute: 'Iniciar Ruta',
+      closeRoute: 'Cerrar',
+      routeTitle: 'Rutas Turísticas',
+      routeHistoric: 'Ruta Histórica',
+      routeHistoricDesc: 'Conoce la historia de Campos do Jordão',
+      routeNature: 'Ruta de la Naturaleza',
+      routeNatureDesc: 'Explora las bellezas naturales de la región',
+      routeGastronomy: 'Ruta Gastronómica',
+      routeGastronomyDesc: 'Saborea lo mejor de la gastronomía local',
+      notProvided: 'No informado',
+      noResults: 'Ningún lugar encontrado',
+      view: 'Ver',
+      navigate: 'Navegar',
+    },
+  };
+
+  const t = translations[language];
+
+  // Expor traduções globalmente para o script inline
+  useEffect(() => {
+    (window as any).__roteirosLang = t;
+    (window as any).__roteirosLanguage = language;
+    
+    // Expor função de tradução de locais
+    (window as any).__roteirosGetTranslation = (id: number) => {
+      return getTranslatedMapLocation(id, language);
+    };
+    
+    // Expor traduções de categorias
+    (window as any).__roteirosCategoryNames = {
+      hotel: mapCategoryTranslations.hotel[language],
+      restaurant: mapCategoryTranslations.restaurant[language],
+      attraction: mapCategoryTranslations.attraction[language],
+      service: mapCategoryTranslations.service[language],
+    };
+  }, [t, language]);
+
   useEffect(() => {
     const ensureLink = (href: string, id?: string) => {
       if (id && document.getElementById(id)) return;
@@ -38,10 +160,53 @@ const Roteiros: React.FC = () => {
       document.body.appendChild(s);
     });
 
+    // Load Leaflet Routing Machine
+    const loadRoutingMachine = () => new Promise<void>((resolve) => {
+      if ((window as any).L?.Routing) return resolve();
+      
+      // Adicionar CSS do routing machine
+      const cssLink = document.createElement('link');
+      cssLink.rel = 'stylesheet';
+      cssLink.href = 'https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css';
+      document.head.appendChild(cssLink);
+      
+      const s = document.createElement('script');
+      s.src = 'https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.min.js';
+      s.async = true;
+      s.onload = () => resolve();
+      s.onerror = () => {
+        console.error('Failed to load Leaflet Routing Machine');
+        resolve();
+      };
+      document.body.appendChild(s);
+    });
+
     let destroyed = false;
+    let currentRoute: string | null = null; // Current selected route for filtering
+    let routingControl: any = null; // Controle de roteamento atual
+    let routePolylines: any[] = []; // Linhas da rota
+    let routeTimeMarkers: any[] = []; // Marcadores de tempo
+    let userLocation: { lat: number; lng: number } | null = null; // Localização do usuário
+    let userLocationMarker: any = null; // Marcador da localização do usuário
+    let useUserLocationAsStart = false; // Se deve usar a localização do usuário como início da rota
+
+    // Route definitions - which location IDs belong to each route
+    // Cada roteiro tem: 1 local de natureza + 1 gastronômico + 1 de lazer
+    const routeLocationIds: Record<string, number[]> = {
+      cultural: [209, 106, 210],      // Museu Felícia Leirner (natureza/cultura) → Choperia Baden Baden (gastro) → Palácio da Boa Vista (lazer)
+      gastronomic: [211, 105, 214],   // Parque Amantikir (natureza) → Caras de Malte (gastro) → Parque da Cerveja (lazer)
+      nature: [216, 120, 218],        // Horto Florestal (natureza) → Restaurante Vila Chã (gastro) → Morro do Elefante (lazer)
+      adventure: [217, 101, 202],     // Pico do Itapeva (natureza) → Alto da Brasa (gastro) → Parque Tarundu (lazer)
+      romantic: [211, 110, 207],      // Parque Amantikir (natureza) → Le Foyer (gastro) → Ducha de Prata (lazer)
+      family: [215, 108, 213],        // Parque da Lagoinha (natureza) → Dona Chica (gastro) → Parque Capivari (lazer)
+      shopping: [212, 121, 206],      // Bosque do Silêncio (natureza) → Sabor Chocolate (gastro) → Iceland Bar de Gelo (lazer)
+      photo: [219, 122, 220]          // Pedra do Baú (natureza) → Sans Souci Café (gastro) → Teleférico (lazer)
+    };
 
     (async () => {
       await loadLeaflet();
+      if (destroyed) return;
+      await loadRoutingMachine();
       if (destroyed) return;
       const L = (window as any).L;
       if (!L) return console.error('Leaflet not available');
@@ -347,7 +512,19 @@ const Roteiros: React.FC = () => {
 
       const locations = rawLocations.map(l => ({ ...l, image: findImageFor(l) }));
 
-      const categoryConfig: any = { hotel: { color: '#3498db', icon: 'bed', name: 'Hotel/Pousada' }, restaurant: { color: '#e74c3c', icon: 'utensils', name: 'Restaurante/Bar' }, attraction: { color: '#2ecc71', icon: 'mountain', name: 'Atração Turística' }, service: { color: '#9b59b6', icon: 'concierge-bell', name: 'Serviço' } };
+      // Pegar nomes de categorias traduzidos
+      const catNames = (window as any).__roteirosCategoryNames || { hotel: 'Hotel/Pousada', restaurant: 'Restaurante/Bar', attraction: 'Atração Turística', service: 'Serviço' };
+      const categoryConfig: any = { hotel: { color: '#3498db', icon: 'bed', name: catNames.hotel || 'Hotel/Pousada' }, restaurant: { color: '#e74c3c', icon: 'utensils', name: catNames.restaurant || 'Restaurante/Bar' }, attraction: { color: '#2ecc71', icon: 'mountain', name: catNames.attraction || 'Atração Turística' }, service: { color: '#9b59b6', icon: 'concierge-bell', name: catNames.service || 'Serviço' } };
+      
+      // Função helper para obter nome traduzido de um local
+      function getLocationName(location: any): string {
+        const getTranslation = (window as any).__roteirosGetTranslation;
+        if (getTranslation) {
+          const translation = getTranslation(location.id);
+          if (translation && translation.name) return translation.name;
+        }
+        return location.name;
+      }
 
       let map: any; let markers: any[] = []; let selectedLocation: any = null; let currentCategory: any = 'all'; let currentSearch: any = '';
 
@@ -370,16 +547,20 @@ const Roteiros: React.FC = () => {
         markers.forEach(m => map.removeLayer(m));
         markers = [];
         
-        // Filtrar locais com base na categoria atual
+        // Filtrar locais com base na categoria atual e rota selecionada
         const filteredLocations = locations.filter((location: any) => {
           const matchesCategory = currentCategory === 'all' || location.category === currentCategory;
-          const matchesSearch = location.name.toLowerCase().includes(currentSearch.toLowerCase()) || location.address.toLowerCase().includes(currentSearch.toLowerCase());
-          return matchesCategory && matchesSearch;
+          const locationName = getLocationName(location);
+          const matchesSearch = locationName.toLowerCase().includes(currentSearch.toLowerCase()) || location.address.toLowerCase().includes(currentSearch.toLowerCase());
+          // Filtrar por rota se uma rota estiver selecionada
+          const matchesRoute = !currentRoute || (routeLocationIds[currentRoute] && routeLocationIds[currentRoute].includes(location.id));
+          return matchesCategory && matchesSearch && matchesRoute;
         });
         
         filteredLocations.forEach((location: any) => {
           if (!location.lat || !location.lng) return;
           const config = categoryConfig[location.category];
+          const locationName = getLocationName(location);
           let iconHtml = '';
           
           // Se estiver em "Todos", mostra apenas ícones por categoria
@@ -394,7 +575,7 @@ const Roteiros: React.FC = () => {
             const imgUrl = location.image;
             if (imgUrl && !imgUrl.includes('unsplash.com')) {
               iconHtml = `<div style="width:42px;height:42px;border-radius:8px;overflow:hidden;border:3px solid ${config.color};box-shadow:0 2px 6px rgba(0,0,0,0.35);cursor:pointer;background:${config.color};">
-                <img src="${imgUrl}" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\\'display:flex;align-items:center;justify-content:center;width:100%;height:100%\\'><i class=\\'fas fa-${config.icon}\\' style=\\'color:white;font-size:16px\\'></i></div>'" style="width:100%;height:100%;object-fit:cover;display:block" alt="${location.name}"/>
+                <img src="${imgUrl}" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\\'display:flex;align-items:center;justify-content:center;width:100%;height:100%\\'><i class=\\'fas fa-${config.icon}\\' style=\\'color:white;font-size:16px\\'></i></div>'" style="width:100%;height:100%;object-fit:cover;display:block" alt="${locationName}"/>
               </div>`;
             } else {
               iconHtml = `<div style="background-color: ${config.color}; width:42px; height:42px; border-radius:8px; border:3px solid white; box-shadow:0 2px 6px rgba(0,0,0,0.35); display:flex; align-items:center; justify-content:center; cursor:pointer;">
@@ -404,7 +585,7 @@ const Roteiros: React.FC = () => {
           }
           
           const icon = L.divIcon({ html: iconHtml, className: 'custom-marker', iconSize: [42,42], iconAnchor: [21,21] });
-          const marker = L.marker([location.lat, location.lng], { icon: icon, title: location.name }).addTo(map);
+          const marker = L.marker([location.lat, location.lng], { icon: icon, title: locationName }).addTo(map);
           // Removido popup para usar apenas o info-panel
           (marker as any).location = location; markers.push(marker); marker.on('click', () => selectLocation(location));
         });
@@ -412,26 +593,36 @@ const Roteiros: React.FC = () => {
 
       function loadLocationsList() {
         const listContainer = document.getElementById('locations-list'); if (!listContainer) return; listContainer.innerHTML = '';
-        const filteredLocations = locations.filter((location: any) => { const matchesCategory = currentCategory === 'all' || location.category === currentCategory; const matchesSearch = location.name.toLowerCase().includes(currentSearch.toLowerCase()) || location.address.toLowerCase().includes(currentSearch.toLowerCase()); return matchesCategory && matchesSearch; });
-        if (filteredLocations.length === 0) { listContainer.innerHTML = `<div style=\"text-align:center;padding:40px 20px;color:#666;\"><i class=\"fas fa-search\" style=\"font-size:2rem;margin-bottom:10px;\"></i><p>Nenhum local encontrado</p></div>`; return; }
+        const lang = (window as any).__roteirosLang || {};
+        const noResults = lang.noResults || 'Nenhum local encontrado';
+        const filteredLocations = locations.filter((location: any) => { 
+          const matchesCategory = currentCategory === 'all' || location.category === currentCategory; 
+          const locationName = getLocationName(location); 
+          const matchesSearch = locationName.toLowerCase().includes(currentSearch.toLowerCase()) || location.address.toLowerCase().includes(currentSearch.toLowerCase()); 
+          // Filtrar por rota se uma rota estiver selecionada
+          const matchesRoute = !currentRoute || (routeLocationIds[currentRoute] && routeLocationIds[currentRoute].includes(location.id));
+          return matchesCategory && matchesSearch && matchesRoute; 
+        });
+        if (filteredLocations.length === 0) { listContainer.innerHTML = `<div style=\"text-align:center;padding:40px 20px;color:#666;\"><i class=\"fas fa-search\" style=\"font-size:2rem;margin-bottom:10px;\"></i><p>${noResults}</p></div>`; return; }
         filteredLocations.forEach((location: any) => {
           const config = categoryConfig[location.category];
           const thumb = location.image || '/images/gastronomia/placeholder.svg';
+          const locationName = getLocationName(location);
           const item = document.createElement('div');
           item.className = 'location-item';
           if (selectedLocation && selectedLocation.id === location.id) item.classList.add('active');
           item.innerHTML = `
             <div class="location-row">
-              <img class="location-thumb" src="${thumb}" onerror="this.src='/images/gastronomia/placeholder.svg'" alt="${location.name}" />
+              <img class="location-thumb" src="${thumb}" onerror="this.src='/images/gastronomia/placeholder.svg'" alt="${locationName}" />
               <div class="location-body">
                 <div class="location-header">
-                  <div class="location-name">${location.name}</div>
+                  <div class="location-name">${locationName}</div>
                   <div class="location-category ${location.category}-category">${config.name}</div>
                 </div>
                 <div class="location-address"><i class="fas fa-map-marker-alt"></i> ${location.address}</div>
                 <div class="location-actions">
-                  <button class="action-btn" onclick="event.stopPropagation(); window.selectLocationById(${location.id})"><i class="fas fa-eye"></i> Ver</button>
-                  <button class="action-btn" onclick="event.stopPropagation(); window.navigateToLocation(${location.id})"><i class="fas fa-directions"></i> Navegar</button>
+                  <button class="action-btn" onclick="event.stopPropagation(); window.selectLocationById(${location.id})"><i class="fas fa-eye"></i> ${lang.view || 'Ver'}</button>
+                  <button class="action-btn" onclick="event.stopPropagation(); window.navigateToLocation(${location.id})"><i class="fas fa-directions"></i> ${lang.navigate || 'Navegar'}</button>
                 </div>
               </div>
             </div>
@@ -446,7 +637,30 @@ const Roteiros: React.FC = () => {
       (window as any).selectLocationById = function(id: number) { const location = locations.find((loc: any) => loc.id === id); if (location) selectLocation(location); };
       (window as any).navigateToLocation = function(id: number) { const location = locations.find((loc: any) => loc.id === id); if (!location) return; window.open(location.waze, '_blank'); };
 
-      function updateInfoPanel() { if (!selectedLocation) return; const config = categoryConfig[selectedLocation.category]; const nameEl = document.getElementById('info-name'); if (nameEl) nameEl.textContent = selectedLocation.name; const catEl = document.getElementById('info-category'); if (catEl) catEl.textContent = config.name; const addrEl = document.getElementById('info-address'); if (addrEl) addrEl.textContent = selectedLocation.address; const phoneEl = document.getElementById('info-phone'); if (phoneEl) phoneEl.textContent = selectedLocation.phone || 'Não informado'; const hoursEl = document.getElementById('info-hours'); if (hoursEl) hoursEl.textContent = selectedLocation.hours || ''; const img = document.getElementById('info-image') as HTMLImageElement | null; if (img) { img.src = selectedLocation.image; img.alt = selectedLocation.name; } const wazeBtn = document.getElementById('navigate-waze'); if (wazeBtn) (wazeBtn as HTMLButtonElement).onclick = () => window.open(selectedLocation.waze, '_blank'); const googleBtn = document.getElementById('navigate-google'); if (googleBtn) (googleBtn as HTMLButtonElement).onclick = () => window.open(selectedLocation.google, '_blank'); const infoPanel = document.getElementById('info-panel'); if (infoPanel) infoPanel.classList.add('active'); }
+      function updateInfoPanel() { 
+        if (!selectedLocation) return; 
+        const config = categoryConfig[selectedLocation.category]; 
+        const locationName = getLocationName(selectedLocation);
+        const lang = (window as any).__roteirosLang || {};
+        const nameEl = document.getElementById('info-name'); 
+        if (nameEl) nameEl.textContent = locationName; 
+        const catEl = document.getElementById('info-category'); 
+        if (catEl) catEl.textContent = config.name; 
+        const addrEl = document.getElementById('info-address'); 
+        if (addrEl) addrEl.textContent = selectedLocation.address; 
+        const phoneEl = document.getElementById('info-phone'); 
+        if (phoneEl) phoneEl.textContent = selectedLocation.phone || (lang.notProvided || 'Não informado'); 
+        const hoursEl = document.getElementById('info-hours'); 
+        if (hoursEl) hoursEl.textContent = selectedLocation.hours || ''; 
+        const img = document.getElementById('info-image') as HTMLImageElement | null; 
+        if (img) { img.src = selectedLocation.image; img.alt = locationName; } 
+        const wazeBtn = document.getElementById('navigate-waze'); 
+        if (wazeBtn) (wazeBtn as HTMLButtonElement).onclick = () => window.open(selectedLocation.waze, '_blank'); 
+        const googleBtn = document.getElementById('navigate-google'); 
+        if (googleBtn) (googleBtn as HTMLButtonElement).onclick = () => window.open(selectedLocation.google, '_blank'); 
+        const infoPanel = document.getElementById('info-panel'); 
+        if (infoPanel) infoPanel.classList.add('active'); 
+      }
 
       function updateInterface() { 
         // Recriar marcadores com o estilo correto (ícones em "Todos", miniaturas em filtro específico)
@@ -454,11 +668,129 @@ const Roteiros: React.FC = () => {
         loadLocationsList(); 
       }
 
+      // Função para mostrar toast/notificação
+      function showToast(message: string) {
+        const existingToast = document.getElementById('map-toast');
+        if (existingToast) existingToast.remove();
+        
+        const toast = document.createElement('div');
+        toast.id = 'map-toast';
+        toast.className = 'map-toast';
+        toast.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
+        document.querySelector('.map-container')?.appendChild(toast);
+        
+        setTimeout(() => {
+          toast.classList.add('fade-out');
+          setTimeout(() => toast.remove(), 300);
+        }, 3000);
+      }
+
+      const lang = (window as any).__roteirosLang || {};
+
       function setupEventListeners() {
-        document.querySelectorAll('.category-btn').forEach(btn => { btn.addEventListener('click', () => { document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); currentCategory = (btn as HTMLElement).dataset.category || 'all'; updateInterface(); }); });
+        document.querySelectorAll('.category-btn').forEach(btn => { 
+          btn.addEventListener('click', () => { 
+            document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active')); 
+            btn.classList.add('active'); 
+            currentCategory = (btn as HTMLElement).dataset.category || 'all'; 
+            
+            // Sair do modo de roteiro
+            clearRouteDisplay();
+            currentRoute = null;
+            document.querySelectorAll('.route-option').forEach(opt => opt.classList.remove('active'));
+            
+            // Remover painel de info da rota
+            const routeInfoPanel = document.getElementById('route-info-panel');
+            if (routeInfoPanel) routeInfoPanel.remove();
+            
+            updateInterface(); 
+          }); 
+        });
         const searchInput = document.getElementById('search-input') as HTMLInputElement | null; if (searchInput) searchInput.addEventListener('input', (e: any) => { currentSearch = e.target.value; updateInterface(); });
-        const zoomIn = document.getElementById('zoom-in'); if (zoomIn) zoomIn.addEventListener('click', () => map.zoomIn()); const zoomOut = document.getElementById('zoom-out'); if (zoomOut) zoomOut.addEventListener('click', () => map.zoomOut()); const locate = document.getElementById('locate-me'); if (locate) locate.addEventListener('click', () => { if (navigator.geolocation) navigator.geolocation.getCurrentPosition(pos => { const lat = pos.coords.latitude; const lng = pos.coords.longitude; if (CAMPOS_BOUNDS.contains([lat, lng])) map.setView([lat, lng], 16); else alert('Você está fora da área de Campos do Jordão'); }, () => alert('Não foi possível obter sua localização')); });
-        const resetBtn = document.getElementById('reset-map'); if (resetBtn) resetBtn.addEventListener('click', () => map.setView([-22.735, -45.58], 14)); const closeInfo = document.getElementById('close-info'); if (closeInfo) closeInfo.addEventListener('click', () => document.getElementById('info-panel')?.classList.remove('active')); const closeRoute = document.getElementById('close-route'); if (closeRoute) closeRoute.addEventListener('click', () => document.getElementById('route-panel')?.classList.remove('active')); const showRoute = document.getElementById('show-route'); if (showRoute) showRoute.addEventListener('click', () => document.getElementById('route-panel')?.classList.toggle('active'));
+        const zoomIn = document.getElementById('zoom-in'); if (zoomIn) zoomIn.addEventListener('click', () => map.zoomIn()); 
+        const zoomOut = document.getElementById('zoom-out'); if (zoomOut) zoomOut.addEventListener('click', () => map.zoomOut()); 
+        
+        // Botão de localização - agora com funcionalidade completa
+        const locate = document.getElementById('locate-me'); 
+        if (locate) {
+          locate.addEventListener('click', () => { 
+            if (!navigator.geolocation) {
+              alert(lang.noGeolocation || 'Seu navegador não suporta geolocalização');
+              return;
+            }
+            
+            // Mostrar indicador de carregamento
+            locate.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            
+            navigator.geolocation.getCurrentPosition(
+              (pos) => {
+                const lat = pos.coords.latitude;
+                const lng = pos.coords.longitude;
+                
+                // Salvar localização do usuário
+                userLocation = { lat, lng };
+                useUserLocationAsStart = true;
+                
+                // Atualizar botão
+                locate.innerHTML = '<i class="fas fa-location-crosshairs"></i>';
+                locate.classList.add('location-active');
+                
+                // Remover marcador anterior se existir
+                if (userLocationMarker) {
+                  map.removeLayer(userLocationMarker);
+                }
+                
+                // Criar marcador de localização do usuário (pulsante azul)
+                const userIcon = L.divIcon({
+                  html: `<div class="user-location-marker">
+                    <div class="user-location-pulse"></div>
+                    <div class="user-location-dot"></div>
+                  </div>`,
+                  className: 'user-location-icon',
+                  iconSize: [50, 50],
+                  iconAnchor: [25, 25]
+                });
+                
+                userLocationMarker = L.marker([lat, lng], { 
+                  icon: userIcon,
+                  zIndexOffset: 2000
+                }).addTo(map);
+                
+                userLocationMarker.bindPopup(`
+                  <div style="text-align: center; min-width: 120px;">
+                    <strong style="color: #4f46e5;">📍 ${lang.yourLocation || 'Sua Localização'}</strong>
+                  </div>
+                `);
+                
+                // Centralizar mapa na localização do usuário
+                map.setView([lat, lng], 15);
+                
+                // Se houver uma rota ativa, redesenhar incluindo localização do usuário
+                if (currentRoute) {
+                  clearRouteDisplay();
+                  drawRouteOnMap(currentRoute);
+                }
+                
+                // Mostrar mensagem
+                showToast(lang.locationFound || 'Localização encontrada! Rotas agora partirão de você.');
+              }, 
+              (error) => {
+                locate.innerHTML = '<i class="fas fa-location-crosshairs"></i>';
+                let errorMsg = lang.locationError || 'Não foi possível obter sua localização';
+                if (error.code === 1) errorMsg = lang.locationDenied || 'Permissão de localização negada';
+                else if (error.code === 2) errorMsg = lang.locationUnavailable || 'Localização indisponível';
+                else if (error.code === 3) errorMsg = lang.locationTimeout || 'Tempo esgotado ao buscar localização';
+                alert(errorMsg);
+              },
+              { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+            );
+          });
+        }
+        
+        const resetBtn = document.getElementById('reset-map'); if (resetBtn) resetBtn.addEventListener('click', () => { map.setView([-22.735, -45.58], 14); useUserLocationAsStart = false; locate?.classList.remove('location-active'); }); 
+        const closeInfo = document.getElementById('close-info'); if (closeInfo) closeInfo.addEventListener('click', () => document.getElementById('info-panel')?.classList.remove('active')); 
+        const closeRoute = document.getElementById('close-route'); if (closeRoute) closeRoute.addEventListener('click', () => document.getElementById('route-panel')?.classList.remove('active')); 
+        const showRoute = document.getElementById('show-route'); if (showRoute) showRoute.addEventListener('click', () => document.getElementById('route-panel')?.classList.toggle('active'));
         document.querySelectorAll('.route-option').forEach(option => { option.addEventListener('click', () => { document.querySelectorAll('.route-option').forEach(opt => opt.classList.remove('active')); option.classList.add('active'); setupRouteNavigation((option as HTMLElement).dataset.route || 'cultural'); }); });
         const openWaze = document.getElementById('open-waze-route'); if (openWaze) openWaze.addEventListener('click', () => { const routeUrl = (openWaze as HTMLElement).dataset.route; if (routeUrl) window.open(routeUrl, '_blank'); }); const openGoogle = document.getElementById('open-google-route'); if (openGoogle) openGoogle.addEventListener('click', () => { const routeUrl = (openGoogle as HTMLElement).dataset.route; if (routeUrl) window.open(routeUrl, '_blank'); });
         
@@ -480,12 +812,254 @@ const Roteiros: React.FC = () => {
         }
       }
 
-      function setupRouteNavigation(routeType: string) { const wazeRoutes: any = { cultural: 'https://ul.waze.com/ul?ll=-22.73688900%2C-45.58794000&navigate=yes&to=1.%20Pal%C3%A1cio%20Boa%20Vista%20%3E%202.%20Audit%C3%B3rio%20Santoro%20%3E%203.%20Museu%20Felícia%20Leirner', gastronomic: 'https://ul.waze.com/ul?ll=-22.72842000%2C-45.57215000&navigate=yes&to=1.%20Baden%20Baden%20%3E%202.%20Caras%20de%20Malte%20%3E%203.%20Ludwig%20Restaurant', nature: 'https://ul.waze.com/ul?ll=-22.72652000%2C-45.58432000&navigate=yes&to=1.%20Horto%20Florestal%20%3E%202.%20Parque%20Capivari%20%3E%203.%20Morro%20do%20Elefante', adventure: 'https://ul.waze.com/ul?ll=-22.71532000%2C-45.55623000&navigate=yes&to=1.%20Tarundu%20%3E%202.%20Prana%20Park%20%3E%203.%20Iceland' }; const googleRoutes: any = { cultural: 'https://www.google.com/maps/dir/Pal%C3%A1cio+Boa+Vista,+Av.+Adhemar+de+Barros,+3001+-+Alto+da+Boa+Vista,+Campos+do+Jord%C3%AÃ£o+-+SP/Audit%C3%Bório+Claudio+Santoro,+Av.+Dr.+Luis+Arrobas+Martins,+1880+-+Alto+Boa+Vista,+Campos+do+Jord%C3%AÃ£o+-+SP/Museu+Felícia+Leirner,+Av.+Dr.+Luis+Arrobas+Martins,+1880+-+Alto+Boa+Vista,+Campos+do+Jord%C3%AÃ£o+-+SP', gastronomic: 'https://www.google.com/maps/dir/Cervejaria+Baden+Baden,+Av.+Matheus+Costa+Pinto,+1653+-+Vila+Santa+Cruz,+Campos+do+Jord%C3%AÃ£o+-+SP/Caras+de+Malte,+Av.+Pedro+Paulo,+1455+-+Jardim+Embaixador,+Campos+do+Jord%C3%AÃ£o+-+SP/Ludwig+Restaurant,+Av.+Dr.+Jan+Antonin+Bata,+1400+-+Capivari,+Campos+do+Jord%C3%AÃ£o+-+SP', nature: 'https://www.google.com/maps/dir/Horto+Florestal,+Av.+Pedro+Paulo+-+Horto+Florestal,+Campos+do+Jord%C3%AÃ£o+-+SP/Parque+Capivari,+R.+Eng.+Diogo+Jos%C3%A9+de+Carvalho,+1291+-+Capivari,+Campos+do+Jord%C3%AÃ£o+-+SP/Morro+do+Elefante,+Av.+Em%C3%IMe+Lang+J%C3%BAnior+-+Campos+do+Jord%C3%AÃ£o+-+SP', adventure: 'https://www.google.com/maps/dir/Centro+de+Lazer+Tarundu,+Av.+Jos%C3%AÉ+Antonio+Manso,+1515+-+Campos+do+Jord%C3%AÃ£o+-+SP/Prana+Park,+Estrada+do+Pico+do+Itapeva+-+Campos+do+Jord%C3%AÃ£o+-+SP/Iceland+Aventura+no+Gelo,+R.+Eng.+Diogo+Jos%C3%AÉ+de+Carvalho,+190+-+Capivari,+Campos+do+Jord%C3%AÃ£o+-+SP' }; const openWaze = document.getElementById('open-waze-route'); if (openWaze) (openWaze as HTMLElement).dataset.route = wazeRoutes[routeType]; const openGoogle = document.getElementById('open-google-route'); if (openGoogle) (openGoogle as HTMLElement).dataset.route = googleRoutes[routeType]; }
+      function setupRouteNavigation(routeType: string) { 
+        // Definir rota atual e atualizar interface
+        currentRoute = routeType === 'all' ? null : routeType;
+        
+        // Fechar painel de rotas e atualizar mapa
+        document.getElementById('route-panel')?.classList.remove('active');
+        updateInterface();
+        
+        // Limpar rota anterior
+        clearRouteDisplay();
+        
+        // Se selecionou um roteiro específico, desenhar a rota
+        if (currentRoute && routeLocationIds[currentRoute]) {
+          drawRouteOnMap(currentRoute);
+        }
+        
+        const wazeRoutes: any = { 
+          cultural: 'https://ul.waze.com/ul?ll=-22.7256,-45.5918&navigate=yes', 
+          gastronomic: 'https://ul.waze.com/ul?ll=-22.7574,-45.6163&navigate=yes', 
+          nature: 'https://ul.waze.com/ul?ll=-22.6958,-45.5033&navigate=yes', 
+          adventure: 'https://ul.waze.com/ul?ll=-22.7648196,-45.5292868&navigate=yes',
+          romantic: 'https://ul.waze.com/ul?ll=-22.7574,-45.6163&navigate=yes',
+          family: 'https://ul.waze.com/ul?ll=-22.7094417,-45.5479686&navigate=yes',
+          shopping: 'https://ul.waze.com/ul?ll=-22.7335427,-45.5714982&navigate=yes',
+          photo: 'https://ul.waze.com/ul?ll=-22.6873,-45.6396&navigate=yes'
+        }; 
+        const googleRoutes: any = { 
+          cultural: 'https://www.google.com/maps/dir/Museu+Fel%C3%ADcia+Leirner,+Campos+do+Jord%C3%A3o/Choperia+Baden+Baden,+Campos+do+Jord%C3%A3o/Pal%C3%A1cio+Boa+Vista,+Campos+do+Jord%C3%A3o', 
+          gastronomic: 'https://www.google.com/maps/dir/Parque+Amantikir,+Campos+do+Jord%C3%A3o/Caras+de+Malte,+Campos+do+Jord%C3%A3o/Parque+da+Cerveja,+Campos+do+Jord%C3%A3o', 
+          nature: 'https://www.google.com/maps/dir/Parque+Estadual+Campos+do+Jord%C3%A3o/Restaurante+Vila+Ch%C3%A3,+Campos+do+Jord%C3%A3o/Morro+do+Elefante,+Campos+do+Jord%C3%A3o', 
+          adventure: 'https://www.google.com/maps/dir/Pico+do+Itapeva,+Campos+do+Jord%C3%A3o/Alto+da+Brasa,+Campos+do+Jord%C3%A3o/Parque+Tarundu,+Campos+do+Jord%C3%A3o',
+          romantic: 'https://www.google.com/maps/dir/Parque+Amantikir,+Campos+do+Jord%C3%A3o/Le+Foyer+Restaurante,+Campos+do+Jord%C3%A3o/Ducha+de+Prata,+Campos+do+Jord%C3%A3o',
+          family: 'https://www.google.com/maps/dir/Parque+da+Lagoinha,+Campos+do+Jord%C3%A3o/Dona+Chica+Capivari,+Campos+do+Jord%C3%A3o/Parque+Capivari,+Campos+do+Jord%C3%A3o',
+          shopping: 'https://www.google.com/maps/dir/Bosque+do+Sil%C3%AAncio,+Campos+do+Jord%C3%A3o/Sabor+Chocolate,+Campos+do+Jord%C3%A3o/Iceland+Bar+de+Gelo,+Campos+do+Jord%C3%A3o',
+          photo: 'https://www.google.com/maps/dir/Pedra+do+Ba%C3%BA,+S%C3%A3o+Bento+do+Sapuca%C3%AD/Sans+Souci+Confeitaria,+Campos+do+Jord%C3%A3o/Telef%C3%A9rico+de+Campos+do+Jord%C3%A3o'
+        }; 
+        const openWaze = document.getElementById('open-waze-route'); 
+        if (openWaze) (openWaze as HTMLElement).dataset.route = wazeRoutes[routeType] || ''; 
+        const openGoogle = document.getElementById('open-google-route'); 
+        if (openGoogle) (openGoogle as HTMLElement).dataset.route = googleRoutes[routeType] || ''; 
+      }
+
+      // Limpar exibição de rota
+      function clearRouteDisplay() {
+        // Remover polylines
+        routePolylines.forEach(p => map.removeLayer(p));
+        routePolylines = [];
+        
+        // Remover marcadores de tempo
+        routeTimeMarkers.forEach(m => map.removeLayer(m));
+        routeTimeMarkers = [];
+        
+        // Remover routing control se existir
+        if (routingControl) {
+          try { map.removeControl(routingControl); } catch (e) {}
+          routingControl = null;
+        }
+        
+        // Remover painel de info da rota
+        const routeInfoPanel = document.getElementById('route-info-panel');
+        if (routeInfoPanel) routeInfoPanel.remove();
+      }
+
+      // Desenhar rota no mapa
+      function drawRouteOnMap(routeType: string) {
+        const routeIds = routeLocationIds[routeType];
+        if (!routeIds || routeIds.length < 2) return;
+        
+        // Pegar locais da rota na ordem definida
+        const routeLocations = routeIds
+          .map(id => locations.find((loc: any) => loc.id === id))
+          .filter((loc: any) => loc && loc.lat && loc.lng);
+        
+        if (routeLocations.length < 2) return;
+        
+        const langCode = (window as any).__roteirosLanguage || 'pt';
+        
+        // Criar waypoints - se tiver localização do usuário, começar de lá
+        let waypoints: any[] = [];
+        let startOffset = 0; // Offset para numeração dos marcadores
+        
+        if (useUserLocationAsStart && userLocation) {
+          waypoints.push(L.latLng(userLocation.lat, userLocation.lng));
+          startOffset = 1; // Primeiro ponto será "Você está aqui"
+        }
+        
+        waypoints = waypoints.concat(routeLocations.map((loc: any) => L.latLng(loc.lat, loc.lng)));
+        
+        // Usar OSRM para obter rotas segmentadas - sólida até o primeiro ponto, pontilhada depois
+        if (L.Routing) {
+          // Array para armazenar múltiplos controles de rota
+          const routingControls: any[] = [];
+          let totalDistance = 0;
+          let totalTime = 0;
+          const segmentTimes: number[] = [0];
+          let completedSegments = 0;
+          const totalSegments = waypoints.length - 1;
+          
+          // Função para criar rota para cada segmento
+          const createSegmentRoute = (fromIdx: number, toIdx: number, isSolid: boolean) => {
+            const segmentWaypoints = [waypoints[fromIdx], waypoints[toIdx]];
+            
+            const control = L.Routing.control({
+              waypoints: segmentWaypoints,
+              router: L.Routing.osrmv1({
+                serviceUrl: 'https://router.project-osrm.org/route/v1',
+                profile: 'car'
+              }),
+              lineOptions: {
+                styles: isSolid 
+                  ? [
+                      { color: '#4f46e5', opacity: 0.9, weight: 6 },
+                      { color: '#6366f1', opacity: 1, weight: 4 }
+                    ]
+                  : [
+                      { color: '#9ca3af', opacity: 0.7, weight: 4, dashArray: '10, 10' }
+                    ],
+                extendToWaypoints: true,
+                missingRouteTolerance: 0
+              },
+              show: false,
+              addWaypoints: false,
+              routeWhileDragging: false,
+              fitSelectedRoutes: false,
+              showAlternatives: false,
+              createMarker: () => null
+            }).addTo(map);
+            
+            control.on('routesfound', (e: any) => {
+              const route = e.routes[0];
+              if (route && route.summary) {
+                totalDistance += route.summary.totalDistance;
+                totalTime += route.summary.totalTime;
+                segmentTimes[toIdx] = Math.round(totalTime / 60);
+              }
+              completedSegments++;
+              
+              // Quando todos os segmentos estiverem prontos, atualizar UI
+              if (completedSegments === totalSegments) {
+                updateRouteUI();
+              }
+            });
+            
+            routingControls.push(control);
+          };
+          
+          // Função para atualizar UI após calcular todas as rotas
+          const updateRouteUI = () => {
+            // Adicionar marcadores de tempo para cada local do roteiro
+            for (let i = 0; i < routeLocations.length; i++) {
+              const loc = routeLocations[i];
+              const locationName = getLocationName(loc);
+              const waypointIdx = i + startOffset;
+              const timeToHere = segmentTimes[waypointIdx] || 0;
+              
+              let timeText = '';
+              if (i === 0 && !useUserLocationAsStart) {
+                timeText = langCode === 'en' ? 'Start' : langCode === 'es' ? 'Inicio' : 'Início';
+              } else {
+                timeText = `${timeToHere} min`;
+              }
+              
+              const numberIcon = L.divIcon({
+                html: `<div class="route-number-marker">
+                  <div class="route-number">${i + 1}</div>
+                  <div class="route-time">${timeText}</div>
+                </div>`,
+                className: 'route-number-icon',
+                iconSize: [40, 50],
+                iconAnchor: [20, 50]
+              });
+              
+              const timeMarker = L.marker([loc.lat, loc.lng], { 
+                icon: numberIcon,
+                zIndexOffset: 1000
+              }).addTo(map);
+              
+              timeMarker.bindPopup(`
+                <div style="text-align: center; min-width: 150px;">
+                  <strong style="font-size: 14px;">${i + 1}. ${locationName}</strong>
+                  <div style="color: #6366f1; font-weight: 600; margin-top: 4px;">${timeText}</div>
+                </div>
+              `);
+              
+              routeTimeMarkers.push(timeMarker);
+            }
+            
+            // Mostrar tempo total
+            const totalMinutes = Math.round(totalTime / 60);
+            const totalKm = (totalDistance / 1000).toFixed(1);
+            const fromText = useUserLocationAsStart 
+              ? (langCode === 'en' ? 'From your location' : langCode === 'es' ? 'Desde tu ubicación' : 'Da sua localização')
+              : '';
+            const totalText = langCode === 'en' 
+              ? `${fromText ? fromText + ' - ' : ''}Total: ${totalMinutes} min (${totalKm} km)` 
+              : langCode === 'es' 
+                ? `${fromText ? fromText + ' - ' : ''}Total: ${totalMinutes} min (${totalKm} km)` 
+                : `${fromText ? fromText + ' - ' : ''}Total: ${totalMinutes} min (${totalKm} km)`;
+            
+            const routeInfoDiv = document.createElement('div');
+            routeInfoDiv.id = 'route-info-panel';
+            routeInfoDiv.className = 'route-info-panel';
+            routeInfoDiv.innerHTML = `
+              <i class="fas fa-car"></i>
+              <span>${totalText}</span>
+            `;
+            
+            const existingPanel = document.getElementById('route-info-panel');
+            if (existingPanel) existingPanel.remove();
+            
+            document.querySelector('.map-container')?.appendChild(routeInfoDiv);
+          };
+          
+          // Criar rotas para cada segmento
+          // Primeiro segmento (da localização ao ponto 1) = sólido
+          // Demais segmentos = pontilhado
+          for (let i = 0; i < waypoints.length - 1; i++) {
+            const isSolid = i === 0; // Apenas o primeiro segmento é sólido
+            createSegmentRoute(i, i + 1, isSolid);
+          }
+          
+          // Guardar referência para limpeza
+          routingControl = { 
+            remove: () => routingControls.forEach(c => map.removeControl(c)),
+            _container: null
+          };
+        } else {
+          // Fallback: desenhar linha reta se routing machine não estiver disponível
+          const polyline = L.polyline(waypoints, {
+            color: '#6366f1',
+            weight: 4,
+            opacity: 0.8,
+            dashArray: '10, 10'
+          }).addTo(map);
+          routePolylines.push(polyline);
+        }
+      }
 
       initMap();
       try { document.body.classList.add('roteiros-no-scroll'); } catch (e) {}
       (window as any).__roteiros_cleanup = () => { 
         try { 
+          // Limpar rota
+          clearRouteDisplay();
+          // Remover painel de info da rota
+          const routeInfoPanel = document.getElementById('route-info-panel');
+          if (routeInfoPanel) routeInfoPanel.remove();
+          
           if (map && map.remove) map.remove(); 
           // Limpar container do mapa
           const mapContainer = document.getElementById('main-map');
@@ -525,6 +1099,178 @@ const Roteiros: React.FC = () => {
           --shadow-glow: 0 0 60px rgba(99, 102, 241, 0.15);
           --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.3), 0 2px 4px -2px rgba(0,0,0,0.2);
           --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.3), 0 4px 6px -4px rgba(0,0,0,0.2);
+          --shadow-xl: 0 30px 80px rgba(2,6,23,0.6);
+        }
+        
+        * { box-sizing: border-box; }
+
+        /* Route number markers */
+        .route-number-icon {
+          background: transparent !important;
+          border: none !important;
+        }
+        
+        .route-number-marker {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+        }
+        
+        .route-number {
+          background: linear-gradient(135deg, #4f46e5, #6366f1);
+          color: white;
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: 700;
+          font-size: 14px;
+          box-shadow: 0 4px 12px rgba(79, 70, 229, 0.5);
+          border: 3px solid white;
+        }
+        
+        .route-time {
+          background: white;
+          color: #4f46e5;
+          padding: 2px 8px;
+          border-radius: 10px;
+          font-size: 11px;
+          font-weight: 600;
+          margin-top: 4px;
+          box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+          white-space: nowrap;
+        }
+        
+        /* Route info panel */
+        .route-info-panel {
+          position: absolute;
+          bottom: 20px;
+          left: 50%;
+          transform: translateX(-50%);
+          background: linear-gradient(135deg, #4f46e5, #6366f1);
+          color: white;
+          padding: 10px 20px;
+          border-radius: 25px;
+          font-size: 14px;
+          font-weight: 600;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          box-shadow: 0 4px 20px rgba(79, 70, 229, 0.4);
+          z-index: 1000;
+          animation: fadeInUp 0.3s ease;
+        }
+        
+        .route-info-panel i {
+          font-size: 16px;
+        }
+        
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateX(-50%) translateY(10px); }
+          to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+        
+        /* User location marker */
+        .user-location-icon {
+          background: transparent !important;
+          border: none !important;
+          width: 50px !important;
+          height: 50px !important;
+          margin-left: -25px !important;
+          margin-top: -25px !important;
+        }
+        
+        .user-location-marker {
+          position: relative;
+          width: 50px;
+          height: 50px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        
+        .user-location-dot {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 16px;
+          height: 16px;
+          background: #3b82f6;
+          border: 3px solid white;
+          border-radius: 50%;
+          box-shadow: 0 2px 8px rgba(59, 130, 246, 0.5);
+          z-index: 2;
+        }
+        
+        .user-location-pulse {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          width: 50px;
+          height: 50px;
+          background: rgba(59, 130, 246, 0.25);
+          border-radius: 50%;
+          animation: pulse 2s ease-out infinite;
+          z-index: 1;
+        }
+        
+        @keyframes pulse {
+          0% { transform: translate(-50%, -50%) scale(0.3); opacity: 1; }
+          100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+        }
+        
+        /* Location button active state */
+        .map-control-btn.location-active {
+          background: linear-gradient(135deg, #3b82f6, #2563eb) !important;
+          color: white !important;
+        }
+        
+        /* Toast notification */
+        .map-toast {
+          position: absolute;
+          top: 80px;
+          left: 50%;
+          transform: translateX(-50%);
+          background: linear-gradient(135deg, #10b981, #059669);
+          color: white;
+          padding: 12px 20px;
+          border-radius: 25px;
+          font-size: 14px;
+          font-weight: 500;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          box-shadow: 0 4px 20px rgba(16, 185, 129, 0.4);
+          z-index: 1001;
+          animation: fadeInDown 0.3s ease;
+        }
+        
+        .map-toast.fade-out {
+          animation: fadeOutUp 0.3s ease forwards;
+        }
+        
+        @keyframes fadeInDown {
+          from { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+          to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+        
+        @keyframes fadeOutUp {
+          from { opacity: 1; transform: translateX(-50%) translateY(0); }
+          to { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+        }
+        
+        /* Hide default routing machine elements */
+        .leaflet-routing-container {
+          display: none !important;
+        }
+        
+        .leaflet-routing-alt {
+          display: none !important;
+        }
           --shadow-xl: 0 30px 80px rgba(2,6,23,0.6);
         }
         
@@ -1196,16 +1942,16 @@ const Roteiros: React.FC = () => {
           <div className="search-container">
             <div className="search-wrapper">
               <i className="fas fa-search" />
-              <input id="search-input" className="search-input" placeholder="Buscar hotéis, restaurantes, atrações..." />
+              <input id="search-input" className="search-input" placeholder={t.search} />
             </div>
           </div>
           <div className="categories-container">
             <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-              <button className="category-btn active" data-category="all"><i className="fas fa-layer-group" style={{ marginRight: 6 }} />Todos</button>
-              <button className="category-btn" data-category="hotel"><i className="fas fa-bed" style={{ marginRight: 6 }} />Hotéis</button>
-              <button className="category-btn" data-category="restaurant"><i className="fas fa-utensils" style={{ marginRight: 6 }} />Restaurantes</button>
-              <button className="category-btn" data-category="attraction"><i className="fas fa-mountain" style={{ marginRight: 6 }} />Atrações</button>
-              <button className="category-btn" data-category="service"><i className="fas fa-concierge-bell" style={{ marginRight: 6 }} />Serviços</button>
+              <button className="category-btn active" data-category="all"><i className="fas fa-layer-group" style={{ marginRight: 6 }} />{t.all}</button>
+              <button className="category-btn" data-category="hotel"><i className="fas fa-bed" style={{ marginRight: 6 }} />{t.hotels}</button>
+              <button className="category-btn" data-category="restaurant"><i className="fas fa-utensils" style={{ marginRight: 6 }} />{t.restaurants}</button>
+              <button className="category-btn" data-category="attraction"><i className="fas fa-mountain" style={{ marginRight: 6 }} />{t.attractions}</button>
+              <button className="category-btn" data-category="service"><i className="fas fa-concierge-bell" style={{ marginRight: 6 }} />{t.services}</button>
             </div>
           </div>
           <div id="locations-list" style={{ flex: 1, overflowY: 'auto', background: 'transparent' }}>
@@ -1219,21 +1965,21 @@ const Roteiros: React.FC = () => {
           <div id="main-map" style={{ height: '100%', width: '100%' }} />
 
           <div className="map-controls">
-            <button id="zoom-in" className="map-control-btn" title="Aumentar Zoom"><i className="fas fa-plus" /></button>
-            <button id="zoom-out" className="map-control-btn" title="Diminuir Zoom"><i className="fas fa-minus" /></button>
-            <button id="locate-me" className="map-control-btn" title="Minha Localização"><i className="fas fa-location-crosshairs" /></button>
+            <button id="zoom-in" className="map-control-btn" title={t.zoomIn}><i className="fas fa-plus" /></button>
+            <button id="zoom-out" className="map-control-btn" title={t.zoomOut}><i className="fas fa-minus" /></button>
+            <button id="locate-me" className="map-control-btn" title={t.myLocation}><i className="fas fa-location-crosshairs" /></button>
           </div>
 
           {/* Floating buttons aligned with map-controls */}
           <div style={{ position: 'absolute', top: 20, right: 80, zIndex: 1000, display: 'flex', gap: 8 }}>
-            <button id="show-route" className="btn btn-primary" style={{ padding: '6px 12px', fontSize: '0.8rem', height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><i className="fas fa-route" style={{ marginRight: 6 }} />Roteiros</button>
-            <button id="reset-map" className="btn btn-primary" style={{ padding: '6px 12px', fontSize: '0.8rem', height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><i className="fas fa-compass" style={{ marginRight: 6 }} />Centralizar</button>
+            <button id="show-route" className="btn btn-primary" style={{ padding: '6px 12px', fontSize: '0.8rem', height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><i className="fas fa-route" style={{ marginRight: 6 }} />{t.routes}</button>
+            <button id="reset-map" className="btn btn-primary" style={{ padding: '6px 12px', fontSize: '0.8rem', height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><i className="fas fa-compass" style={{ marginRight: 6 }} />{t.center}</button>
           </div>
 
           <div id="info-panel" className="info-panel">
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 16 }}>
               <div>
-                <h3 id="info-name" style={{ margin: 0, fontSize: '1.15rem', fontWeight: 700, color: 'var(--text-primary)' }}>Nome do Local</h3>
+                <h3 id="info-name" style={{ margin: 0, fontSize: '1.15rem', fontWeight: 700, color: 'var(--text-primary)' }}>{t.locationName}</h3>
               </div>
               <button id="close-info" className="close-btn"><i className="fas fa-times" /></button>
             </div>
@@ -1261,14 +2007,14 @@ const Roteiros: React.FC = () => {
                 <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px', background: 'rgba(255, 255, 255, 0.06)', borderRadius: 12, border: '1px solid var(--border-color)' }}>
                   <i className="fas fa-phone" style={{ color: 'var(--accent)', width: 18 }} />
                   <div>
-                    <div style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Telefone</div>
+                    <div style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{language === 'en' ? 'Phone' : language === 'es' ? 'Teléfono' : 'Telefone'}</div>
                     <div id="info-phone" style={{ fontWeight: 500, fontSize: '0.85rem', color: 'var(--text-primary)' }}>-</div>
                   </div>
                 </div>
                 <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px', background: 'rgba(255, 255, 255, 0.06)', borderRadius: 12, border: '1px solid var(--border-color)' }}>
                   <i className="fas fa-clock" style={{ color: 'var(--accent)', width: 18 }} />
                   <div>
-                    <div style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Horário</div>
+                    <div style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{language === 'en' ? 'Hours' : language === 'es' ? 'Horario' : 'Horário'}</div>
                     <div id="info-hours" style={{ fontWeight: 500, fontSize: '0.85rem', color: 'var(--text-primary)' }}>-</div>
                   </div>
                 </div>
@@ -1283,18 +2029,23 @@ const Roteiros: React.FC = () => {
 
           <div id="route-panel" className="route-panel">
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-              <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)' }}><i className="fas fa-route" style={{ color: 'var(--accent)', marginRight: 10 }} />Roteiros Sugeridos</h3>
+              <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)' }}><i className="fas fa-route" style={{ color: 'var(--accent)', marginRight: 10 }} />{language === 'en' ? 'Suggested Routes' : language === 'es' ? 'Rutas Sugeridas' : 'Roteiros Sugeridos'}</h3>
               <button id="close-route" className="close-btn"><i className="fas fa-times" /></button>
             </div>
-            <div style={{ display: 'grid', gap: 10, marginBottom: 20 }}>
-              <div className="route-option active" data-route="cultural"><strong>🏛️ Cultural:</strong> Palácio Boa Vista → Auditório Santoro → Museu Felícia Leirner</div>
-              <div className="route-option" data-route="gastronomic"><strong>🍺 Gastronômico:</strong> Baden Baden → Caras de Malte → Ludwig Restaurant</div>
-              <div className="route-option" data-route="nature"><strong>🌲 Natureza:</strong> Horto Florestal → Parque Capivari → Morro do Elefante</div>
-              <div className="route-option" data-route="adventure"><strong>🎢 Aventura:</strong> Tarundu → Prana Park → Iceland Aventura no Gelo</div>
+            <div style={{ display: 'grid', gap: 8, marginBottom: 16, maxHeight: 320, overflowY: 'auto' }}>
+              <div className="route-option" data-route="all" style={{ background: 'rgba(99, 102, 241, 0.2)', border: '1px solid var(--primary)' }}><strong>📍 {language === 'en' ? 'Show All' : language === 'es' ? 'Mostrar Todo' : 'Mostrar Todos'}:</strong> {language === 'en' ? 'View all locations' : language === 'es' ? 'Ver todas las ubicaciones' : 'Ver todos os locais'}</div>
+              <div className="route-option active" data-route="cultural"><strong>🏛️ {language === 'en' ? 'Cultural' : 'Cultural'}:</strong> Museu Felícia → Baden Baden → Palácio</div>
+              <div className="route-option" data-route="gastronomic"><strong>🍺 {language === 'en' ? 'Gastronomic' : language === 'es' ? 'Gastronómico' : 'Gastronômico'}:</strong> Amantikir → Caras de Malte → Parque da Cerveja</div>
+              <div className="route-option" data-route="nature"><strong>🌲 {language === 'en' ? 'Nature' : language === 'es' ? 'Naturaleza' : 'Natureza'}:</strong> Horto Florestal → Vila Chã → Morro do Elefante</div>
+              <div className="route-option" data-route="adventure"><strong>🎢 {language === 'en' ? 'Adventure' : language === 'es' ? 'Aventura' : 'Aventura'}:</strong> Pico do Itapeva → Alto da Brasa → Tarundu</div>
+              <div className="route-option" data-route="romantic"><strong>💕 {language === 'en' ? 'Romantic' : language === 'es' ? 'Romántico' : 'Romântico'}:</strong> Amantikir → Le Foyer → Ducha de Prata</div>
+              <div className="route-option" data-route="family"><strong>👨‍👩‍👧‍👦 {language === 'en' ? 'Family' : language === 'es' ? 'Familia' : 'Família'}:</strong> Lagoinha → Dona Chica → Parque Capivari</div>
+              <div className="route-option" data-route="shopping"><strong>🛍️ {language === 'en' ? 'Shopping' : language === 'es' ? 'Compras' : 'Compras'}:</strong> Bosque do Silêncio → Sabor Chocolate → Iceland</div>
+              <div className="route-option" data-route="photo"><strong>📸 {language === 'en' ? 'Photo Spots' : language === 'es' ? 'Fotos' : 'Fotos'}:</strong> Pedra do Baú → Sans Souci → Teleférico</div>
             </div>
             <div style={{ display: 'flex', gap: 10 }}>
-              <button id="open-waze-route" className="route-btn waze"><i className="fab fa-waze" /> Abrir no Waze</button>
-              <button id="open-google-route" className="route-btn google"><i className="fab fa-google" /> Abrir no Maps</button>
+              <button id="open-waze-route" className="route-btn waze"><i className="fab fa-waze" /> {language === 'en' ? 'Open in Waze' : language === 'es' ? 'Abrir en Waze' : 'Abrir no Waze'}</button>
+              <button id="open-google-route" className="route-btn google"><i className="fab fa-google" /> {language === 'en' ? 'Open in Maps' : language === 'es' ? 'Abrir en Maps' : 'Abrir no Maps'}</button>
             </div>
           </div>
         </main>
