@@ -823,9 +823,65 @@ const Roteiros: React.FC = () => {
         // Limpar rota anterior
         clearRouteDisplay();
         
-        // Se selecionou um roteiro específico, desenhar a rota
+        // Se selecionou um roteiro específico, obter localização e desenhar a rota
         if (currentRoute && routeLocationIds[currentRoute]) {
-          drawRouteOnMap(currentRoute);
+          // Sempre tentar obter localização do usuário antes de desenhar a rota
+          if (navigator.geolocation) {
+            const locate = document.getElementById('locate-me');
+            if (locate) locate.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            
+            navigator.geolocation.getCurrentPosition(
+              (pos) => {
+                const lat = pos.coords.latitude;
+                const lng = pos.coords.longitude;
+                
+                // Salvar localização do usuário
+                userLocation = { lat, lng };
+                useUserLocationAsStart = true;
+                
+                // Atualizar botão de localização
+                if (locate) {
+                  locate.innerHTML = '<i class="fas fa-location-crosshairs"></i>';
+                  locate.classList.add('location-active');
+                }
+                
+                // Remover marcador anterior se existir
+                if (userLocationMarker) {
+                  map.removeLayer(userLocationMarker);
+                }
+                
+                // Criar marcador de localização do usuário (pulsante azul)
+                const userIcon = L.divIcon({
+                  html: `<div class="user-location-marker">
+                    <div class="user-location-pulse"></div>
+                    <div class="user-location-dot"></div>
+                  </div>`,
+                  className: 'user-location-icon',
+                  iconSize: [50, 50],
+                  iconAnchor: [25, 25]
+                });
+                
+                userLocationMarker = L.marker([lat, lng], { 
+                  icon: userIcon,
+                  zIndexOffset: 2000
+                }).addTo(map);
+                
+                // Desenhar a rota com a localização do usuário
+                drawRouteOnMap(currentRoute!);
+              },
+              (error) => {
+                // Se falhar ao obter localização, desenhar rota sem ela
+                console.log('Geolocation error:', error);
+                if (locate) locate.innerHTML = '<i class="fas fa-location-crosshairs"></i>';
+                useUserLocationAsStart = false;
+                drawRouteOnMap(currentRoute!);
+              },
+              { enableHighAccuracy: true, timeout: 5000, maximumAge: 60000 }
+            );
+          } else {
+            // Navegador não suporta geolocalização
+            drawRouteOnMap(currentRoute);
+          }
         }
         
         const wazeRoutes: any = { 
@@ -1147,14 +1203,14 @@ const Roteiros: React.FC = () => {
         /* Route info panel */
         .route-info-panel {
           position: absolute;
-          bottom: 20px;
+          bottom: 96px;
           left: 50%;
           transform: translateX(-50%);
           background: linear-gradient(135deg, #4f46e5, #6366f1);
           color: white;
-          padding: 10px 20px;
+          padding: 12px 24px;
           border-radius: 25px;
-          font-size: 14px;
+          font-size: 15px;
           font-weight: 600;
           display: flex;
           align-items: center;
@@ -1169,7 +1225,7 @@ const Roteiros: React.FC = () => {
         }
         
         @keyframes fadeInUp {
-          from { opacity: 0; transform: translateX(-50%) translateY(10px); }
+          from { opacity: 0; transform: translateX(-50%) translateY(20px); }
           to { opacity: 1; transform: translateX(-50%) translateY(0); }
         }
         

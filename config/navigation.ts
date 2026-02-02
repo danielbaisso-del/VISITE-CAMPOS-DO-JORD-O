@@ -27,7 +27,7 @@ export const NAV_ITEMS: NavItem[] = [
   { id: 'ondecomer', label: 'Onde comer', showInMenu: true },
   { id: 'eventos', label: 'Eventos', showInMenu: true },
   { id: 'hospedagens', label: 'Onde ficar', showInMenu: true },
-  { id: 'quemsomos', label: 'Quem somos', showInMenu: true },
+  { id: 'quemsomos', label: 'CJRC&VB', showInMenu: true },
 ];
 
 export const NAV_MAP: Record<string, PageType> = {

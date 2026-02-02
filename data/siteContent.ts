@@ -10,7 +10,7 @@ const SITE_CONTENT = {
       { id: "ondecomer", title: "Onde Comer", path: "/#ondecomer" },
       { id: "hospedagens", title: "Onde Ficar", path: "/#hospedagens" },
       { id: "eventos", title: "Eventos & MICE", path: "/#eventos" },
-      { id: "quemsomos", title: "Quem Somos", path: "/#quemsomos" },
+      { id: "quemsomos", title: "CJRC&VB", path: "/#quemsomos" },
       { id: "associe", title: "Associe-se", path: "https://www.visitecamposdojordao.org.br/associados/associe-se/" }
     ]
   },

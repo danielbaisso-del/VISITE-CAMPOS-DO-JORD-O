@@ -20,7 +20,7 @@ const translations: Record<Language, Record<string, string>> = {
     'nav.ondecomer': 'Onde comer',
     'nav.eventos': 'Eventos',
     'nav.ondeficar': 'Onde ficar',
-    'nav.quemsomos': 'Quem somos',
+    'nav.quemsomos': 'CJRC&VB',
     'nav.associe': 'Associe-se',
     
     // Hero

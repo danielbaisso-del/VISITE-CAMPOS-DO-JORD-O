@@ -30,7 +30,7 @@ export const Navbar: React.FC<NavbarProps> = ({ current, onNavigate }) => {
 
   const getButtonClass = (item: typeof NAV_ITEMS[0]) => {
     const isActive = current === item.id;
-    const baseClass = 'hover:text-blue-400 transition-colors';
+    const baseClass = 'hover:text-blue-400 transition-colors font-medium uppercase tracking-wider text-[13px]';
     
     if (isActive) {
       return item.hasUnderline 
@@ -69,12 +69,13 @@ export const Navbar: React.FC<NavbarProps> = ({ current, onNavigate }) => {
         </div>
 
         {/* Desktop Menu */}
-        <div className="hidden md:flex items-center gap-8 text-slate-300 font-medium text-sm">
+        <div className="hidden md:flex items-center gap-8 text-slate-300 font-nav text-sm tracking-wide">
           {NAV_ITEMS.map(item => (
             <button
               key={item.id}
               onClick={() => handleNavigate(item.id)}
               className={getButtonClass(item)}
+              style={{ fontFamily: "'Poppins', sans-serif" }}
             >
               {t(labelToTranslationKey[item.id] || item.label)}
             </button>
