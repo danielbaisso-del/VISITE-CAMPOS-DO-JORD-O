@@ -1168,5 +1168,5 @@ const server = http.createServer(async (req, res) => {
 });
 
 server.on('error', (err) => console.error('Server error:', err));
-server.on('listening', () => console.log(`\n🤖 Guia Virtual de Campos do Jordão - Mock AI Server\n📍 Listening on http://127.0.0.1:${PORT}/generate\n`));
-server.listen(PORT, '127.0.0.1');
+server.on('listening', () => console.log(`\n🤖 Guia Virtual de Campos do Jordão - Mock AI Server\n📍 Listening on http://localhost:${PORT}/generate\n`));
+server.listen(PORT, '0.0.0.0');

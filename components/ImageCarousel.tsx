@@ -239,15 +239,6 @@ const ImageCarousel: React.FC = () => {
           />
         ))}
       </div>
-
-      {/* Counter */}
-      <div className="text-center mt-2">
-        <span className="text-slate-400 text-xs tracking-wider">
-          <span className="text-blue-600 font-semibold">{currentIndex + 1}</span>
-          <span className="mx-1">/</span>
-          <span>{totalSlides}</span>
-        </span>
-      </div>
     </div>
   );
 };
