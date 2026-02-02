@@ -8,7 +8,9 @@ export const ACCOMMODATIONS: Accommodation[] = [
     phone: '(12) 3663-6010',
     website: 'https://dashortensias.com.br/',
     images: ['https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/pousada_hortensias.jpg'],
-    tags: ['Centro', 'Família']
+    tags: ['Centro', 'Família'],
+    instagram: 'https://www.instagram.com/pousadadashortensias/',
+    facebook: 'https://www.facebook.com/dashortensias/'
   },
   {
     id: 'parque-hotel',
@@ -18,7 +20,9 @@ export const ACCOMMODATIONS: Accommodation[] = [
     phone: '(12) 3669-3333',
     website: 'http://www.parquehotel.com.br',
     images: ['https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/parque_hotel_800.jpg'],
-    tags: ['Hotel', 'Centro']
+    tags: ['Hotel', 'Centro'],
+    instagram: 'https://www.instagram.com/cj.parquehotel/',
+    facebook: 'http://www.facebook.com/CamposDoJordaoParqueHotel'
   },
   {
     id: 'champet-boutique',
@@ -28,7 +32,9 @@ export const ACCOMMODATIONS: Accommodation[] = [
     phone: '(12) 3669-8811 | (12) 99763-0735',
     website: '',
     images: ['https://visitecamposdojordao.org.br/wp-content/uploads/2025/05/1.png'],
-    tags: ['Boutique', 'Centro']
+    tags: ['Boutique', 'Centro'],
+    instagram: 'https://www.instagram.com/champetboutiquehotel',
+    facebook: 'https://www.facebook.com/champethotel/'
   },
   {
     id: 'chrys-wellness-park',
@@ -37,7 +43,9 @@ export const ACCOMMODATIONS: Accommodation[] = [
     phone: '(12) 3663-1151',
     website: 'http://www.chrisparkhotel.com.br',
     images: ['https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/chris_park_800.jpg'],
-    tags: ['Wellness', 'Piscina']
+    tags: ['Wellness', 'Piscina'],
+    instagram: 'https://www.instagram.com/chrisparkhotel/',
+    facebook: 'https://www.facebook.com/hotelchrispark/'
   },
   {
     id: 'home-green-home',
@@ -46,7 +54,9 @@ export const ACCOMMODATIONS: Accommodation[] = [
     phone: '0800-170127 | (12) 3669-0300',
     website: 'http://www.homegreenhome.com.br',
     images: ['https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/home_green.jpg'],
-    tags: ['Flat', 'Alto Capivari']
+    tags: ['Flat', 'Alto Capivari'],
+    instagram: 'https://www.instagram.com/hotelhomegreenhome/',
+    facebook: 'https://www.facebook.com/homegreen'
   },
   {
     id: 'palazzo-reale',
@@ -55,7 +65,9 @@ export const ACCOMMODATIONS: Accommodation[] = [
     phone: '(12) 3669-9600',
     website: 'http://www.palazzoreale.com.br',
     images: ['https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/palazzo_reale.jpg'],
-    tags: ['Flat', 'Capivari']
+    tags: ['Flat', 'Capivari'],
+    instagram: 'https://www.instagram.com/palazzoreale/',
+    facebook: 'https://www.facebook.com/flathotelpalazzoreale'
   },
   {
     id: 'hotel-ascona',
@@ -64,7 +76,9 @@ export const ACCOMMODATIONS: Accommodation[] = [
     phone: '(11) 91160-4122 | (11) 99124-9224',
     website: 'https://hotelascona.com.br/',
     images: ['https://visitecamposdojordao.org.br/wp-content/uploads/2025/04/ascona.png'],
-    tags: ['Hotel', 'Pet Friendly']
+    tags: ['Hotel', 'Pet Friendly'],
+    instagram: 'https://www.instagram.com/hotelascona_',
+    facebook: 'https://www.facebook.com/ascona.hotel/'
   },
   {
     id: 'bendito-cacau',
@@ -73,7 +87,9 @@ export const ACCOMMODATIONS: Accommodation[] = [
     phone: '(12) 3669-0777',
     website: 'https://www.benditocacaoresort.com.br/campos',
     images: ['https://visitecamposdojordao.org.br/wp-content/uploads/2025/04/Design-sem-nome.png'],
-    tags: ['Resort']
+    tags: ['Resort'],
+    instagram: 'https://www.instagram.com/benditocacauresort',
+    facebook: 'https://www.facebook.com/benditocacauresort/'
   },
   {
     id: 'hotel-quebra-noz',
@@ -82,7 +98,9 @@ export const ACCOMMODATIONS: Accommodation[] = [
     phone: '(12) 3663-4889 | (12) 3663-4955',
     website: 'https://quebranoz.com.br',
     images: ['https://visitecamposdojordao.org.br/wp-content/uploads/2024/02/Externa-Quebra-Noz-6-scaled.jpg'],
-    tags: ['Boutique', 'Spa']
+    tags: ['Boutique', 'Spa'],
+    instagram: 'https://www.instagram.com/hotelquebranoz/',
+    facebook: 'https://www.facebook.com/hotelquebranoz'
   },
   {
     id: 'dan-inn-premium',
@@ -91,7 +109,9 @@ export const ACCOMMODATIONS: Accommodation[] = [
     phone: '(12) 3663-3611',
     website: 'https://www.nacionalinn.com.br/hotel/15/dan-inn-campos-do-jordao/',
     images: ['https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/dan_inn.jpg'],
-    tags: ['Rede', 'Vila Everest']
+    tags: ['Rede', 'Vila Everest'],
+    instagram: 'https://www.instagram.com/hoteldaninnpremium/',
+    facebook: 'https://www.facebook.com/Daninnpremiumcampos'
   },
   {
     id: 'hotel-estoril',
@@ -100,7 +120,9 @@ export const ACCOMMODATIONS: Accommodation[] = [
     phone: '(12) 3669-5000',
     website: 'https://hotelestoril.com.br/',
     images: ['https://visitecamposdojordao.org.br/wp-content/uploads/2025/04/hotel-estoril-800x450.png'],
-    tags: ['Centro', 'Tradicional']
+    tags: ['Centro', 'Tradicional'],
+    instagram: 'https://www.instagram.com/hotel.estoril/',
+    facebook: 'https://www.facebook.com/hotelestoril1'
   },
   {
     id: 'le-renard',
@@ -109,7 +131,9 @@ export const ACCOMMODATIONS: Accommodation[] = [
     phone: '(12) 3669-2220',
     website: 'https://lerenard.com.br/',
     images: ['https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/le_renard.jpg'],
-    tags: ['Conforto', 'Piscina']
+    tags: ['Conforto', 'Piscina'],
+    instagram: 'https://www.instagram.com/hotellerenard/',
+    facebook: 'https://www.facebook.com/hotellerenard/'
   },
   {
     id: 'leao-da-montanha',
@@ -118,7 +142,9 @@ export const ACCOMMODATIONS: Accommodation[] = [
     phone: '(12) 3669-8811',
     website: 'http://www.leaodamontanha.com.br',
     images: ['https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/leao_montanha.jpg'],
-    tags: ['Familia', 'Lazer']
+    tags: ['Familia', 'Lazer'],
+    instagram: 'https://www.instagram.com/hotelleaodamontanha/',
+    facebook: 'https://www.facebook.com/Leaodamontanha/'
   },
   {
     id: 'hotel-platanus',
@@ -127,7 +153,9 @@ export const ACCOMMODATIONS: Accommodation[] = [
     phone: '(12) 3664-1100',
     website: '',
     images: ['https://visitecamposdojordao.org.br/wp-content/uploads/2025/05/2.png'],
-    tags: ['Familia']
+    tags: ['Familia'],
+    instagram: 'https://www.instagram.com/hotelplatanus/',
+    facebook: 'https://www.facebook.com/hotelplatanus'
   },
   {
     id: 'recanto-sao-cristovao',
@@ -136,7 +164,9 @@ export const ACCOMMODATIONS: Accommodation[] = [
     phone: '(12) 3662-2888',
     website: 'http://recantosaocristovao.com.br/',
     images: ['https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/sao_cristovao.jpg'],
-    tags: ['Resort', 'Natureza']
+    tags: ['Resort', 'Natureza'],
+    instagram: 'https://www.instagram.com/hotelsaocristovaocampos/',
+    facebook: 'https://www.facebook.com/hotelsaocristovaocamposdojordao/'
   },
   {
     id: 'solar-d-izabel',
@@ -145,7 +175,9 @@ export const ACCOMMODATIONS: Accommodation[] = [
     phone: '(12) 3669-3030',
     website: 'https://www.dizabel.com.br/',
     images: ['https://visitecamposdojordao.org.br/wp-content/uploads/2025/04/SOLAR-IZABEL-800x450.png'],
-    tags: ['Centro']
+    tags: ['Centro'],
+    instagram: 'https://www.instagram.com/hotelsolardizabel/',
+    facebook: 'https://www.facebook.com/solardizabel/'
   },
   {
     id: 'hotel-toriba',
@@ -154,7 +186,9 @@ export const ACCOMMODATIONS: Accommodation[] = [
     phone: '(12) 3668-5008',
     website: 'https://www.toriba.com.br/',
     images: ['https://visitecamposdojordao.org.br/wp-content/uploads/2025/10/hotel-toriba.png'],
-    tags: ['Luxo', 'Spa']
+    tags: ['Luxo', 'Spa'],
+    instagram: 'https://www.instagram.com/hoteltoriba/',
+    facebook: 'https://www.facebook.com/toriba/'
   },
   {
     id: 'vila-inglesa',
@@ -163,7 +197,9 @@ export const ACCOMMODATIONS: Accommodation[] = [
     phone: '(12) 3669-5000',
     website: 'http://www.hotelvilainglesa.com.br',
     images: ['https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/vila_inglesa.jpg'],
-    tags: ['Atividades', 'Familia']
+    tags: ['Atividades', 'Familia'],
+    instagram: 'https://www.instagram.com/hotelvilainglesa/',
+    facebook: 'https://www.facebook.com/hotelvilainglesa/'
   },
   {
     id: 'le-suisse',
@@ -172,7 +208,9 @@ export const ACCOMMODATIONS: Accommodation[] = [
     phone: '(12) 3669-0000',
     website: 'https://www.lesuissehotel.com.br/',
     images: ['https://visitecamposdojordao.org.br/wp-content/uploads/2025/08/le-suisse.png'],
-    tags: ['Centro', 'Elegância']
+    tags: ['Centro', 'Elegância'],
+    instagram: 'https://instagram.com/lesuissehotel',
+    facebook: 'https://www.facebook.com/lesuissehotel'
   },
   {
     id: 'parador',
@@ -181,7 +219,8 @@ export const ACCOMMODATIONS: Accommodation[] = [
     phone: '(12) 99630-2478',
     website: 'https://paradorcamposdojordao.com.br/',
     images: ['https://visitecamposdojordao.org.br/wp-content/uploads/2025/10/parador-760x428.png'],
-    tags: ['Moderno', 'Centro']
+    tags: ['Moderno', 'Centro'],
+    instagram: 'https://www.instagram.com/paradorcamposdojordao/'
   },
   {
     id: 'alto-boa-vista',
@@ -190,7 +229,9 @@ export const ACCOMMODATIONS: Accommodation[] = [
     phone: '(12) 99660-3386',
     website: 'https://pousadaaltodaboavista.com.br/',
     images: ['https://visitecamposdojordao.org.br/wp-content/uploads/2025/05/alto-da-boa-vista-760x428.png'],
-    tags: ['Vista', 'Chalé']
+    tags: ['Vista', 'Chalé'],
+    instagram: 'https://www.instagram.com/pousada_altodaboavista/',
+    facebook: 'https://www.facebook.com/AltodaBoaVista/'
   },
   {
     id: 'annecy',
@@ -199,7 +240,9 @@ export const ACCOMMODATIONS: Accommodation[] = [
     phone: '(12) 3663-3617',
     website: 'https://www.annecypousada.com.br/',
     images: ['https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/annecy.jpg'],
-    tags: ['Charme', 'Centro']
+    tags: ['Charme', 'Centro'],
+    instagram: 'https://www.instagram.com/annecypousada/',
+    facebook: 'https://www.facebook.com/annecypousada/'
   },
   {
     id: 'provence',
@@ -208,7 +251,9 @@ export const ACCOMMODATIONS: Accommodation[] = [
     phone: '(12) 3663-4003',
     website: 'https://www.camposdeprovence.com.br/',
     images: ['https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/campos_provence.jpg'],
-    tags: ['Pet Friendly', 'Charme']
+    tags: ['Pet Friendly', 'Charme'],
+    instagram: 'https://www.instagram.com/pousadacamposdeprovence/',
+    facebook: 'https://www.facebook.com/camposdeprovence/'
   },
   {
     id: 'holandeses',
@@ -217,7 +262,9 @@ export const ACCOMMODATIONS: Accommodation[] = [
     phone: '(12) 3663-6579',
     website: 'https://www.pousadacamposdosholandeses.com.br/',
     images: ['https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/campos_holandeses.jpg'],
-    tags: ['Piscina', 'Pet Friendly']
+    tags: ['Piscina', 'Pet Friendly'],
+    instagram: 'https://www.instagram.com/camposdosholandeses/',
+    facebook: 'https://www.facebook.com/pousadacamposdosholandeses/'
   },
   {
     id: 'cantinho-serra',
@@ -226,7 +273,9 @@ export const ACCOMMODATIONS: Accommodation[] = [
     phone: '(12) 99753-3065',
     website: 'https://pousadacantinhodaserra.com.br/',
     images: ['https://visitecamposdojordao.org.br/wp-content/uploads/2025/04/cantinh.jpg'],
-    tags: ['Vista', 'Romântico']
+    tags: ['Vista', 'Romântico'],
+    instagram: 'https://www.instagram.com/pousadacantinhodaserra_cj/',
+    facebook: 'https://www.facebook.com/cantinhodaserrapousada/'
   },
   {
     id: 'sabor-chocolate-pousada',
@@ -235,7 +284,9 @@ export const ACCOMMODATIONS: Accommodation[] = [
     phone: '(12) 99235-8587',
     website: 'https://casasaborchocolate.com.br/',
     images: ['https://visitecamposdojordao.org.br/wp-content/uploads/2025/05/casa-chocolate-760x428.png'],
-    tags: ['Temático', 'Romântico']
+    tags: ['Temático', 'Romântico'],
+    instagram: 'https://www.instagram.com/casasaborchocolate/',
+    facebook: 'https://www.facebook.com/casasaborchocolate/'
   },
   {
     id: 'chateau-villette',
@@ -244,7 +295,9 @@ export const ACCOMMODATIONS: Accommodation[] = [
     phone: '(12) 3663-1444',
     website: 'https://chateaulavillette.com.br/',
     images: ['https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/la_villette.jpg'],
-    tags: ['Luxo', 'Gourmet']
+    tags: ['Luxo', 'Gourmet'],
+    instagram: 'https://www.instagram.com/chateau_la_villette/',
+    facebook: 'https://www.facebook.com/lavillette/'
   },
   {
     id: 'da-pedra',
@@ -253,7 +306,9 @@ export const ACCOMMODATIONS: Accommodation[] = [
     phone: '(12) 3663-6262',
     website: 'https://www.pousadadapedra.com.br/',
     images: ['https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/pousada_pedra.jpg'],
-    tags: ['Piscina', 'Charme']
+    tags: ['Piscina', 'Charme'],
+    instagram: 'https://www.instagram.com/pousada_da_pedra/',
+    facebook: 'https://www.facebook.com/pousadadapedra'
   },
   {
     id: 'lavandas',
@@ -262,7 +317,9 @@ export const ACCOMMODATIONS: Accommodation[] = [
     phone: '(12) 99660-0700',
     website: 'https://pousadadaslavandas.com/',
     images: ['https://visitecamposdojordao.org.br/wp-content/uploads/2025/05/Design-sem-nome-1-760x570.png'],
-    tags: ['Vista', 'Aconchegante']
+    tags: ['Vista', 'Aconchegante'],
+    instagram: 'https://www.instagram.com/pousada_das_lavandas/',
+    facebook: 'https://www.facebook.com/pousadadaslavandas'
   },
   {
     id: 'do-conde',
@@ -271,7 +328,9 @@ export const ACCOMMODATIONS: Accommodation[] = [
     phone: '(12) 99636-3635',
     website: 'https://www.pousadadoconde.com.br/',
     images: ['https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/pousada_conde.jpg'],
-    tags: ['Centro', 'Família']
+    tags: ['Centro', 'Família'],
+    instagram: 'https://www.instagram.com/pousadadoconde/',
+    facebook: 'https://www.facebook.com/pousadadoconde'
   },
   {
     id: 'figueira-serra',
@@ -280,7 +339,9 @@ export const ACCOMMODATIONS: Accommodation[] = [
     phone: '(12) 3663-8010',
     website: 'https://www.figueiradaserra.com.br/',
     images: ['https://visitecamposdojordao.org.br/wp-content/uploads/2024/02/Figueira-da-Serra-Geral-056-760x570.jpg'],
-    tags: ['Spa', 'Romântico']
+    tags: ['Spa', 'Romântico'],
+    instagram: 'https://www.instagram.com/pousadafigueiradaserra/',
+    facebook: 'https://www.facebook.com/pousadafigueiradaserra'
   },
   {
     id: 'kaliman',
@@ -289,7 +350,9 @@ export const ACCOMMODATIONS: Accommodation[] = [
     phone: '(12) 3663-2049',
     website: 'https://www.kaliman.com.br/campos-do-jordao',
     images: ['https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/kaliman.jpg'],
-    tags: ['Econômico', 'Centro']
+    tags: ['Econômico', 'Centro'],
+    instagram: 'https://www.instagram.com/kaliman.camposdojordao/',
+    facebook: 'https://www.facebook.com/pousadakaliman.camposdojordao'
   },
   {
     id: 'la-toscana',
@@ -298,7 +361,9 @@ export const ACCOMMODATIONS: Accommodation[] = [
     phone: '(12) 3663-6650',
     website: 'https://pousadalatoscana.com.br/',
     images: ['https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/latoscana.jpg'],
-    tags: ['Charme', 'Centro']
+    tags: ['Charme', 'Centro'],
+    instagram: 'https://www.instagram.com/pousadalatoscana/',
+    facebook: 'https://www.facebook.com/PousadaLaToscanaCamposdoJordao'
   },
   {
     id: 'luis-xv',
@@ -307,7 +372,9 @@ export const ACCOMMODATIONS: Accommodation[] = [
     phone: '(12) 3669-5050',
     website: 'http://www.pousadaluisxv.com.br/',
     images: ['https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/luis_xv.jpg'],
-    tags: ['Luxo', 'Centro']
+    tags: ['Luxo', 'Centro'],
+    instagram: 'https://www.instagram.com/pousadaluisxv/',
+    facebook: 'https://www.facebook.com/pousadaluisxv/'
   },
   {
     id: 'murano',
@@ -316,7 +383,9 @@ export const ACCOMMODATIONS: Accommodation[] = [
     phone: '(12) 3663-6661',
     website: 'https://pousadamurano.com.br/',
     images: ['https://visitecamposdojordao.org.br/wp-content/uploads/2025/05/murata-760x428.png'],
-    tags: ['Romântico', 'Natureza']
+    tags: ['Romântico', 'Natureza'],
+    instagram: 'https://www.instagram.com/pousadamurano',
+    facebook: 'https://www.facebook.com/share/19thQ17A56/'
   },
   {
     id: 'primavera',
@@ -325,7 +394,9 @@ export const ACCOMMODATIONS: Accommodation[] = [
     phone: '(12) 3663-6207',
     website: 'https://www.pousadaprimaveracampos.com.br/',
     images: ['https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?w=800&h=450&fit=crop'],
-    tags: ['Econômico', 'Simples']
+    tags: ['Econômico', 'Simples'],
+    instagram: 'https://www.instagram.com/pousadaprimaveracampos/',
+    facebook: 'https://www.facebook.com/excursaocamposdojordao'
   },
   {
     id: 'recanto-almeida',
@@ -334,7 +405,9 @@ export const ACCOMMODATIONS: Accommodation[] = [
     phone: '(12) 3669-6000',
     website: 'https://www.recantoalmeida.com.br/',
     images: ['https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/recantoalmeida.jpg'],
-    tags: ['Conforto', 'Room Service']
+    tags: ['Conforto', 'Room Service'],
+    instagram: 'https://www.instagram.com/pousadarecantoalmeida/',
+    facebook: 'https://www.facebook.com/pousadarecantoalmeida'
   },
   {
     id: 'vila-cores',
@@ -343,7 +416,9 @@ export const ACCOMMODATIONS: Accommodation[] = [
     phone: '(11) 98346-2309',
     website: 'http://www.viladascores.com.br/',
     images: ['https://visitecamposdojordao.org.br/wp-content/uploads/2025/05/vila-das-cores-760x428.png'],
-    tags: ['Vista', 'Charme']
+    tags: ['Vista', 'Charme'],
+    instagram: 'https://www.instagram.com/pousadaviladascores/',
+    facebook: 'https://www.facebook.com/people/Vila-Das-Cores-Pousada/100072017132355/'
   },
   {
     id: 'dbiagy-raizes',
@@ -352,7 +427,9 @@ export const ACCOMMODATIONS: Accommodation[] = [
     phone: '(12) 3669-3535',
     website: 'https://villadbiagy.com.br/',
     images: ['https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/villa_dbiagy.jpg'],
-    tags: ['Centro', 'Charme']
+    tags: ['Centro', 'Charme'],
+    instagram: 'https://www.instagram.com/pousadasvilladbiagy/',
+    facebook: 'https://www.facebook.com/pousadasvilladbiagy/'
   },
   {
     id: 'dbiagy-premium',
@@ -361,7 +438,9 @@ export const ACCOMMODATIONS: Accommodation[] = [
     phone: '(12) 3669-3536',
     website: 'https://premium.villadbiagy.com.br/',
     images: ['https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/villa_dbiagy_premium.jpg'],
-    tags: ['Premium', 'Centro']
+    tags: ['Premium', 'Centro'],
+    instagram: 'https://www.instagram.com/pousadasvilladbiagy/',
+    facebook: 'https://www.facebook.com/pousadasvilladbiagy/'
   },
   {
     id: 'villaggio-italia',
@@ -370,7 +449,9 @@ export const ACCOMMODATIONS: Accommodation[] = [
     phone: '(12) 3663-2533',
     website: 'http://pousadavillaggioitalia.com.br/',
     images: ['https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/villagio_italia.jpg'],
-    tags: ['Centro', 'Tradicional']
+    tags: ['Centro', 'Tradicional'],
+    instagram: 'https://www.instagram.com/pousadavillaggioitalia/',
+    facebook: 'https://www.facebook.com/pousadavillaggioitalia0'
   },
   {
     id: 'surya-pan',
@@ -379,7 +460,8 @@ export const ACCOMMODATIONS: Accommodation[] = [
     phone: '(12) 98847-3655',
     website: 'https://www.suryapan.com.br/',
     images: ['https://visitecamposdojordao.org.br/wp-content/uploads/2025/10/Surya-pan-760x428.png'],
-    tags: ['Wellness', 'Spa', 'Natureza']
+    tags: ['Wellness', 'Spa', 'Natureza'],
+    instagram: 'https://www.instagram.com/suryapanhotel/'
   },
   {
     id: 'zur',
@@ -388,7 +470,8 @@ export const ACCOMMODATIONS: Accommodation[] = [
     phone: '(12) 99610-0393',
     website: 'https://www.zurcamposdojordao.com.br/',
     images: ['https://visitecamposdojordao.org.br/wp-content/uploads/2025/10/zur-760x428.png'],
-    tags: ['Moderno', 'Design']
+    tags: ['Moderno', 'Design'],
+    instagram: 'https://www.instagram.com/zursuites/'
   }
 ];
 

@@ -11,7 +11,9 @@ export const TOURS: TourItem[] = [
     address: 'Av. Dr. Luis Arrobas Martins, 1880 – Alto Boa Vista',
     phone: '(12) 3662 6000',
     imageUrl: 'https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/auditorio_claudio_santoro.jpg',
-    website: 'https://www.museufelicialeirner.org.br/institucional/auditorio-claudio-santoro/'
+    website: 'https://www.museufelicialeirner.org.br/institucional/auditorio-claudio-santoro/',
+    instagram: 'https://www.instagram.com/museufelicialeirner/',
+    facebook: 'https://www.facebook.com/museufelicialeirner'
   },
   {
     id: 'felicia-leirner',
@@ -21,7 +23,9 @@ export const TOURS: TourItem[] = [
     address: 'Av. Dr. Luis Arrobas Martins, 1880 – Alto Boa Vista',
     phone: '(12) 3662 6000',
     imageUrl: 'https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/museu_felicia_leirner.jpg',
-    website: 'https://www.museufelicialeirner.org.br/institucional/museu-felicia-leirner/'
+    website: 'https://www.museufelicialeirner.org.br/institucional/museu-felicia-leirner/',
+    instagram: 'https://www.instagram.com/museufelicialeirner/',
+    facebook: 'https://www.facebook.com/museufelicialeirner'
   },
   {
     id: 'efcj',
@@ -31,7 +35,10 @@ export const TOURS: TourItem[] = [
     address: 'Avenida Emilio Ribas – Estação Emílio Ribas – Capivari',
     phone: '(12) 3644-7408',
     imageUrl: 'https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/efcj.jpg',
-    status: 'No momento os passeios estão desativados.'
+    status: 'No momento os passeios estão desativados.',
+    website: 'https://www.stm.sp.gov.br/home-efcj/',
+    instagram: 'https://www.instagram.com/estradadeferrocamposdojordao/',
+    facebook: 'https://www.facebook.com/efcj1914'
   },
   {
     id: 'tarundu',
@@ -41,7 +48,9 @@ export const TOURS: TourItem[] = [
     address: 'Av. José Antonio Manso, 1515',
     phone: '(12) 3800 0150',
     imageUrl: 'https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/tarundu.jpg',
-    website: 'http://tarundu.com.br/'
+    website: 'http://tarundu.com.br/',
+    instagram: 'https://www.instagram.com/tarundu/',
+    facebook: 'https://www.facebook.com/tarundu'
   },
   {
     id: 'parque-capivari',
@@ -50,7 +59,9 @@ export const TOURS: TourItem[] = [
     description: 'Grande revitalização com novo centro comercial, pedalinhos, o famoso teleférico e palco sobre o lago.',
     address: 'R. Eng. Diogo José de Carvalho, 1291 – Capivari',
     imageUrl: 'https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/parque_capivari.jpg',
-    website: 'https://parquecapivari.com.br/'
+    website: 'https://parquecapivari.com.br/',
+    instagram: 'https://www.instagram.com/parquecapivari/',
+    facebook: 'https://www.facebook.com/parquecapivari/'
   },
   {
     id: 'baden-baden',
@@ -60,7 +71,9 @@ export const TOURS: TourItem[] = [
     address: 'Av. Matheus Costa Pinto, 1653 – Vila Santa Cruz',
     phone: '(12) 3664 2004',
     imageUrl: 'https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/fabrica_baden.jpg',
-    website: 'https://www.badenbaden.com.br/'
+    website: 'https://www.badenbaden.com.br/',
+    instagram: 'https://www.instagram.com/cervejabadenbaden/',
+    facebook: 'https://www.facebook.com/cervejabadenbaden/'
   },
   {
     id: 'amantikir',
@@ -69,7 +82,9 @@ export const TOURS: TourItem[] = [
     description: 'Jardins inspirados em diferentes culturas ao redor do mundo, com mais de 700 espécies de plantas.',
     address: 'Rodovia Campos do Jordão - Gavião Gonzaga',
     imageUrl: 'https://visitecamposdojordao.org.br/wp-content/uploads/2025/04/2-800x450.png',
-    website: 'https://parqueamantikir.com.br/'
+    website: 'https://parqueamantikir.com.br/',
+    instagram: 'https://www.instagram.com/amantikir/',
+    facebook: 'https://www.facebook.com/amantikirgarden/'
   },
   {
     id: 'horto',
@@ -79,8 +94,7 @@ export const TOURS: TourItem[] = [
     address: 'Parque Estadual de Campos do Jordão',
     imageUrl: 'https://visitecamposdojordao.org.br/wp-content/uploads/2026/01/Untitled-design.png',
     instagram: 'https://www.instagram.com/parquecamposdojordao/'
-  }
-  ,
+  },
   {
     id: 'casa-xilogravura',
     title: 'Museu Casa da Xilogravura',
@@ -89,7 +103,9 @@ export const TOURS: TourItem[] = [
     address: 'Av. Eduardo Moreira da Cruz, 295 – Jardim Jaguaribe',
     phone: '(12) 3662 1832',
     imageUrl: 'https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/museu_xilogravura.jpg',
-    website: 'https://www.casadaxilogravura.com.br/'
+    website: 'https://www.casadaxilogravura.com.br/',
+    instagram: 'https://www.instagram.com/museucasadaxilogravura/',
+    facebook: 'https://www.facebook.com/casadaxilogravura/'
   },
   {
     id: 'palacio-boa-vista',
@@ -99,7 +115,9 @@ export const TOURS: TourItem[] = [
     address: 'Av. Adhemar de Barros, 3001 – Alto da Boa Vista',
     phone: '(12) 3668 9739',
     imageUrl: 'https://visitecamposdojordao.org.br/wp-content/uploads/2020/11/palacio_boa_vista.jpg',
-    website: 'http://www.acervo.sp.gov.br/palBoaVista.html'
+    website: 'http://www.acervo.sp.gov.br/palBoaVista.html',
+    instagram: 'https://www.instagram.com/acervodospalacios/',
+    facebook: 'https://www.facebook.com/AcervodosPalacios/'
   },
   {
     id: 'prana-park',
@@ -108,7 +126,9 @@ export const TOURS: TourItem[] = [
     description: 'Parque de aventuras com tirolesas, bike aérea, megabalanço, arvorismo e mirantes com vistas panorâmicas.',
     address: 'Estrada do Pico do Itapeva',
     imageUrl: 'https://visitecamposdojordao.org.br/wp-content/uploads/2025/03/Design-sem-nome.png',
-    website: 'https://pranapark.com.br/'
+    website: 'https://pranapark.com.br/',
+    instagram: 'https://www.instagram.com/pranapark_fazenda/',
+    facebook: 'https://www.facebook.com/pranapark'
   },
   {
     id: 'dreams-house-park',
@@ -116,7 +136,8 @@ export const TOURS: TourItem[] = [
     category: 'Lazer',
     description: 'Complexo de entretenimento com museu de cera, Miniland e atrações voltadas a famílias e fotos memoráveis.',
     imageUrl: 'https://visitecamposdojordao.org.br/wp-content/uploads/2025/10/dreamhouse.png',
-    website: 'https://grupodreams.com.br/loja/campos/'
+    website: 'https://grupodreams.com.br/loja/campos/',
+    instagram: 'https://www.instagram.com/dreamshousepark/'
   },
   {
     id: 'maostiqueiras',
@@ -126,7 +147,9 @@ export const TOURS: TourItem[] = [
     address: 'Av. Pedro Paulo, 1455 – Parque da Lagoinha',
     phone: '(12) 3662 3207',
     imageUrl: 'https://visitecamposdojordao.org.br/wp-content/uploads/2025/04/maostiqueira.jpg',
-    website: 'http://maostiqueiras.com.br/'
+    website: 'http://maostiqueiras.com.br/',
+    instagram: 'https://www.instagram.com/maostiqueiras/',
+    facebook: 'https://www.facebook.com/maostiqueiras'
   },
   {
     id: 'parque-da-lagoinha',
@@ -135,7 +158,9 @@ export const TOURS: TourItem[] = [
     description: 'Parque revitalizado com trilhas, lagos, projetos socioambientais, educação ambiental e áreas de lazer.',
     address: 'Av. Pedro Paulo, 1455 – Lot. Veu da Noiva',
     imageUrl: 'https://visitecamposdojordao.org.br/wp-content/uploads/2025/03/paruqe-da-lagoinha-800x464.jpg',
-    website: 'https://parquedalagoinha.com.br/'
+    website: 'https://parquedalagoinha.com.br/',
+    instagram: 'https://www.instagram.com/parque.da.lagoinha/',
+    facebook: 'https://www.facebook.com/Parquelagoinha'
   },
   {
     id: 'casa-araucaria',
@@ -143,7 +168,9 @@ export const TOURS: TourItem[] = [
     category: 'Experiência',
     description: 'Loja e espaço com produtos de pequenos produtores locais, oficinas e experiências imersivas ligadas à araucária e biodiversidade.',
     imageUrl: 'https://visitecamposdojordao.org.br/wp-content/uploads/2025/04/3-800x450.png',
-    website: 'https://www.casaraucaria.com.br/'
+    website: 'https://www.casaraucaria.com.br/',
+    instagram: 'https://www.instagram.com/casaraucaria.com.br/',
+    facebook: 'https://www.facebook.com/p/Casarauc%C3%A1ria-100090438309640/'
   },
   {
     id: 'iceland-aventura-no-gelo',
@@ -152,7 +179,9 @@ export const TOURS: TourItem[] = [
     description: 'Espaço inteiro construído em gelo com esculturas temáticas; visitas curtas com casacos e luvas providenciados.',
     address: 'R. Eng. Diogo José de Carvalho, 190 – Capivari',
     imageUrl: 'https://visitecamposdojordao.org.br/wp-content/uploads/2025/04/iceland-800x450.png',
-    website: 'https://www.icelandcampos.com.br/'
+    website: 'https://www.icelandcampos.com.br/',
+    instagram: 'https://www.instagram.com/icelandcampos/',
+    facebook: 'https://www.facebook.com/icelandcampos/'
   },
   {
     id: 'parque-da-cerveja',
@@ -160,7 +189,9 @@ export const TOURS: TourItem[] = [
     category: 'Gastronomia',
     description: 'Espaço com experiências ligadas à produção e degustação de cervejas artesanais em um parque cercado por araucárias.',
     imageUrl: 'https://visitecamposdojordao.org.br/wp-content/uploads/2025/04/1-800x450.png',
-    website: 'https://cervejacamposdojordao.com.br/'
+    website: 'https://cervejacamposdojordao.com.br/',
+    instagram: 'https://www.instagram.com/cervejacamposdojordao',
+    facebook: 'https://pt-br.facebook.com/cervejacampos'
   },
   {
     id: 'parque-bambui',
@@ -168,6 +199,8 @@ export const TOURS: TourItem[] = [
     category: 'Natureza',
     description: 'Área verde com trilhas, lagos, arte ao ar livre, Maria-fumaça, esculturas e gastronomia local.',
     imageUrl: 'https://visitecamposdojordao.org.br/wp-content/uploads/2025/05/parque-bambui.png',
-    website: 'https://parquebambui.com.br/'
+    website: 'https://parquebambui.com.br/',
+    instagram: 'https://www.instagram.com/parquebambui/',
+    facebook: 'https://www.facebook.com/parquebambui/'
   }
 ];

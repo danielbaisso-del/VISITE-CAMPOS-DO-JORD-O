@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { TOURS } from '../constants';
 import SITE_CONTENT from '../data/siteContent';
 import { ACCOMMODATIONS } from '../components/accommodationsData';
+import { RESTAURANTS } from '../components/Gastronomia';
 import { FilterCategory } from '../config';
 
 interface TourItem {
@@ -15,6 +16,8 @@ interface TourItem {
   website?: string;
   status?: string;
   tags?: string[];
+  instagram?: string;
+  facebook?: string;
 }
 
 /**
@@ -70,15 +73,17 @@ export function useFilteredTours(filter: FilterCategory, searchQuery: string): T
 
 // Helper functions to map data sources to common format
 function mapRestaurants(): TourItem[] {
-  return (SITE_CONTENT.restaurants || []).map(r => ({
+  return RESTAURANTS.map(r => ({
     id: r.id || (r.name || '').replace(/\s+/g, '-').toLowerCase(),
     title: r.name,
     category: 'Gastronomia',
-    description: r.specialty || '',
+    description: r.description || '',
     address: r.address || '',
     phone: r.phone || '',
     imageUrl: r.image || `/images/gastronomia/${r.id}.jpg`,
-    website: r.website || undefined
+    website: r.website || undefined,
+    instagram: r.instagram || '',
+    facebook: r.facebook || ''
   }));
 }
 
@@ -103,6 +108,8 @@ function mapHotels(): TourItem[] {
     phone: acc.phone || '',
     website: acc.website || '',
     status: '',
-    tags: acc.tags || []
+    tags: acc.tags || [],
+    instagram: acc.instagram || '',
+    facebook: acc.facebook || ''
   }));
 }

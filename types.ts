@@ -61,6 +61,8 @@ export interface Accommodation {
   priceRange?: string;
   stars?: number;
   tags?: string[];
+  instagram?: string;
+  facebook?: string;
 }
 
 // ============================================
@@ -75,6 +77,8 @@ export interface Restaurant {
   phone?: string;
   website?: string;
   image?: string;
+  instagram?: string;
+  facebook?: string;
 }
 
 // ============================================

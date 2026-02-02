@@ -1,7 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { APP_CONFIG, DEFAULT_ACTIONS } from '../../config/app';
 import { geminiService } from '../../services/gemini';
 import { useLanguage } from '../../contexts';
+
+// Imagens de capa do Hero
+const HERO_IMAGES = [
+  APP_CONFIG.hero.image,
+  'https://images.pexels.com/photos/28530398/pexels-photo-28530398.jpeg?auto=compress&cs=tinysrgb&w=2400',
+];
 
 export const Hero: React.FC = () => {
   const { t, language } = useLanguage();
@@ -11,6 +17,15 @@ export const Hero: React.FC = () => {
   const [resultCard, setResultCard] = useState<{ text: string; actions?: Array<{ label?: string; url?: string }> } | null>(null);
   const [cardVisible, setCardVisible] = useState(false);
   const [loadingResult, setLoadingResult] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  // Troca automática de imagem a cada 4 segundos
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % HERO_IMAGES.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
 
   // Placeholders e textos por idioma
   const heroTexts = {
@@ -71,12 +86,17 @@ export const Hero: React.FC = () => {
 
   return (
     <div className="relative h-[68vh] min-h-[520px] flex items-center justify-center">
-      {/* Background */}
+      {/* Background com múltiplas imagens */}
       <div className="absolute inset-0 transform-gpu will-change-transform overflow-hidden rounded-b-[3rem]">
-        <div
-          className="absolute inset-0 bg-center bg-cover animate-kenburns"
-          style={{ backgroundImage: `url('${APP_CONFIG.hero.image}')` }}
-        />
+        {HERO_IMAGES.map((image, index) => (
+          <div
+            key={index}
+            className={`absolute inset-0 bg-center bg-cover animate-kenburns transition-opacity duration-1000 ease-in-out ${
+              index === currentImageIndex ? 'opacity-100' : 'opacity-0'
+            }`}
+            style={{ backgroundImage: `url('${image}')` }}
+          />
+        ))}
         <div className="absolute inset-0 bg-gradient-to-b from-slate-950/70 to-slate-900/60" />
       </div>
 
