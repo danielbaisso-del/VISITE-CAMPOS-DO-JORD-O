@@ -2,6 +2,7 @@ import { TOURS } from "../constants";
 import metadata from "../metadata.json";
 import SITE_CONTENT from "../data/siteContent";
 import { KB, KEYWORDS, matchKeywords, findBestMatch } from "./knowledgeBase";
+import { CAMPOS_JORDAO_KB, CamposJordaoIA } from "./camposJordaoExpandedKB";
 
 const SYSTEM_INSTRUCTION = `
 Você é o Guia Virtual oficial de Campos do Jordão para o site "${metadata.name}".
@@ -164,42 +165,266 @@ export class GeminiService {
     }
 
     // =========================================================================
-    // CLIMA E MELHOR ÉPOCA
+    // BUSCA INTELIGENTE - USA A NOVA BASE DE CONHECIMENTO EXPANDIDA
     // =========================================================================
-    if (matchKeywords(m, KEYWORDS.climate) || matchKeywords(m, KEYWORDS.bestTime)) {
-      const hasNeve = m.includes('neve');
-      const hasFrio = m.includes('frio') || m.includes('inverno');
+
+    // Gastronomia com detalhes específicos
+    if (matchKeywords(m, KEYWORDS.food) || matchKeywords(m, KEYWORDS.restaurant)) {
+      // Detecta interesse específico
+      const isVegetarian = m.includes('vegetarian') || m.includes('vegano') || m.includes('vegetaria');
+      const isFondue = m.includes('fondue');
+      const isChocolate = m.includes('chocolate') || m.includes('doce');
+      const isBudget = m.includes('barato') || m.includes('economico') || m.includes('custo');
+      const isRomantic = m.includes('romantic') || m.includes('jantar') && m.includes('vista');
       
-      let response = `🌡️ **Clima em Campos do Jordão**\n\n${KB.city.climate}\n\n`;
+      let response = '🍽️ **Gastronomia em Campos do Jordão**\n\n';
       
-      if (hasNeve) {
-        response += `❄️ **Sobre neve:** Neve é extremamente rara em Campos do Jordão. Pode haver geadas fortes no inverno (junho-agosto), mas neve praticamente não ocorre.\n\n`;
+      if (isFondue) {
+        const fondue = CAMPOS_JORDAO_KB.gastronomia.pratos_tipicos.fondue;
+        response += `🧀 **Fondue - Prato Símbolo da Cidade**\n${fondue.descricao}\n**Preço:** ${fondue.preco_medio}\n\n**Onde encontrar:**\n${fondue.onde_encontrar.map(r => `• ${r}`).join('\n')}\n\n`;
       }
       
-      if (hasFrio) {
-        response += `🧥 **Inverno (junho-agosto):**\n• Temperaturas de 0°C a 15°C\n• Noites muito frias, possível geada\n• Dias ensolarados e secos\n• Alta temporada turística\n\n`;
+      if (isChocolate) {
+        const chocolaterias = CAMPOS_JORDAO_KB.gastronomia.chocolaterias;
+        response += `🍫 **Chocolaterias Imperdíveis:**\n${chocolaterias.map(c => `• **${c.nome}** - ${c.diferencial} (${c.preco_medio})`).join('\n')}\n\n`;
       }
       
-      response += `📅 **Melhor época para visitar:**\n${KB.city.best_times}\n\n💡 **Dica:** Leve roupas em camadas e agasalhos mesmo no verão, pois as noites são frias.`;
+      if (isRomantic) {
+        const gastronomia = CAMPOS_JORDAO_KB.gastronomia.restaurantes_categoria.alta_gastronomia;
+        response += `💕 **Para um Jantar Romântico:**\n${gastronomia.map(r => `• **${r.nome}** - ${r.especialidade} (${r.preco_medio})`).join('\n')}\n\n`;
+      }
+      
+      if (isBudget) {
+        const casual = CAMPOS_JORDAO_KB.gastronomia.restaurantes_categoria.casual;
+        response += `💰 **Opções Econômicas:**\n${casual.map(r => `• **${r.nome}** - ${r.especialidade} (${r.preco_medio})`).join('\n')}\n\n`;
+      }
+      
+      // Adiciona recomendação geral se não há critério específico
+      if (!isFondue && !isChocolate && !isRomantic && !isBudget) {
+        response += `**Pratos típicos obrigatórios:**\n• 🧀 Fondue (queijo, chocolate, carne)\n• 🐟 Truta local grelhada\n• 🌰 Pinhão assado\n• ☕ Chocolate quente gourmet\n• 🍷 Vinho quente (inverno)\n\n`;
+        const tradicional = CAMPOS_JORDAO_KB.gastronomia.restaurantes_categoria.tradicional;
+        response += `**Restaurantes tradicionais:**\n${tradicional.slice(0,3).map(r => `• **${r.nome}** - ${r.especialidade}`).join('\n')}`;
+      }
       
       return {
         text: response,
         actions: [
-          { label: 'Festival de Inverno', url: '/#eventos' },
-          { label: 'Onde Ficar', url: '/#hospedagens' }
+          { label: '🧀 Baden Baden', url: '/#ondecomer' },
+          { label: '🍫 Chocolaterias', url: '/#ondecomer' },
+          { label: '📍 Ver no Mapa', url: '/#explore' }
         ]
       };
     }
 
+    // Hospedagem com filtros inteligentes
+    if (matchKeywords(m, KEYWORDS.accommodations)) {
+      const isLuxury = m.includes('luxo') || m.includes('5 estrelas') || m.includes('spa');
+      const isFamily = m.includes('familia') || m.includes('crianca');
+      const isBudget = m.includes('barato') || m.includes('economico') || m.includes('pousada');
+      const isRomantic = m.includes('romantic') || m.includes('casal') || m.includes('lua de mel');
+      
+      let response = '🏨 **Hospedagem em Campos do Jordão**\n\n';
+      
+      if (isLuxury) {
+        const luxo = CAMPOS_JORDAO_KB.hospedagens.hoteis_luxo;
+        response += `⭐ **Hotéis de Luxo:**\n${luxo.map(h => `• **${h.nome}** - ${h.categoria}\n  Alta: ${h.diaria_alta_temporada} | Baixa: ${h.diaria_baixa_temporada}\n  ${h.diferenciais.join(', ')}`).join('\n\n')}\n\n`;
+      }
+      
+      if (isBudget) {
+        const pousadas = CAMPOS_JORDAO_KB.hospedagens.pousadas_charme;
+        response += `💰 **Pousadas e Opções Econômicas:**\n${pousadas.map(p => `• **${p.nome}** - ${p.categoria}\n  Alta: ${p.diaria_alta_temporada} | Baixa: ${p.diaria_baixa_temporada}\n  ${p.diferenciais.join(', ')}`).join('\n\n')}\n\n`;
+      }
+      
+      if (isFamily || (!isLuxury && !isBudget && !isRomantic)) {
+        const executivos = CAMPOS_JORDAO_KB.hospedagens.hoteis_executivos;
+        response += `👨‍👩‍👧‍👦 **Hotéis para Famílias:**\n${executivos.map(h => `• **${h.nome}** - ${h.categoria}\n  Alta: ${h.diaria_alta_temporada} | Baixa: ${h.diaria_baixa_temporada}\n  ${h.diferenciais?.join(', ') || 'Tradicional, boa localização'}`).join('\n\n')}\n\n`;
+      }
+      
+      // Informações sobre temporadas
+      response += `📅 **Sobre as temporadas:**\n• **Alta temporada (Julho):** Preços máximos, reserve com antecedência\n• **Baixa temporada (Mar-Mai, Set-Nov):** Melhores preços, menos movimento\n• **Média temporada:** Bom custo-benefício`;
+      
+      return {
+        text: response,
+        actions: [
+          { label: '🏨 Ver Hospedagens', url: '/#hospedagens' },
+          { label: '📅 Verificar Disponibilidade', url: '/#hospedagens' },
+          { label: '📍 Localização', url: '/#explore' }
+        ]
+      };
+    }
+
+    // Roteiros personalizados por perfil
+    if (matchKeywords(m, ['roteiro', 'itinerario', 'o que fazer', 'programa'])) {
+      const isAdventure = m.includes('aventura') || m.includes('trilha') || m.includes('radical');
+      const isFamily = m.includes('familia') || m.includes('crianca');
+      const isRomantic = m.includes('casal') || m.includes('romantic') || m.includes('lua de mel');
+      const isOneDay = m.includes('1 dia') || m.includes('um dia') || m.includes('bate e volta');
+      const isCulture = m.includes('cultura') || m.includes('museu') || m.includes('arte');
+      
+      let response = '🗺️ **Roteiro Personalizado para Campos do Jordão**\n\n';
+      
+      if (isOneDay) {
+        response += `⏰ **Roteiro de 1 Dia - Bate e Volta:**\n\n**Manhã (9h-12h):**\n• Chegada e café na Vila Capivari\n• Teleférico para o Morro do Elefante\n• Vista panorâmica e fotos\n\n**Tarde (12h-17h):**\n• Almoço no Capivari (fondue obrigatório)\n• Visita ao Horto Florestal OU Amantikir\n• Compras de chocolates e malhas\n\n**Final (17h-19h):**\n• Chocolate quente de despedida\n• Retorno\n\n💡 **Dica:** Chegue cedo para evitar trânsito e filas!`;
+      }
+      
+      else if (isAdventure) {
+        response += `🏔️ **Roteiro de Aventura (2-3 dias):**\n\n**Dia 1:**\n• Trilha do Pico do Itapeva (nascer do sol)\n• Arvorismo no Tarundu\n• Noite na Vila Capivari\n\n**Dia 2:**\n• Trilha da Pedra do Baú (dia inteiro)\n• Descanso e jantar romântico\n\n**Dia 3:**\n• Horto Florestal (trilhas mais leves)\n• Cervejaria Baden Baden\n• Relaxamento no hotel\n\n⚠️ **Preparo:** Leve equipamentos adequados e verifique condições climáticas`;
+      }
+      
+      else if (isFamily) {
+        response += `👨‍👩‍👧‍👦 **Roteiro Família (2-3 dias):**\n\n**Dia 1:**\n• Vila Capivari e teleférico\n• Parque Capivari (pedalinhos)\n• Chocolate quente e compras\n\n**Dia 2:**\n• Amantikir (crianças adoram os jardins)\n• Fábrica de chocolates (visita guiada)\n• Iceland (experiência no gelo)\n\n**Dia 3:**\n• Horto Florestal (trilhas fáceis)\n• Tarundu (atividades para todas idades)\n• Souvenir shopping\n\n👶 **Para crianças:** A maioria das atrações aceita todas as idades com supervisão`;
+      }
+      
+      else if (isRomantic) {
+        response += `💕 **Roteiro Romântico (2-3 dias):**\n\n**Dia 1:**\n• Chegada e check-in em hotel boutique\n• Passeio pela Vila Capivari\n• Jantar romântico com fondue\n\n**Dia 2:**\n• Nascer do sol no Pico do Itapeva\n• Spa no hotel ou Amantikir\n• Degustação na Baden Baden\n• Jantar no Villa Gourmet\n\n**Dia 3:**\n• Museu Felícia Leirner\n• Compras de presentes únicos\n• Despedida com vista panorâmica\n\n🍷 **Dicas:** Reserve restaurantes com vista, considere hospedagem com lareira`;
+      }
+      
+      else {
+        // Roteiro geral
+        response += `🎯 **Roteiro Clássico (2-3 dias):**\n\n**Imperdíveis:**\n• Vila Capivari e Teleférico\n• Horto Florestal ou Amantikir\n• Baden Baden (cervejaria)\n• Fondue em algum restaurante tradicional\n• Compras (chocolates, malhas, souvenirs)\n\n**Se tiver tempo extra:**\n• Pico do Itapeva (vista panorâmica)\n• Museu Felícia Leirner\n• Tarundu (aventura)\n• Iceland (experiência gelada)\n\n💡 **Melhor época:** Julho para frio autêntico, abril-maio para preços melhores`;
+      }
+      
+      return {
+        text: response,
+        actions: [
+          { label: '🎯 Principais Atrações', url: '/#explore' },
+          { label: '🏨 Onde Ficar', url: '/#hospedagens' },
+          { label: '🍽️ Onde Comer', url: '/#ondecomer' },
+          { label: '📍 Ver Mapa', url: '/#explore' }
+        ]
+      };
+    }
+
+    // Informações sobre eventos sazonais
+    if (matchKeywords(m, KEYWORDS.eventos) || matchKeywords(m, ['evento', 'festa', 'show', 'festival'])) {
+      const isWinter = m.includes('inverno') || m.includes('julho') || m.includes('musica') || m.includes('classica');
+      const currentMonth = new Date().getMonth() + 1; // 1-12
+      
+      let response = '🎪 **Eventos em Campos do Jordão**\n\n';
+      
+      if (isWinter) {
+        const festival = CAMPOS_JORDAO_KB.eventos.festival_inverno;
+        response += `🎼 **${festival.nome}**\n${festival.descricao}\n\n📅 **Período:** ${festival.periodo}\n📍 **Local:** ${festival.local}\n🎫 **Ingressos:** ${festival.ingressos}\n👥 **Público:** ${festival.publico_esperado} pessoas\n\n**Programação inclui:**\n${festival.programacao.map(p => `• ${p}`).join('\n')}\n\n`;
+      }
+      
+      // Eventos por época do ano
+      const eventosEpoca = CamposJordaoIA.recomendacoesPorEpoca(currentMonth);
+      response += `📅 **Nesta época (${eventosEpoca.epoca}):**\n`;
+      
+      // Lista os eventos principais
+      Object.values(CAMPOS_JORDAO_KB.eventos).forEach(evento => {
+        if (evento.periodo) {
+          response += `• **${evento.nome}** - ${evento.periodo}\n`;
+        }
+      });
+      
+      response += `\n💡 **Dica:** ${eventosEpoca.dicas}`;
+      
+      return {
+        text: response,
+        actions: [
+          { label: '🎼 Festival de Inverno', url: '/#eventos' },
+          { label: '🌸 Festa da Cerejeira', url: '/#eventos' },
+          { label: '🏍️ Motofest', url: '/#eventos' }
+        ]
+      };
     // =========================================================================
-    // TRANSPORTE - COMO CHEGAR
+    // CLIMA E MELHOR ÉPOCA - COM INFORMAÇÕES EXPANDIDAS
+    // =========================================================================
+    if (matchKeywords(m, KEYWORDS.climate) || matchKeywords(m, KEYWORDS.bestTime)) {
+      const hasNeve = m.includes('neve');
+      const hasFrio = m.includes('frio') || m.includes('inverno');
+      const hasTemperatura = m.includes('temperatura') || m.includes('grau');
+      const currentMonth = new Date().getMonth() + 1; // 1-12
+      
+      let response = `🌡️ **Clima em Campos do Jordão**\n\n`;
+      
+      // Informações climáticas básicas da nova KB
+      const clima = CAMPOS_JORDAO_KB.cidade.clima;
+      response += `**Altitude:** ${CAMPOS_JORDAO_KB.cidade.altitude}m - Município mais alto do Brasil!\n`;
+      response += `**Tipo:** ${clima.tipo}\n`;
+      response += `**Temperatura média:** ${clima.temperatura_media_anual}°C\n\n`;
+      
+      if (hasNeve) {
+        response += `❄️ **Sobre neve:** Neve é extremamente rara em Campos do Jordão devido ao clima seco do inverno. Registros históricos: 1928, 1942, 1947, 1966.\n**Mais comum:** Geadas fortes no inverno, especialmente madrugadas.\n\n`;
+      }
+      
+      if (hasTemperatura) {
+        response += `🌡️ **Extremos de temperatura:**\n• **Máxima histórica:** ${clima.temperatura_maxima_recordista}°C (2023)\n• **Mínima histórica:** ${clima.temperatura_minima_recordista}°C (1979)\n\n`;
+      }
+      
+      // Informações sazonais detalhadas
+      if (hasFrio) {
+        const inverno = clima.estacoes.inverno;
+        response += `🧥 **Inverno (${inverno.periodo}):**\n• **Temperatura média:** ${inverno.temperatura_media}°C\n• **Características:** ${inverno.caracteristicas}\n• **Precipitação:** ${inverno.precipitacao_media}mm (época seca)\n• **Mín. comum:** ${inverno.temperatura_minima_comum}°C\n\n`;
+      } else {
+        // Informação da época atual
+        const recomendacaoEpoca = CamposJordaoIA.recomendacoesPorEpoca(currentMonth);
+        response += `📅 **Agora (${recomendacaoEpoca.epoca}):**\n• **Roupas:** ${recomendacaoEpoca.roupas}\n• **Preços:** ${recomendacaoEpoca.precos}\n• **Dicas:** ${recomendacaoEpoca.dicas}\n\n`;
+      }
+      
+      // Melhor época por interesse
+      const melhorEpoca = clima.melhor_epoca;
+      response += `📅 **Melhor época para visitar:**\n• **Frio intenso:** ${melhorEpoca.frio_intenso}\n• **Clima ameno:** ${melhorEpoca.clima_ameno}\n• **Menos movimento:** ${melhorEpoca.menos_movimento}\n• **Época seca:** ${melhorEpoca.mais_seco}\n\n💡 **Dica:** Sempre leve agasalho, mesmo no verão as noites são frias!`;
+      
+      return {
+        text: response,
+        actions: [
+          { label: '❄️ Festival de Inverno', url: '/#eventos' },
+          { label: '🏨 Onde Ficar', url: '/#hospedagens' },
+          { label: '🎯 O que fazer', url: '/#explore' }
+        ]
+      };
+    }
+    // =========================================================================
+    // TRANSPORTE - COMO CHEGAR (EXPANDIDO)
     // =========================================================================
     if (matchKeywords(m, KEYWORDS.transport)) {
+      const praticas = CAMPOS_JORDAO_KB.informacoes_praticas.como_chegar;
+      const custos = CAMPOS_JORDAO_KB.informacoes_praticas.custos_estimados;
+      const transLocal = CAMPOS_JORDAO_KB.informacoes_praticas.transporte_local;
+      
+      let response = `🚗 **Como Chegar a Campos do Jordão**\n\n`;
+      
+      // Informações detalhadas de carro
+      response += `**🚗 De carro:**\n`;
+      response += `• **São Paulo:** ${praticas.carro.de_sao_paulo.distancia} - ${praticas.carro.de_sao_paulo.tempo}\n`;
+      response += `  Rota: ${praticas.carro.de_sao_paulo.rota}\n`;
+      response += `  Pedágios: ${praticas.carro.de_sao_paulo.pedagio}\n\n`;
+      
+      response += `• **Rio de Janeiro:** ${praticas.carro.de_rio.distancia} - ${praticas.carro.de_rio.tempo}\n`;
+      response += `  Rota: ${praticas.carro.de_rio.rota}\n`;
+      response += `  Pedágios: ${praticas.carro.de_rio.pedagio}\n\n`;
+      
+      // Informações de avião
+      response += `**✈️ De avião:**\n`;
+      response += `• **Mais próximo:** ${praticas.aviao.aeroporto_mais_proximo}\n`;
+      response += `  Distância: ${praticas.aviao.distancia_aeroporto}\n`;
+      response += `  Transfer: ${praticas.aviao.transfer}\n`;
+      response += `• **Alternativa:** ${praticas.aviao.alternativa}\n\n`;
+      
+      // Ônibus
+      response += `**🚌 De ônibus:**\n`;
+      response += `• **De São Paulo:** ${praticas.onibus.de_sao_paulo.empresa}\n`;
+      response += `  Tempo: ${praticas.onibus.de_sao_paulo.tempo} | Preço: ${praticas.onibus.de_sao_paulo.preco}\n`;
+      response += `  Frequência: ${praticas.onibus.de_sao_paulo.frequencia}\n\n`;
+      
+      // Transporte local
+      response += `**🚕 Transporte na cidade:**\n`;
+      response += `• Táxi: ${transLocal.taxi}\n`;
+      response += `• Uber: ${transLocal.uber}\n`;
+      response += `• Aluguel de carro: ${transLocal.carro_aluguel}\n`;
+      response += `• Ônibus urbano: ${transLocal.onibus_urbano}\n`;
+      response += `• A pé: ${transLocal.walking}\n\n`;
+      
+      response += `💡 **Dicas importantes:**\n• Na alta temporada (julho), trânsito intenso - chegue cedo\n• Estacionar no centro é difícil e pago\n• Para pontos distantes, carro próprio/alugado é melhor opção\n• Apps de transporte funcionam bem na cidade`;
+      
       return {
-        text: `🚗 **Como Chegar a Campos do Jordão**\n\n**De carro:**\n${KB.city.transport.main_access}\n\n**De avião:**\n${KB.city.transport.airports.map(a => `• ${a}`).join('\n')}\n\n**Transporte público:**\n${KB.city.transport.public}\n\n💡 **Dicas:**\n• Na alta temporada (julho), trânsito pode ser intenso\n• Alugar carro facilita visitar atrações fora do centro\n• Transfer particular é opção confortável do aeroporto`,
+        text: response,
         actions: [
-          { label: 'Ver Hospedagens', url: '/#hospedagens' },
-          { label: 'Mapa da Cidade', url: '/#explore' }
+          { label: '🏨 Hotéis com Transfer', url: '/#hospedagens' },
+          { label: '📍 Mapa da Cidade', url: '/#explore' },
+          { label: '💰 Custos de Viagem', url: '/#hospedagens' }
         ]
       };
     }
@@ -514,7 +739,63 @@ export class GeminiService {
     }
 
     // =========================================================================
-    // HOSPEDAGEM
+    // BUSCA INTELIGENTE GERAL - NOVA BASE DE CONHECIMENTO
+    // =========================================================================
+    
+    // Tenta buscar informações específicas na base expandida
+    const buscarInformacaoEspecifica = (consulta: string) => {
+      const kb = CAMPOS_JORDAO_KB;
+      
+      // Busca por pontos turísticos específicos
+      if (consulta.includes('morro') || consulta.includes('elefante')) {
+        const attracao = kb.atracoes.morro_elefante;
+        return `🚡 **${attracao.nome}**\n\n${attracao.descricao}\n\n📍 **Endereço:** ${attracao.endereco}\n🕐 **Funcionamento:** ${attracao.horario_funcionamento}\n⏱️ **Tempo de visita:** ${attracao.tempo_visita}\n💰 **Preços:** Bondinho ida/volta: ${attracao.preco.bondinho_ida_volta}, Crianças: ${attracao.preco.bondinho_crianca}\n\n**Dicas:**\n${attracao.dicas.map(d => `• ${d}`).join('\n')}`;
+      }
+      
+      if (consulta.includes('horto') || consulta.includes('florestal')) {
+        const attracao = kb.atracoes.horto_florestal;
+        return `🌲 **${attracao.nome}**\n\n${attracao.descricao}\n\n📍 **Endereço:** ${attracao.endereco}\n🕐 **Funcionamento:** ${attracao.horario_funcionamento}\n💰 **Entrada:** ${attracao.preco}\n🏞️ **Área:** ${attracao.area}\n\n**Trilhas disponíveis:**\n${Object.entries(attracao.trilhas).map(([nome, dados]: [string, any]) => `• **${nome.charAt(0).toUpperCase() + nome.slice(1)}**: ${dados.distancia}, ${dados.dificuldade}, ${dados.tempo}`).join('\n')}\n\n**Fauna:** ${attracao.fauna.join(', ')}\n**Flora:** ${attracao.flora.join(', ')}`;
+      }
+      
+      if (consulta.includes('amantikir')) {
+        const attracao = kb.atracoes.parque_amantikir;
+        return `🌸 **${attracao.nome}**\n\n${attracao.descricao}\n\n📍 **Endereço:** ${attracao.endereco}\n🕐 **Funcionamento:** ${attracao.horario_funcionamento}\n💰 **Entrada:** ${attracao.preco}\n🏞️ **Área:** ${attracao.area}\n\n**Jardins temáticos:** ${attracao.jardins_tematicos.join(', ')}\n**Destaques:** ${attracao.destaques.join(', ')}`;
+      }
+      
+      if (consulta.includes('itapeva') || consulta.includes('pico')) {
+        const attracao = kb.atracoes.pico_itapeva;
+        return `⛰️ **${attracao.nome}**\n\n${attracao.descricao}\n\n📍 **Localização:** ${attracao.endereco}\n🕐 **Melhor horário:** ${attracao.horario_funcionamento}\n💰 **Entrada:** ${attracao.preco}\n📏 **Altitude:** ${attracao.altitude}m - Ponto mais alto da região!\n🔭 **Vista:** ${attracao.vista}\n\n**Dicas importantes:**\n${attracao.dicas.map(d => `• ${d}`).join('\n')}`;
+      }
+      
+      // Busca por informações de custos
+      if (consulta.includes('preco') || consulta.includes('custo') || consulta.includes('quanto custa') || consulta.includes('orcamento')) {
+        const custos = kb.informacoes_praticas.custos_estimados;
+        return `💰 **Custos Estimados para Campos do Jordão**\n\n**💵 Orçamento Econômico:**\n• Hospedagem: ${custos.orcamento_economico.hospedagem}\n• Alimentação: ${custos.orcamento_economico.alimentacao}\n• Atividades: ${custos.orcamento_economico.atividades}\n• **Total/dia: ${custos.orcamento_economico.total_dia}**\n\n**💳 Orçamento Médio:**\n• Hospedagem: ${custos.orcamento_medio.hospedagem}\n• Alimentação: ${custos.orcamento_medio.alimentacao}\n• Atividades: ${custos.orcamento_medio.atividades}\n• **Total/dia: ${custos.orcamento_medio.total_dia}**\n\n**💎 Orçamento Luxo:**\n• Hospedagem: ${custos.orcamento_luxo.hospedagem}\n• Alimentação: ${custos.orcamento_luxo.alimentacao}\n• Atividades: ${custos.orcamento_luxo.atividades}\n• **Total/dia: ${custos.orcamento_luxo.total_dia}**`;
+      }
+      
+      // Busca por curiosidades e história
+      if (consulta.includes('historia') || consulta.includes('curiosidade') || consulta.includes('origem') || consulta.includes('fundacao')) {
+        const historia = kb.historia_cultura;
+        return `📚 **História de Campos do Jordão**\n\n**Origem do nome:** ${historia.origem_nome}\n\n**Marcos históricos:**\n${historia.marcos_historicos.map(m => `• ${m}`).join('\n')}\n\n**Influências arquitetônicas:**\n• **Alemã:** ${historia.influencias_arquitetonicas.alemã}\n• **Suíça:** ${historia.influencias_arquitetonicas.suiça}\n• **Inglesa:** ${historia.influencias_arquitetonicas.inglesa}\n\n**Personalidades ilustres:** ${historia.personalidades_ilustres.join(', ')}`;
+      }
+      
+      return null;
+    };
+    
+    const informacaoEspecifica = buscarInformacaoEspecifica(m);
+    if (informacaoEspecifica) {
+      return {
+        text: informacaoEspecifica,
+        actions: [
+          { label: '🎯 Principais Atrações', url: '/#explore' },
+          { label: '🏨 Onde Ficar', url: '/#hospedagens' },
+          { label: '📍 Ver no Mapa', url: '/#explore' }
+        ]
+      };
+    }
+
+    // =========================================================================
+    // BUSCA POR CATEGORIAS EXISTENTES (FALLBACK ORIGINAL)
     // =========================================================================
     
     // Luxo
@@ -731,6 +1012,56 @@ export class GeminiService {
       return {
         text: response,
         actions: hotel.website ? [{ label: '🌐 Site', url: hotel.website }] : [{ label: 'Outras Hospedagens', url: '/#hospedagens' }]
+      };
+    }
+
+    // =========================================================================
+    // RESPOSTA INTELIGENTE FINAL - USA TODA A BASE EXPANDIDA
+    // =========================================================================
+    
+    // Função de busca semântica avançada usando a nova base
+    const buscarSemantico = (consulta: string) => {
+      const termos = consulta.toLowerCase().split(' ');
+      const kb = CAMPOS_JORDAO_KB;
+      
+      // Detecta intenção e direciona para informações específicas
+      if (termos.some(t => ['neve', 'frio', 'temperatura', 'clima'].includes(t))) {
+        return CamposJordaoIA.recomendacoesPorEpoca(new Date().getMonth() + 1);
+      }
+      
+      if (termos.some(t => ['quanto', 'preco', 'custo', 'caro', 'barato', 'orcamento'].includes(t))) {
+        const custos = kb.informacoes_praticas.custos_estimados;
+        return {
+          epoca: 'Informações de Custos',
+          atividades: [`Orçamento econômico: ${custos.orcamento_economico.total_dia}`, `Orçamento médio: ${custos.orcamento_medio.total_dia}`, `Orçamento luxo: ${custos.orcamento_luxo.total_dia}`],
+          roupas: 'Consulte hotéis e restaurantes para valores específicos',
+          precos: 'Variam conforme temporada',
+          dicas: 'Julho é alta temporada com preços máximos. Maio-junho e agosto-setembro oferecem melhor custo-benefício'
+        };
+      }
+      
+      if (termos.some(t => ['historia', 'cultura', 'origem', 'curiosidade'].includes(t))) {
+        return {
+          epoca: 'História e Cultura Local',
+          atividades: kb.historia_cultura.marcos_historicos.slice(0, 3),
+          roupas: 'Visitação a museus e centros culturais',
+          precos: 'Atrações culturais geralmente têm preços acessíveis',
+          dicas: kb.historia_cultura.origem_nome
+        };
+      }
+      
+      return null;
+    };
+    
+    const respostaSematica = buscarSemantico(m);
+    if (respostaSematica) {
+      return {
+        text: `ℹ️ **${respostaSematica.epoca}**\n\n${respostaSematica.dicas}\n\n**Informações relevantes:**\n${respostaSematica.atividades.map(a => `• ${a}`).join('\n')}\n\n💡 **Dica:** ${respostaSematica.roupas}`,
+        actions: [
+          { label: '💰 Custos Detalhados', url: '/#hospedagens' },
+          { label: '🎯 Atrações', url: '/#explore' },
+          { label: '📚 Mais Informações', url: '/' }
+        ]
       };
     }
 
