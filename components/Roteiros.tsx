@@ -108,10 +108,47 @@ const Roteiros: React.FC = () => {
 
   const t = translations[language];
 
+  // Traduções de Bairros/Regiões
+  const neighborhoodTranslations = {
+    pt: {
+      all: 'Todas Regiões',
+      capivari: 'Capivari',
+      vilainglesa: 'Vila Inglesa',
+      altodaboavista: 'Alto da Boa Vista',
+      jaguaribe: 'Jaguaribe',
+      descansopolis: 'Descansópolis',
+      hortoflorestal: 'Horto Florestal',
+      outras: 'Outras Regiões',
+    },
+    en: {
+      all: 'All Regions',
+      capivari: 'Capivari',
+      vilainglesa: 'Vila Inglesa',
+      altodaboavista: 'Alto da Boa Vista',
+      jaguaribe: 'Jaguaribe',
+      descansopolis: 'Descansópolis',
+      hortoflorestal: 'Horto Florestal',
+      outras: 'Other Regions',
+    },
+    es: {
+      all: 'Todas las Regiones',
+      capivari: 'Capivari',
+      vilainglesa: 'Vila Inglesa',
+      altodaboavista: 'Alto da Boa Vista',
+      jaguaribe: 'Jaguaribe',
+      descansopolis: 'Descansópolis',
+      hortoflorestal: 'Horto Florestal',
+      outras: 'Otras Regiones',
+    },
+  };
+
+  const nt = neighborhoodTranslations[language];
+
   // Expor traduções globalmente para o script inline
   useEffect(() => {
     (window as any).__roteirosLang = t;
     (window as any).__roteirosLanguage = language;
+    (window as any).__roteirosNeighborhoodLang = nt;
     
     // Expor função de tradução de locais
     (window as any).__roteirosGetTranslation = (id: number) => {
@@ -183,12 +220,25 @@ const Roteiros: React.FC = () => {
 
     let destroyed = false;
     let currentRoute: string | null = null; // Current selected route for filtering
+    let currentNeighborhood: string = 'all'; // Current selected neighborhood for filtering
     let routingControl: any = null; // Controle de roteamento atual
     let routePolylines: any[] = []; // Linhas da rota
     let routeTimeMarkers: any[] = []; // Marcadores de tempo
     let userLocation: { lat: number; lng: number } | null = null; // Localização do usuário
     let userLocationMarker: any = null; // Marcador da localização do usuário
     let useUserLocationAsStart = false; // Se deve usar a localização do usuário como início da rota
+    
+    // Função para detectar bairro pelo endereço
+    function getNeighborhood(address: string): string {
+      const addr = address.toLowerCase();
+      if (addr.includes('capivari')) return 'capivari';
+      if (addr.includes('vila inglesa')) return 'vilainglesa';
+      if (addr.includes('alto da boa vista') || addr.includes('alto boa vista')) return 'altodaboavista';
+      if (addr.includes('jaguaribe')) return 'jaguaribe';
+      if (addr.includes('descansópolis') || addr.includes('descansopolis')) return 'descansopolis';
+      if (addr.includes('horto florestal')) return 'hortoflorestal';
+      return 'outras';
+    }
 
     // Route definitions - which location IDs belong to each route
     // Cada roteiro tem: 1 local de natureza + 1 gastronômico + 1 de lazer
@@ -601,7 +651,10 @@ const Roteiros: React.FC = () => {
           const matchesSearch = locationName.toLowerCase().includes(currentSearch.toLowerCase()) || location.address.toLowerCase().includes(currentSearch.toLowerCase()); 
           // Filtrar por rota se uma rota estiver selecionada
           const matchesRoute = !currentRoute || (routeLocationIds[currentRoute] && routeLocationIds[currentRoute].includes(location.id));
-          return matchesCategory && matchesSearch && matchesRoute; 
+          // Filtrar por bairro
+          const locationNeighborhood = getNeighborhood(location.address);
+          const matchesNeighborhood = currentNeighborhood === 'all' || locationNeighborhood === currentNeighborhood;
+          return matchesCategory && matchesSearch && matchesRoute && matchesNeighborhood; 
         });
         if (filteredLocations.length === 0) { listContainer.innerHTML = `<div style=\"text-align:center;padding:40px 20px;color:#666;\"><i class=\"fas fa-search\" style=\"font-size:2rem;margin-bottom:10px;\"></i><p>${noResults}</p></div>`; return; }
         filteredLocations.forEach((location: any) => {
@@ -706,6 +759,26 @@ const Roteiros: React.FC = () => {
             updateInterface(); 
           }); 
         });
+        
+        document.querySelectorAll('.neighborhood-btn').forEach(btn => { 
+          btn.addEventListener('click', () => { 
+            document.querySelectorAll('.neighborhood-btn').forEach(b => b.classList.remove('active')); 
+            btn.classList.add('active'); 
+            currentNeighborhood = (btn as HTMLElement).dataset.neighborhood || 'all'; 
+            
+            // Sair do modo de roteiro
+            clearRouteDisplay();
+            currentRoute = null;
+            document.querySelectorAll('.route-option').forEach(opt => opt.classList.remove('active'));
+            
+            // Remover painel de info da rota
+            const routeInfoPanel = document.getElementById('route-info-panel');
+            if (routeInfoPanel) routeInfoPanel.remove();
+            
+            updateInterface(); 
+          }); 
+        });
+        
         const searchInput = document.getElementById('search-input') as HTMLInputElement | null; if (searchInput) searchInput.addEventListener('input', (e: any) => { currentSearch = e.target.value; updateInterface(); });
         const zoomIn = document.getElementById('zoom-in'); if (zoomIn) zoomIn.addEventListener('click', () => map.zoomIn()); 
         const zoomOut = document.getElementById('zoom-out'); if (zoomOut) zoomOut.addEventListener('click', () => map.zoomOut()); 
@@ -1552,6 +1625,33 @@ const Roteiros: React.FC = () => {
           box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
         }
         
+        .neighborhood-btn {
+          padding: 8px 16px;
+          border: 1px solid var(--border-color);
+          border-radius: 9999px;
+          background: rgba(255, 255, 255, 0.06);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          color: var(--text-secondary);
+          font-size: 0.85rem;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+        
+        .neighborhood-btn:hover {
+          border-color: rgba(34, 197, 94, 0.5);
+          color: var(--text-primary);
+          background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .neighborhood-btn.active {
+          background: linear-gradient(to right, #22c55e, #16a34a);
+          border-color: transparent;
+          color: white;
+          box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
+        }
+        
         .map-container { 
           flex: 1; 
           position: relative; 
@@ -2002,12 +2102,25 @@ const Roteiros: React.FC = () => {
             </div>
           </div>
           <div className="categories-container">
-            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-              <button className="category-btn active" data-category="all"><i className="fas fa-layer-group" style={{ marginRight: 6 }} />{t.all}</button>
-              <button className="category-btn" data-category="hotel"><i className="fas fa-bed" style={{ marginRight: 6 }} />{t.hotels}</button>
-              <button className="category-btn" data-category="restaurant"><i className="fas fa-utensils" style={{ marginRight: 6 }} />{t.restaurants}</button>
-              <button className="category-btn" data-category="attraction"><i className="fas fa-mountain" style={{ marginRight: 6 }} />{t.attractions}</button>
-              <button className="category-btn" data-category="service"><i className="fas fa-concierge-bell" style={{ marginRight: 6 }} />{t.services}</button>
+            <div style={{ marginBottom: 12 }}>
+              <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: 600 }}>{language === 'en' ? 'Categories' : language === 'es' ? 'Categorías' : 'Categorias'}</div>
+              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                <button className="category-btn active" data-category="all"><i className="fas fa-layer-group" style={{ marginRight: 6 }} />{t.all}</button>
+                <button className="category-btn" data-category="hotel"><i className="fas fa-bed" style={{ marginRight: 6 }} />{t.hotels}</button>
+                <button className="category-btn" data-category="restaurant"><i className="fas fa-utensils" style={{ marginRight: 6 }} />{t.restaurants}</button>
+                <button className="category-btn" data-category="attraction"><i className="fas fa-mountain" style={{ marginRight: 6 }} />{t.attractions}</button>
+                <button className="category-btn" data-category="service"><i className="fas fa-concierge-bell" style={{ marginRight: 6 }} />{t.services}</button>
+              </div>
+            </div>
+            <div>
+              <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: 600 }}>{language === 'en' ? 'Regions' : language === 'es' ? 'Regiones' : 'Regiões'}</div>
+              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                <button className="neighborhood-btn active" data-neighborhood="all"><i className="fas fa-map-marked-alt" style={{ marginRight: 6 }} />{nt.all}</button>
+                <button className="neighborhood-btn" data-neighborhood="capivari"><i className="fas fa-location-dot" style={{ marginRight: 6 }} />{nt.capivari}</button>
+                <button className="neighborhood-btn" data-neighborhood="vilainglesa"><i className="fas fa-location-dot" style={{ marginRight: 6 }} />{nt.vilainglesa}</button>
+                <button className="neighborhood-btn" data-neighborhood="altodaboavista"><i className="fas fa-location-dot" style={{ marginRight: 6 }} />{nt.altodaboavista}</button>
+                <button className="neighborhood-btn" data-neighborhood="jaguaribe"><i className="fas fa-location-dot" style={{ marginRight: 6 }} />{nt.jaguaribe}</button>
+              </div>
             </div>
           </div>
           <div id="locations-list" style={{ flex: 1, overflowY: 'auto', background: 'transparent' }}>

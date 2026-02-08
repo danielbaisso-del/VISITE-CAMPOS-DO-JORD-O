@@ -10,8 +10,9 @@ export const HomePage: React.FC = () => {
   const { language, t } = useLanguage();
   const [filter, setFilter] = useState<FilterCategory>('Todos');
   const [searchQuery, setSearchQuery] = useState('');
+  const [neighborhoodFilter, setNeighborhoodFilter] = useState<string>('all');
   
-  const filteredTours = useFilteredTours(filter, searchQuery);
+  const filteredTours = useFilteredTours(filter, searchQuery, neighborhoodFilter);
 
   const texts = {
     pt: {
@@ -34,6 +35,32 @@ export const HomePage: React.FC = () => {
     es: { Todos: 'Todos', Cultura: 'Cultura', Natureza: 'Naturaleza', Lazer: 'Ocio', Gastronomia: 'Gastronomía' },
   };
 
+  const neighborhoodTranslations = {
+    pt: {
+      all: 'Todas Regiões',
+      capivari: 'Capivari',
+      vilainglesa: 'Vila Inglesa',
+      altodaboavista: 'Alto da Boa Vista',
+      jaguaribe: 'Jaguaribe',
+    },
+    en: {
+      all: 'All Regions',
+      capivari: 'Capivari',
+      vilainglesa: 'Vila Inglesa',
+      altodaboavista: 'Alto da Boa Vista',
+      jaguaribe: 'Jaguaribe',
+    },
+    es: {
+      all: 'Todas las Regiones',
+      capivari: 'Capivari',
+      vilainglesa: 'Vila Inglesa',
+      altodaboavista: 'Alto da Boa Vista',
+      jaguaribe: 'Jaguaribe',
+    },
+  };
+
+  const nt = neighborhoodTranslations[language];
+
   const txt = texts[language];
 
   return (
@@ -55,29 +82,59 @@ export const HomePage: React.FC = () => {
         </div>
 
         {/* Filters and Search */}
-        <div className="flex flex-col md:flex-row gap-6 items-center justify-between mb-12">
-          <div className="flex flex-wrap gap-2">
-            {FILTER_CATEGORIES.map(cat => (
-              <button
-                key={cat}
-                onClick={() => setFilter(cat)}
-                className={`px-6 py-2 rounded-full text-xs font-bold transition-all ${
-                  filter === cat
-                    ? 'bg-blue-600 text-white shadow-md'
-                    : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
-                }`}
-              >
-                {categoryTranslations[language][cat]}
-              </button>
-            ))}
+        <div className="flex flex-col gap-4 mb-12">
+          {/* Category Filters */}
+          <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
+            <div>
+              <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
+                {language === 'en' ? 'Categories' : language === 'es' ? 'Categorías' : 'Categorias'}
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {FILTER_CATEGORIES.map(cat => (
+                  <button
+                    key={cat}
+                    onClick={() => setFilter(cat)}
+                    className={`px-6 py-2 rounded-full text-xs font-bold transition-all ${
+                      filter === cat
+                        ? 'bg-blue-600 text-white shadow-md'
+                        : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
+                    }`}
+                  >
+                    {categoryTranslations[language][cat]}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <input
+              type="text"
+              placeholder={txt.search}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full md:w-64 px-4 py-2 bg-white border border-slate-200 rounded-full text-sm focus:ring-1 focus:ring-blue-500 outline-none"
+            />
           </div>
-          <input
-            type="text"
-            placeholder={txt.search}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full md:w-64 px-4 py-2 bg-white border border-slate-200 rounded-full text-sm focus:ring-1 focus:ring-blue-500 outline-none"
-          />
+          
+          {/* Neighborhood Filters */}
+          <div>
+            <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
+              {language === 'en' ? 'Regions' : language === 'es' ? 'Regiones' : 'Regiões'}
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {['all', 'capivari', 'vilainglesa', 'altodaboavista', 'jaguaribe'].map(neighborhood => (
+                <button
+                  key={neighborhood}
+                  onClick={() => setNeighborhoodFilter(neighborhood)}
+                  className={`px-5 py-2 rounded-full text-xs font-bold transition-all ${
+                    neighborhoodFilter === neighborhood
+                      ? 'bg-green-600 text-white shadow-md'
+                      : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
+                  }`}
+                >
+                  {nt[neighborhood as keyof typeof nt]}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* Tour Grid */}

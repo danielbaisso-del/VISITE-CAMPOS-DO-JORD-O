@@ -63,7 +63,7 @@ export const Navbar: React.FC<NavbarProps> = ({ current, onNavigate }) => {
               className="w-full h-full object-contain"
             />
           </div>
-          <span className="text-white font-bold text-lg hidden md:block tracking-tight whitespace-nowrap">
+          <span className="text-white font-bold text-xs md:text-lg tracking-tight whitespace-nowrap">
             VISITE CAMPOS DO JORDÃO
           </span>
         </div>
